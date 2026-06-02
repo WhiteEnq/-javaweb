@@ -14,10 +14,9 @@ public final class Db {
     private static volatile boolean initialized;
 
     static {
-        try (InputStream input = Db.class.getClassLoader().getResourceAsStream("db.properties")) {
-            if (input != null) {
-                PROPERTIES.load(new InputStreamReader(input, StandardCharsets.UTF_8));
-            }
+        try {
+            loadProperties("db.properties");
+            loadProperties("db.local.properties");
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (Exception e) {
             throw new ExceptionInInitializerError(e);
@@ -25,6 +24,14 @@ public final class Db {
     }
 
     private Db() {
+    }
+
+    private static void loadProperties(String resourceName) throws Exception {
+        try (InputStream input = Db.class.getClassLoader().getResourceAsStream(resourceName)) {
+            if (input != null) {
+                PROPERTIES.load(new InputStreamReader(input, StandardCharsets.UTF_8));
+            }
+        }
     }
 
     public static Connection getConnection() throws SQLException {

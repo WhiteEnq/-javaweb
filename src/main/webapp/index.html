@@ -1,0 +1,3156 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>柚子妹妹网购</title>
+    <style>
+        :root {
+            --brand: #c91623;
+            --brand-dark: #991b1b;
+            --ink: #172033;
+            --subtle: #64748b;
+            --line: #e5e7eb;
+            --soft: #f7f8fa;
+            --gold: #f59e0b;
+            --green: #059669;
+            --shadow: 0 14px 30px rgba(15, 23, 42, .08);
+        }
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            color: var(--ink);
+            background: #f3f4f6;
+            font-family: Arial, "Microsoft YaHei", sans-serif;
+        }
+
+        button,
+        input,
+        textarea,
+        select {
+            font: inherit;
+            letter-spacing: 0;
+        }
+
+        input,
+        textarea,
+        select {
+            width: 100%;
+            min-height: 40px;
+            padding: 9px 11px;
+            border: 1px solid #d7dce3;
+            border-radius: 6px;
+            background: #fff;
+            color: var(--ink);
+            outline: none;
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            border-color: var(--brand);
+            box-shadow: 0 0 0 3px rgba(201, 22, 35, .10);
+        }
+
+        textarea {
+            min-height: 82px;
+            resize: vertical;
+        }
+
+        button {
+            min-height: 40px;
+            padding: 9px 15px;
+            border: 1px solid var(--brand);
+            border-radius: 6px;
+            background: var(--brand);
+            color: #fff;
+            cursor: pointer;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        button:hover {
+            filter: brightness(.98);
+        }
+
+        button:disabled {
+            cursor: not-allowed;
+            opacity: .55;
+        }
+
+        button.secondary {
+            background: #fff;
+            color: var(--brand);
+        }
+
+        button.ghost {
+            border-color: #d7dce3;
+            background: #fff;
+            color: #334155;
+        }
+
+        button.dark {
+            border-color: #111827;
+            background: #111827;
+            color: #fff;
+        }
+
+        h1,
+        h2,
+        h3,
+        p {
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 26px;
+            line-height: 1.15;
+        }
+
+        h2 {
+            font-size: 20px;
+            line-height: 1.25;
+        }
+
+        h3 {
+            font-size: 16px;
+            line-height: 1.35;
+        }
+
+        .wrap {
+            width: min(1280px, calc(100% - 32px));
+            margin: 0 auto;
+        }
+
+        .top-strip {
+            background: #111827;
+            color: rgba(255, 255, 255, .82);
+            font-size: 13px;
+        }
+
+        .auth-shell {
+            min-height: 100vh;
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 430px;
+            background:
+                linear-gradient(100deg, rgba(17, 24, 39, .86), rgba(153, 27, 27, .62)),
+                url("https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1600&q=80") center/cover;
+        }
+
+        .auth-hero {
+            display: grid;
+            align-content: end;
+            padding: 54px;
+            color: #fff;
+        }
+
+        .auth-hero h2 {
+            max-width: 620px;
+            font-size: 42px;
+            line-height: 1.1;
+        }
+
+        .auth-hero p {
+            max-width: 560px;
+            margin-top: 14px;
+            color: rgba(255, 255, 255, .84);
+            font-size: 17px;
+            line-height: 1.7;
+        }
+
+        .auth-panel {
+            display: grid;
+            align-content: center;
+            gap: 18px;
+            min-height: 100vh;
+            padding: 34px;
+            background: rgba(255, 255, 255, .96);
+            box-shadow: -20px 0 50px rgba(15, 23, 42, .20);
+        }
+
+        .auth-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--brand);
+        }
+
+        .auth-entry,
+        .auth-form {
+            display: grid;
+            gap: 18px;
+        }
+
+        .auth-entry h2 {
+            font-size: 28px;
+        }
+
+        .auth-entry p {
+            color: var(--subtle);
+            line-height: 1.7;
+        }
+
+        .auth-entry-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        .auth-back {
+            width: fit-content;
+            min-height: 34px;
+            padding: 6px 10px;
+        }
+
+        .auth-tabs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .app-shell.hidden,
+        .auth-shell.hidden {
+            display: none;
+        }
+
+        .top-strip .wrap {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 16px;
+            min-height: 34px;
+        }
+
+        .strip-links {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .strip-links button,
+        .strip-home {
+            min-height: 26px;
+            padding: 0;
+            border: 0;
+            background: transparent;
+            color: rgba(255, 255, 255, .86);
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .strip-links button:hover,
+        .strip-home:hover {
+            color: #fff;
+            text-decoration: underline;
+        }
+
+        .site-header {
+            position: sticky;
+            top: 0;
+            z-index: 20;
+            background: #fff;
+            box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
+        }
+
+        .header-grid {
+            display: grid;
+            grid-template-columns: 230px minmax(260px, 1fr) auto;
+            align-items: center;
+            gap: 18px;
+            min-height: 76px;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--brand);
+        }
+
+        .brand-mark {
+            display: grid;
+            place-items: center;
+            width: 42px;
+            height: 42px;
+            border-radius: 8px;
+            background: var(--brand);
+            color: #fff;
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .brand-subtitle {
+            margin-top: 3px;
+            color: var(--subtle);
+            font-size: 12px;
+        }
+
+        .search-box {
+            display: grid;
+            grid-template-columns: 1fr 94px;
+            gap: 0;
+            border: 2px solid var(--brand);
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .search-box input {
+            min-height: 42px;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+        }
+
+        .search-box button {
+            min-height: 42px;
+            border: 0;
+            border-radius: 0;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .header-user {
+            min-width: 110px;
+            color: #334155;
+            font-size: 14px;
+            text-align: right;
+        }
+
+        main {
+            padding: 20px 0 48px;
+        }
+
+        .notice {
+            display: none;
+            margin: 0 auto 14px;
+            padding: 11px 14px;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            background: #fff1f2;
+            color: #9f1239;
+            font-size: 14px;
+        }
+
+        .notice.show {
+            display: none;
+        }
+
+        .toast-stack {
+            position: fixed;
+            right: 22px;
+            bottom: 22px;
+            z-index: 80;
+            display: grid;
+            gap: 10px;
+            width: min(360px, calc(100vw - 32px));
+        }
+
+        .toast {
+            display: grid;
+            grid-template-columns: 4px 1fr auto;
+            gap: 10px;
+            align-items: center;
+            min-height: 52px;
+            padding: 12px 14px 12px 0;
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: 0 18px 36px rgba(15, 23, 42, .18);
+            animation: toastIn .18s ease-out;
+        }
+
+        .toast::before {
+            content: "";
+            width: 4px;
+            height: 100%;
+            background: var(--green);
+        }
+
+        .toast.error::before {
+            background: var(--brand);
+        }
+
+        .toast button {
+            min-height: 30px;
+            padding: 4px 8px;
+            border: 0;
+            background: transparent;
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        @keyframes toastIn {
+            from { transform: translateY(10px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 230px minmax(0, 1fr) 300px;
+            gap: 14px;
+            align-items: stretch;
+        }
+
+        .category-rail,
+        .account-box,
+        .checkout-box,
+        .editor-box,
+        .section-box {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: var(--shadow);
+        }
+
+        .category-rail {
+            padding: 12px;
+        }
+
+        .rail-title {
+            margin-bottom: 10px;
+            font-weight: 800;
+            color: #111827;
+        }
+
+        .category-list {
+            display: grid;
+            gap: 6px;
+        }
+
+        .category-list button {
+            display: flex;
+            justify-content: space-between;
+            min-height: 38px;
+            border-color: transparent;
+            background: transparent;
+            color: #334155;
+            text-align: left;
+        }
+
+        .category-list button:hover,
+        .category-list button.active {
+            border-color: #fee2e2;
+            background: #fff1f2;
+            color: var(--brand);
+        }
+
+        .hero-stage {
+            position: relative;
+            min-height: 300px;
+            overflow: hidden;
+            border-radius: 8px;
+            background:
+                linear-gradient(100deg, rgba(17, 24, 39, .90), rgba(153, 27, 27, .52)),
+                var(--hero-image, url("https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1400&q=80")) center/cover;
+            color: #fff;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            display: grid;
+            align-content: end;
+            min-height: 300px;
+            padding: 34px;
+        }
+
+        .hero-content h2 {
+            max-width: 560px;
+            font-size: 34px;
+            line-height: 1.15;
+        }
+
+        .hero-content p {
+            max-width: 520px;
+            margin: 12px 0 20px;
+            color: rgba(255, 255, 255, .86);
+        }
+
+        .hero-chips,
+        .actions,
+        .tabs,
+        .inline,
+        .admin-tabs {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .hero-chip {
+            display: inline-flex;
+            align-items: center;
+            min-height: 30px;
+            padding: 5px 10px;
+            border: 1px solid rgba(255, 255, 255, .28);
+            border-radius: 999px;
+            color: rgba(255, 255, 255, .90);
+            background: rgba(255, 255, 255, .12);
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .hero-control {
+            position: absolute;
+            top: 50%;
+            z-index: 2;
+            display: grid;
+            place-items: center;
+            width: 34px;
+            height: 34px;
+            min-height: 34px;
+            padding: 0;
+            border: 1px solid rgba(255, 255, 255, .22);
+            border-radius: 999px;
+            background: rgba(15, 23, 42, .42);
+            color: #fff;
+            transform: translateY(-50%);
+        }
+
+        .hero-control.prev {
+            left: 14px;
+        }
+
+        .hero-control.next {
+            right: 14px;
+        }
+
+        .carousel-dots {
+            position: absolute;
+            right: 24px;
+            bottom: 18px;
+            z-index: 2;
+            display: flex;
+            gap: 7px;
+        }
+
+        .carousel-dots button {
+            width: 8px;
+            height: 8px;
+            min-height: 8px;
+            padding: 0;
+            border: 0;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .44);
+        }
+
+        .carousel-dots button.active {
+            width: 22px;
+            background: #fff;
+        }
+
+        .account-box {
+            display: grid;
+            align-content: start;
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .member-avatar {
+            display: grid;
+            place-items: center;
+            width: 58px;
+            height: 58px;
+            border-radius: 999px;
+            background: #fff1f2;
+            color: var(--brand);
+            font-size: 24px;
+            font-weight: 900;
+        }
+
+        .tag-list {
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .auth-switch {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .auth-switch button {
+            min-height: 36px;
+        }
+
+        .form-grid {
+            display: grid;
+            gap: 10px;
+        }
+
+        .account-line {
+            padding: 10px;
+            border-radius: 6px;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .service-row {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 12px;
+            margin: 14px auto;
+        }
+
+        .service-item {
+            display: block;
+            width: 100%;
+            min-height: 70px;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--ink);
+            text-align: left;
+            box-shadow: 0 10px 22px rgba(15, 23, 42, .05);
+        }
+
+        .service-item:hover {
+            border-color: #fecaca;
+            box-shadow: 0 16px 30px rgba(15, 23, 42, .09);
+            transform: translateY(-1px);
+        }
+
+        .service-item strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .muted {
+            color: var(--subtle);
+            font-size: 13px;
+        }
+
+        .workspace {
+            display: grid;
+            gap: 14px;
+        }
+
+        .tabs {
+            padding: 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .tabs button.active,
+        .admin-tabs button.active {
+            border-color: #111827;
+            background: #111827;
+            color: #fff;
+        }
+
+        .view {
+            display: none;
+        }
+
+        .view.active {
+            display: grid;
+            gap: 14px;
+        }
+
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 360px minmax(0, 1fr);
+            gap: 14px;
+            align-items: start;
+        }
+
+        .section-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+
+        .section-box {
+            padding: 16px;
+        }
+
+        .toolbar {
+            display: grid;
+            grid-template-columns: minmax(220px, 360px) auto auto;
+            gap: 8px;
+            align-items: center;
+        }
+
+        .filter-bar {
+            display: grid;
+            grid-template-columns: minmax(180px, 1fr) 130px 130px 150px 120px;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .hot-search {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+            color: var(--subtle);
+            font-size: 13px;
+        }
+
+        .hot-search button,
+        .mini-chip {
+            min-height: 28px;
+            padding: 4px 10px;
+            border-color: #e2e8f0;
+            border-radius: 999px;
+            background: #fff;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .mini-chip.active,
+        .hot-search button:hover {
+            border-color: #fecaca;
+            color: var(--brand);
+            background: #fff1f2;
+        }
+
+        .tag-picker {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .tag-picker button {
+            min-height: 30px;
+            padding: 5px 11px;
+            border-color: #e2e8f0;
+            border-radius: 999px;
+            background: #fff;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .tag-picker button.active {
+            border-color: #fecaca;
+            background: #fff1f2;
+            color: var(--brand);
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            gap: 12px;
+        }
+
+        .recent-strip {
+            display: none;
+            margin-top: 14px;
+            padding-top: 14px;
+            border-top: 1px solid var(--line);
+        }
+
+        .recent-strip.show {
+            display: block;
+        }
+
+        .recent-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .recent-card {
+            display: grid;
+            gap: 6px;
+            padding: 8px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .recent-card img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #e5e7eb;
+        }
+
+        .product-card {
+            display: grid;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            box-shadow: 0 10px 20px rgba(15, 23, 42, .05);
+            transition: transform .16s ease, box-shadow .16s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 18px 34px rgba(15, 23, 42, .10);
+        }
+
+        .image-wrap {
+            position: relative;
+            overflow: hidden;
+            border-radius: 6px;
+            background: #e5e7eb;
+        }
+
+        .image-wrap img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: #fef3c7;
+            color: #92400e;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .image-wrap .badge {
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            background: rgba(255, 255, 255, .92);
+            color: var(--brand-dark);
+        }
+
+        .price {
+            color: var(--brand);
+            font-size: 20px;
+            font-weight: 900;
+        }
+
+        .product-meta {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            color: var(--subtle);
+            font-size: 13px;
+        }
+
+        .product-stats {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 6px;
+            color: #475569;
+            font-size: 12px;
+        }
+
+        .product-stats span {
+            padding: 6px 8px;
+            border-radius: 6px;
+            background: #f8fafc;
+            text-align: center;
+        }
+
+        .quantity-row {
+            display: grid;
+            grid-template-columns: 86px 1fr;
+            gap: 8px;
+        }
+
+        .comment-box {
+            display: none;
+            gap: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--line);
+        }
+
+        .comment-box.show {
+            display: grid;
+        }
+
+        .comment-list {
+            display: grid;
+            gap: 6px;
+        }
+
+        .comment-item {
+            padding: 8px;
+            border-radius: 6px;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .split-view {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 320px;
+            gap: 14px;
+            align-items: start;
+        }
+
+        .list-stack {
+            display: grid;
+            gap: 10px;
+        }
+
+        .line-card,
+        .order-card {
+            display: grid;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .line-card {
+            grid-template-columns: 96px minmax(0, 1fr) auto;
+            align-items: center;
+        }
+
+        .line-card img {
+            width: 96px;
+            aspect-ratio: 1;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #e5e7eb;
+        }
+
+        .checkout-box,
+        .editor-box {
+            display: grid;
+            gap: 10px;
+            padding: 16px;
+        }
+
+        .total-line {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-top: 1px solid var(--line);
+            font-size: 18px;
+            font-weight: 900;
+        }
+
+        .status {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .status.paid {
+            background: #dcfce7;
+            color: #047857;
+        }
+
+        .status.pending {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .status.done {
+            background: #ede9fe;
+            color: #6d28d9;
+        }
+
+        .order-steps {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+            margin: 4px 0;
+        }
+
+        .step {
+            position: relative;
+            padding-top: 18px;
+            color: #94a3b8;
+            font-size: 12px;
+            text-align: center;
+        }
+
+        .step::before {
+            content: "";
+            position: absolute;
+            top: 4px;
+            left: 50%;
+            width: 9px;
+            height: 9px;
+            border-radius: 999px;
+            background: #cbd5e1;
+            transform: translateX(-50%);
+        }
+
+        .step.done {
+            color: var(--brand);
+            font-weight: 800;
+        }
+
+        .step.done::before {
+            background: var(--brand);
+        }
+
+        .two-col {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .admin-product-grid {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) 300px;
+            gap: 14px;
+            align-items: start;
+        }
+
+        .field-block {
+            display: grid;
+            gap: 8px;
+        }
+
+        .field-block label {
+            color: #334155;
+            font-size: 13px;
+            font-weight: 800;
+        }
+
+        .drop-zone {
+            display: grid;
+            place-items: center;
+            min-height: 260px;
+            padding: 16px;
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #64748b;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .drop-zone.dragover {
+            border-color: var(--brand);
+            background: #fff1f2;
+            color: var(--brand);
+        }
+
+        .image-preview {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            overflow: hidden;
+            border-radius: 8px;
+            background: #e5e7eb;
+        }
+
+        .image-preview img {
+            display: block;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .editor-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .admin-layout {
+            display: grid;
+            grid-template-columns: 220px minmax(0, 1fr);
+            gap: 14px;
+            align-items: start;
+        }
+
+        .admin-tabs {
+            display: grid;
+            padding: 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .admin-view {
+            display: none;
+        }
+
+        .admin-view.active {
+            display: grid;
+            gap: 14px;
+        }
+
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .metric {
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .metric span {
+            display: block;
+            color: var(--subtle);
+            font-size: 13px;
+        }
+
+        .metric strong {
+            display: block;
+            margin-top: 6px;
+            font-size: 26px;
+        }
+
+        .table-wrap {
+            overflow-x: auto;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        table {
+            width: 100%;
+            min-width: 860px;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 11px 12px;
+            border-bottom: 1px solid var(--line);
+            text-align: left;
+            vertical-align: middle;
+        }
+
+        th {
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        tr:last-child td {
+            border-bottom: 0;
+        }
+
+        .thumb {
+            width: 54px;
+            height: 54px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #e5e7eb;
+        }
+
+        .empty {
+            padding: 26px;
+            border: 1px dashed #cbd5e1;
+            border-radius: 8px;
+            background: #fff;
+            color: var(--subtle);
+            text-align: center;
+        }
+
+        .detail-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 70;
+            display: none;
+            overflow-y: auto;
+            background: rgba(15, 23, 42, .62);
+            padding: 32px 16px;
+        }
+
+        .detail-overlay.show {
+            display: block;
+        }
+
+        .detail-page {
+            width: min(1160px, 100%);
+            margin: 0 auto;
+            border-radius: 8px;
+            background: #f8fafc;
+            box-shadow: 0 28px 70px rgba(15, 23, 42, .30);
+        }
+
+        .detail-top {
+            display: grid;
+            grid-template-columns: 420px minmax(0, 1fr);
+            gap: 22px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px 8px 0 0;
+        }
+
+        .detail-image {
+            overflow: hidden;
+            border-radius: 8px;
+            background: #e5e7eb;
+        }
+
+        .detail-image img {
+            display: block;
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+        }
+
+        .detail-info {
+            display: grid;
+            align-content: start;
+            gap: 14px;
+        }
+
+        .detail-info h2 {
+            font-size: 26px;
+        }
+
+        .detail-price {
+            display: flex;
+            align-items: baseline;
+            gap: 10px;
+            padding: 14px;
+            border-radius: 8px;
+            background: #fff1f2;
+            color: var(--brand);
+            font-size: 30px;
+            font-weight: 900;
+        }
+
+        .detail-metrics {
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .detail-metrics div {
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .detail-metrics span {
+            display: block;
+            color: var(--subtle);
+            font-size: 12px;
+        }
+
+        .detail-metrics strong {
+            display: block;
+            margin-top: 4px;
+        }
+
+        .detail-tabs {
+            display: grid;
+            gap: 14px;
+            padding: 18px 20px 22px;
+        }
+
+        .detail-section {
+            padding: 16px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .detail-close {
+            position: sticky;
+            top: 12px;
+            float: right;
+            z-index: 2;
+            min-height: 34px;
+            padding: 6px 10px;
+            border-color: #d7dce3;
+            background: #fff;
+            color: #334155;
+        }
+
+        .float-actions {
+            position: fixed;
+            right: 22px;
+            bottom: 98px;
+            z-index: 60;
+            display: grid;
+            gap: 8px;
+        }
+
+        .float-actions button {
+            width: 42px;
+            min-height: 42px;
+            padding: 0;
+            border-color: #d7dce3;
+            border-radius: 999px;
+            background: #fff;
+            color: #334155;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, .14);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        @media (max-width: 1100px) {
+            .hero-grid,
+            .split-view,
+            .admin-layout,
+            .profile-layout,
+            .admin-product-grid,
+            .detail-top {
+                grid-template-columns: 1fr;
+            }
+
+            .service-row,
+            .metric-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+        }
+
+        @media (max-width: 760px) {
+            .wrap {
+                width: min(100% - 20px, 1280px);
+            }
+
+            .top-strip .wrap,
+            .header-grid,
+            .auth-shell,
+            .section-head {
+                align-items: stretch;
+                grid-template-columns: 1fr;
+                flex-direction: column;
+            }
+
+            .auth-hero,
+            .auth-panel {
+                min-height: auto;
+                padding: 28px 20px;
+            }
+
+            .auth-hero h2 {
+                font-size: 30px;
+            }
+
+            .header-grid {
+                gap: 12px;
+                padding: 12px 0;
+            }
+
+            .header-actions,
+            .strip-links {
+                justify-content: flex-start;
+            }
+
+            .header-user {
+                text-align: left;
+            }
+
+            .search-box,
+            .toolbar,
+            .filter-bar,
+            .line-card,
+            .two-col,
+            .service-row,
+            .metric-grid,
+            .quantity-row,
+            .detail-metrics {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-content {
+                min-height: 240px;
+                padding: 24px;
+            }
+
+            .hero-content h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="toastStack" class="toast-stack" aria-live="polite"></div>
+
+<section id="authShell" class="auth-shell hidden">
+    <div class="auth-hero">
+        <div>
+            <div class="auth-brand">
+                <div class="brand-mark">柚</div>
+                <div>
+                    <h1>柚子妹妹网购</h1>
+                    <div style="color:rgba(255,255,255,.78);font-size:13px">全品类综合网购平台</div>
+                </div>
+            </div>
+            <h2 style="margin-top:34px">买好物，省心到家</h2>
+            <p>精选全品类商品，覆盖数码办公、家居日用、服饰美妆、食品运动等日常消费场景。</p>
+        </div>
+    </div>
+    <div class="auth-panel">
+        <div id="authEntry" class="auth-entry">
+            <div>
+                <h2>欢迎来到柚子妹妹网购</h2>
+                <p style="margin-top:10px">登录账号后继续选购，或创建新账号开始购物。</p>
+            </div>
+            <div class="auth-entry-actions">
+                <button onclick="openAuth('login')">登录</button>
+                <button class="secondary" onclick="openAuth('register')">注册</button>
+            </div>
+        </div>
+        <div id="authForm" class="auth-form hidden">
+            <button class="ghost auth-back" onclick="showAuthEntry()">返回</button>
+            <div>
+                <h2 id="authTitle">会员登录</h2>
+                <div id="authSubtitle" class="muted" style="margin-top:6px">欢迎回来，继续选购喜欢的商品。</div>
+            </div>
+            <div class="auth-tabs">
+                <button id="authLoginModeBtn" class="dark" onclick="openAuth('login')">登录</button>
+                <button id="authRegisterModeBtn" class="ghost" onclick="openAuth('register')">注册</button>
+            </div>
+            <div class="form-grid">
+                <input id="authUsername" placeholder="用户名">
+                <input id="authPassword" placeholder="密码" type="password">
+                <input id="authPhone" class="hidden" placeholder="手机号">
+                <input id="authNickname" class="hidden" placeholder="昵称">
+                <textarea id="authAddress" class="hidden" placeholder="默认收货地址"></textarea>
+                <button id="authSubmitBtn" onclick="submitAuth()">登录</button>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div id="appShell" class="app-shell hidden">
+<div class="top-strip">
+    <div class="wrap">
+        <button class="strip-home" onclick="goHome()">柚子妹妹首页</button>
+        <div class="strip-links">
+            <button onclick="goHome()">首页</button>
+            <button onclick="selectCategory('全部')">全部商品</button>
+            <button onclick="showTab('favorites')">收藏夹</button>
+            <button onclick="showTab('orders')">我的订单</button>
+            <button onclick="showTab('profile')">个人中心</button>
+            <button class="admin-only hidden" onclick="showTab('admin')">运营中心</button>
+        </div>
+    </div>
+</div>
+
+<header class="site-header">
+    <div class="wrap header-grid">
+        <div class="brand">
+            <div class="brand-mark">柚</div>
+            <div>
+                <h1>柚子妹妹网购</h1>
+                <div class="brand-subtitle">全品类综合网购平台</div>
+            </div>
+        </div>
+        <div class="search-box">
+            <input id="topKeyword" placeholder="搜索商品名称、卖点">
+            <button onclick="searchFromHeader()">搜索</button>
+        </div>
+        <div class="header-actions">
+            <button class="ghost" onclick="showTab('cart')">购物车</button>
+            <button class="ghost" onclick="showTab('orders')">订单</button>
+            <button class="ghost" onclick="showTab('profile')">个人主页</button>
+            <button id="navAdminHeader" class="dark admin-only hidden" onclick="showTab('admin')">运营中心</button>
+            <button class="ghost" onclick="logout()">退出</button>
+            <div id="headerUser" class="header-user">未登录</div>
+        </div>
+    </div>
+</header>
+
+<main>
+    <div id="notice" class="wrap notice"></div>
+
+    <section class="wrap hero-grid">
+        <aside class="category-rail">
+            <div class="rail-title">全部分类</div>
+            <div id="categoryList" class="category-list"></div>
+        </aside>
+
+        <div id="heroStage" class="hero-stage">
+            <button class="hero-control prev" onclick="prevSlide()" aria-label="上一张">‹</button>
+            <button class="hero-control next" onclick="nextSlide()" aria-label="下一张">›</button>
+            <div class="hero-content">
+                <h2 id="heroTitle">全品类好物，一站式放心选购</h2>
+                <p id="heroText">手机数码、电脑办公、家用电器、服饰箱包、食品饮料，热门商品集中上新。</p>
+                <div class="actions">
+                    <button id="heroPrimary" onclick="selectCategory('家用电器')">立即选购</button>
+                    <button id="heroSecondary" class="secondary" onclick="selectCategory('电脑办公')">办公精选</button>
+                </div>
+                <div class="hero-chips" style="margin-top:18px">
+                    <span id="heroChipA" class="hero-chip">今日上新</span>
+                    <span id="heroChipB" class="hero-chip">热卖排行</span>
+                    <span id="heroChipC" class="hero-chip">限时好价</span>
+                </div>
+            </div>
+            <div id="carouselDots" class="carousel-dots"></div>
+        </div>
+
+        <aside class="account-box">
+            <div class="section-head" style="margin-bottom:0">
+                <h2>会员中心</h2>
+                <span id="roleBadge" class="badge">游客</span>
+            </div>
+            <div class="inline">
+                <div id="memberAvatar" class="member-avatar">柚</div>
+                <div>
+                    <h3 id="memberName">未登录</h3>
+                    <div id="accountInfo" class="muted">欢迎来到柚子妹妹网购</div>
+                </div>
+            </div>
+            <div id="memberTags" class="tag-list"></div>
+            <button onclick="showTab('profile')">进入个人主页</button>
+            <div class="metric-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
+                <div class="metric"><span>购物车</span><strong id="cartCount">0</strong></div>
+                <div class="metric"><span>订单</span><strong id="orderCount">0</strong></div>
+            </div>
+        </aside>
+    </section>
+
+    <section class="wrap service-row">
+        <button class="service-item" onclick="selectCategory('手机数码')"><strong>正品严选</strong><span class="muted">精选平台好物</span></button>
+        <button class="service-item" onclick="showTab('orders')"><strong>极速发货</strong><span class="muted">订单进度清晰</span></button>
+        <button class="service-item" onclick="selectCategory('家居日用')"><strong>省心售后</strong><span class="muted">购物更安心</span></button>
+        <button class="service-item" onclick="showTab('favorites')"><strong>会员专享</strong><span class="muted">收藏好物不丢失</span></button>
+    </section>
+
+    <section class="wrap workspace">
+        <nav class="tabs">
+            <button id="tabProductsBtn" class="active" onclick="showTab('products')">商品选购</button>
+            <button id="tabCartBtn" class="ghost" onclick="showTab('cart')">购物车</button>
+            <button id="tabFavoritesBtn" class="ghost" onclick="showTab('favorites')">我的收藏</button>
+            <button id="tabOrdersBtn" class="ghost" onclick="showTab('orders')">我的订单</button>
+            <button id="tabProfileBtn" class="ghost" onclick="showTab('profile')">个人主页</button>
+            <button id="tabAdminBtn" class="ghost admin-only hidden" onclick="showTab('admin')">运营中心</button>
+        </nav>
+
+        <div id="productsView" class="view active">
+            <div class="section-box">
+                <div class="section-head">
+                    <div>
+                        <h2>为你推荐</h2>
+                        <div id="productHint" class="muted">全部商品</div>
+                    </div>
+                    <div class="toolbar">
+                        <input id="keyword" placeholder="搜索商品名称、卖点">
+                        <button onclick="loadProducts()">搜索</button>
+                        <button class="ghost" onclick="clearSearch()">全部</button>
+                    </div>
+                </div>
+                <div class="hot-search">
+                    <span>热门分类</span>
+                    <button onclick="selectCategory('家用电器')">家用电器</button>
+                    <button onclick="selectCategory('电脑办公')">电脑办公</button>
+                    <button onclick="selectCategory('食品饮料')">食品饮料</button>
+                    <button onclick="selectCategory('运动户外')">运动户外</button>
+                </div>
+                <div class="filter-bar">
+                    <select id="sortMode" onchange="renderProductList()">
+                        <option value="default">综合排序</option>
+                        <option value="sales">销量优先</option>
+                        <option value="rating">好评优先</option>
+                        <option value="priceAsc">价格从低到高</option>
+                        <option value="priceDesc">价格从高到低</option>
+                    </select>
+                    <input id="minPrice" type="number" min="0" placeholder="最低价" oninput="renderProductList()">
+                    <input id="maxPrice" type="number" min="0" placeholder="最高价" oninput="renderProductList()">
+                    <button id="stockOnlyBtn" class="ghost" onclick="toggleStockOnly()">仅看有货</button>
+                    <button class="ghost" onclick="resetFilters()">重置筛选</button>
+                </div>
+                <div id="products" class="product-grid"></div>
+                <div id="recentViewed" class="recent-strip">
+                    <div class="section-head" style="margin-bottom:0">
+                        <h2>最近浏览</h2>
+                        <button class="ghost" onclick="clearRecentViewed()">清空</button>
+                    </div>
+                    <div id="recentList" class="recent-list"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="cartView" class="view">
+            <div class="split-view">
+                <div class="section-box">
+                    <div class="section-head">
+                        <h2>购物车</h2>
+                        <button class="ghost" onclick="loadCart()">刷新</button>
+                    </div>
+                    <div id="cart" class="list-stack"></div>
+                </div>
+                <aside class="checkout-box">
+                    <h2>订单结算</h2>
+                    <input id="receiverName" placeholder="收货人">
+                    <input id="receiverPhone" placeholder="联系电话">
+                    <textarea id="shippingAddress" placeholder="收货地址"></textarea>
+                    <div class="total-line">
+                        <span>合计</span>
+                        <span id="orderTotal">￥0.00</span>
+                    </div>
+                    <button onclick="createOrder()">提交订单</button>
+                </aside>
+            </div>
+        </div>
+
+        <div id="favoritesView" class="view">
+            <div class="section-box">
+                <div class="section-head">
+                    <h2>我的收藏</h2>
+                    <button class="ghost" onclick="loadFavorites()">刷新</button>
+                </div>
+                <div id="favorites" class="product-grid"></div>
+            </div>
+        </div>
+
+        <div id="ordersView" class="view">
+            <div class="section-box">
+                <div class="section-head">
+                    <h2>我的订单</h2>
+                    <button class="ghost" onclick="loadUserOrders()">刷新</button>
+                </div>
+                <div id="userOrders" class="list-stack"></div>
+            </div>
+        </div>
+
+        <div id="profileView" class="view">
+            <div class="profile-layout">
+                <section class="section-box">
+                    <div class="section-head">
+                        <div>
+                            <h2>个人主页</h2>
+                            <div class="muted">收货信息、联系方式和偏好标签</div>
+                        </div>
+                        <button class="ghost" onclick="loadProfile()">刷新</button>
+                    </div>
+                    <div class="form-grid">
+                        <div class="field-block">
+                            <label for="profileNickname">昵称</label>
+                            <input id="profileNickname" placeholder="昵称">
+                        </div>
+                        <div class="field-block">
+                            <label for="profilePhone">联系方式</label>
+                            <input id="profilePhone" placeholder="手机号">
+                        </div>
+                        <div class="field-block">
+                            <label for="profileAddress">默认收货地址</label>
+                            <textarea id="profileAddress" placeholder="省市区、街道门牌号、收件人信息"></textarea>
+                        </div>
+                        <div class="field-block">
+                            <label for="profileTags">个性标签</label>
+                            <input id="profileTags" placeholder="例如：数码,家居,运动">
+                        </div>
+                        <div id="profileTagPicker" class="tag-picker"></div>
+                        <button onclick="saveProfile()">保存个人资料</button>
+                    </div>
+                </section>
+                <section class="section-box">
+                    <div class="section-head">
+                        <h2>我的资产</h2>
+                        <div class="actions">
+                            <button class="ghost" onclick="showTab('favorites')">收藏</button>
+                            <button class="ghost" onclick="showTab('orders')">订单</button>
+                        </div>
+                    </div>
+                    <div class="metric-grid">
+                        <div class="metric"><span>购物车</span><strong id="profileCartCount">0</strong></div>
+                        <div class="metric"><span>订单</span><strong id="profileOrderCount">0</strong></div>
+                        <div class="metric"><span>收藏</span><strong id="profileFavoriteCount">0</strong></div>
+                        <div class="metric"><span>身份</span><strong id="profileRoleText">会员</strong></div>
+                    </div>
+                    <div style="margin-top:14px">
+                        <h3 style="margin-bottom:10px">最近收藏</h3>
+                        <div id="profileFavorites" class="product-grid"></div>
+                    </div>
+                    <div style="margin-top:14px">
+                        <h3 style="margin-bottom:10px">最近订单</h3>
+                        <div id="profileOrders" class="list-stack"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div id="adminView" class="view">
+            <div class="admin-layout">
+                <nav class="admin-tabs">
+                    <button id="adminOverviewBtn" class="active" onclick="showAdminSection('overview')">概览</button>
+                    <button id="adminProductsBtn" class="ghost" onclick="showAdminSection('products')">商品管理</button>
+                    <button id="adminOrdersBtn" class="ghost" onclick="showAdminSection('orders')">订单物流</button>
+                    <button id="adminCommentsBtn" class="ghost" onclick="showAdminSection('comments')">评价管理</button>
+                    <button id="adminUsersBtn" class="ghost super-only hidden" onclick="showAdminSection('users')">用户权限</button>
+                </nav>
+
+                <div>
+                    <div id="adminOverviewPanel" class="admin-view active">
+                        <div class="metric-grid">
+                            <div class="metric"><span>商品</span><strong id="metricProducts">0</strong></div>
+                            <div class="metric"><span>订单</span><strong id="metricOrders">0</strong></div>
+                            <div class="metric"><span>评价</span><strong id="metricComments">0</strong></div>
+                            <div class="metric"><span>用户</span><strong id="metricUsers">0</strong></div>
+                        </div>
+                    </div>
+
+                    <div id="adminProductsPanel" class="admin-view">
+                        <div class="editor-box">
+                            <div class="section-head">
+                                <h2>商品编辑</h2>
+                                <button class="ghost" onclick="resetProductForm()">清空</button>
+                            </div>
+                            <div class="admin-product-grid">
+                                <div class="form-grid">
+                                    <div class="two-col">
+                                        <div class="field-block">
+                                            <label for="productName">商品名称</label>
+                                            <input id="productName" placeholder="如：家用智能投影仪">
+                                        </div>
+                                        <div class="field-block">
+                                            <label for="productCategory">商品分类</label>
+                                            <select id="productCategory"></select>
+                                        </div>
+                                        <div class="field-block">
+                                            <label for="productPrice">销售价格</label>
+                                            <input id="productPrice" placeholder="价格" type="number" min="0" step="0.01">
+                                        </div>
+                                        <div class="field-block">
+                                            <label for="productStock">库存数量</label>
+                                            <input id="productStock" placeholder="库存" type="number" min="0">
+                                        </div>
+                                    </div>
+                                    <div class="field-block">
+                                        <label for="productSubtitle">商品卖点</label>
+                                        <input id="productSubtitle" placeholder="一句话概括商品优势">
+                                    </div>
+                                    <div class="field-block">
+                                        <label for="productDescription">图文详情</label>
+                                        <textarea id="productDescription" placeholder="商品材质、适用场景、包装清单、售后说明等"></textarea>
+                                    </div>
+                                    <div class="field-block">
+                                        <label for="productSaleCount">基础销量</label>
+                                        <input id="productSaleCount" placeholder="用于新商品初始展示，可填 0" type="number" min="0">
+                                    </div>
+                                </div>
+                                <div class="form-grid">
+                                    <div id="productDropZone" class="drop-zone">
+                                        <div>
+                                            <strong>拖入商品图片</strong>
+                                            <div class="muted">支持 jpg、png、webp，自动压缩后导入</div>
+                                        </div>
+                                    </div>
+                                    <input id="productImageFile" class="hidden" type="file" accept="image/*">
+                                    <div id="productImagePreview" class="image-preview hidden">
+                                        <img id="productPreviewImg" alt="商品图片预览">
+                                    </div>
+                                    <input id="productImage" placeholder="也可以粘贴图片地址">
+                                </div>
+                            </div>
+                            <div class="editor-actions">
+                                <button onclick="saveProduct()">保存商品</button>
+                                <button class="ghost" onclick="loadAdminProducts()">刷新列表</button>
+                            </div>
+                        </div>
+                        <div class="section-box">
+                            <div class="toolbar">
+                                <input id="adminProductKeyword" placeholder="按商品名或分类搜索" oninput="renderAdminProductsTable()">
+                                <button onclick="renderAdminProductsTable()">搜索</button>
+                                <button class="ghost" onclick="$('adminProductKeyword').value=''; renderAdminProductsTable()">全部</button>
+                            </div>
+                        </div>
+                        <div id="adminProductsTable" class="table-wrap"></div>
+                    </div>
+
+                    <div id="adminOrdersPanel" class="admin-view">
+                        <div class="section-box">
+                            <div class="section-head">
+                                <h2>订单物流</h2>
+                                <button class="ghost" onclick="loadAdminOrders()">刷新</button>
+                            </div>
+                            <div id="adminOrders" class="list-stack"></div>
+                        </div>
+                    </div>
+
+                    <div id="adminCommentsPanel" class="admin-view">
+                        <div class="section-box">
+                            <div class="section-head">
+                                <h2>评价管理</h2>
+                                <button class="ghost" onclick="loadAdminComments()">刷新</button>
+                            </div>
+                            <div id="adminComments" class="table-wrap"></div>
+                        </div>
+                    </div>
+
+                    <div id="adminUsersPanel" class="admin-view">
+                        <div class="section-box">
+                            <div class="section-head">
+                                <h2>用户权限</h2>
+                                <button class="ghost" onclick="loadUsers()">刷新</button>
+                            </div>
+                            <div id="users" class="table-wrap"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+
+<div class="float-actions">
+    <button title="购物车" onclick="showTab('cart')">车</button>
+    <button title="回到顶部" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
+</div>
+
+<div id="productDetailOverlay" class="detail-overlay">
+    <div class="detail-page">
+        <button class="detail-close" onclick="closeProductDetail()">关闭</button>
+        <div id="productDetail"></div>
+    </div>
+</div>
+</div>
+
+<script>
+    const contextPath = location.pathname.split("/").filter(Boolean)[0] || "";
+    const api = `${location.origin}${contextPath ? `/${contextPath}` : ""}/api`;
+    const fallbackImage = "https://dummyimage.com/800x600/f1f5f9/475569&text=YZMM";
+    const categories = ["全部", "手机数码", "电脑办公", "家用电器", "服饰箱包", "美妆个护", "食品饮料", "家居日用", "运动户外"];
+    const carouselSlides = [
+        {
+            title: "全品类好物，一站式放心选购",
+            text: "手机数码、电脑办公、家用电器、服饰箱包、食品饮料，热门商品集中上新。",
+            image: "url('https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1400&q=80')",
+            primary: "家用电器",
+            secondary: "电脑办公",
+            chips: ["今日上新", "热卖排行", "限时好价"]
+        },
+        {
+            title: "数码办公专区，效率装备一次配齐",
+            text: "耳机、键盘、笔记本、投影仪，适合学习、办公和家庭娱乐。",
+            image: "url('https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1400&q=80')",
+            primary: "电脑办公",
+            secondary: "手机数码",
+            chips: ["高效办公", "品质数码", "现货速发"]
+        },
+        {
+            title: "家居生活焕新，日用家电放心挑",
+            text: "厨房小家电、保温杯、清洁收纳和日用好物，覆盖真实生活场景。",
+            image: "url('https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1400&q=80')",
+            primary: "家居日用",
+            secondary: "家用电器",
+            chips: ["生活焕新", "省心售后", "精选好物"]
+        }
+    ];
+    const statusNames = ["待支付", "已支付", "已发货", "已完成"];
+    const logisticsNames = {pending: "待发货", shipping: "运输中", signed: "已签收"};
+    const roleNames = {user: "普通用户", admin: "管理员", super_admin: "超级管理员"};
+    const views = ["products", "cart", "favorites", "orders", "profile", "admin"];
+    const adminViews = ["overview", "products", "orders", "comments", "users"];
+    const suggestedProfileTags = ["数码", "办公", "家居", "食品", "运动", "美妆", "通勤", "礼品"];
+
+    const state = {
+        user: JSON.parse(localStorage.getItem("yzmmMallCurrentUser") || "null"),
+        tab: "products",
+        adminTab: "overview",
+        authMode: "login",
+        authStage: "entry",
+        selectedCategory: "全部",
+        editingProductId: null,
+        activeProduct: null,
+        currentSlide: 0,
+        carouselTimer: null,
+        productImageData: "",
+        stockOnly: false,
+        products: [],
+        visibleProducts: [],
+        cartRows: []
+    };
+
+    const $ = id => document.getElementById(id);
+
+    function html(value) {
+        return String(value ?? "").replace(/[&<>"']/g, ch => ({
+            "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#39;"
+        }[ch]));
+    }
+
+    function money(value) {
+        return Number(value || 0).toFixed(2);
+    }
+
+    function intText(value) {
+        return Number(value || 0).toLocaleString("zh-CN");
+    }
+
+    function percentText(value) {
+        if (value === null || value === undefined || value === "") return "100%";
+        return `${Math.round(Number(value) || 0)}%`;
+    }
+
+    function isAdmin() {
+        return state.user && (state.user.role === "admin" || state.user.role === "super_admin");
+    }
+
+    function isSuper() {
+        return state.user && state.user.role === "super_admin";
+    }
+
+    function requireLogin() {
+        if (!state.user) throw new Error("请先登录");
+    }
+
+    function requireAdmin() {
+        if (!isAdmin()) throw new Error("当前账号不是管理员");
+    }
+
+    function setNotice(text) {
+        if (!text) return;
+        const toast = document.createElement("div");
+        const isError = /失败|错误|不能|请|缺少|不存在|不足|异常|无法/.test(text);
+        toast.className = `toast${isError ? " error" : ""}`;
+        toast.innerHTML = `<div>${html(text)}</div><button type="button" aria-label="关闭">×</button>`;
+        toast.querySelector("button").onclick = () => toast.remove();
+        $("toastStack").appendChild(toast);
+        setTimeout(() => toast.remove(), isError ? 4600 : 2600);
+    }
+
+    async function request(path, options = {}) {
+        let response;
+        try {
+            response = await fetch(`${api}${path}`, {
+                headers: {"Content-Type": "application/json"},
+                ...options
+            });
+        } catch (error) {
+            throw new Error("无法连接后端服务，请确认 Tomcat 已启动并完成部署");
+        }
+        const body = await response.json().catch(() => null);
+        if (!body) {
+            throw new Error("接口返回异常，请检查部署路径");
+        }
+        if (!response.ok || body.success === false) {
+            throw new Error(body.message || "请求失败");
+        }
+        return body.data;
+    }
+
+    function init() {
+        renderCategories();
+        renderCategorySelect();
+        renderCarousel();
+        initProductImageDrop();
+        $("topKeyword").addEventListener("keydown", event => {
+            if (event.key === "Enter") searchFromHeader();
+        });
+        $("keyword").addEventListener("keydown", event => {
+            if (event.key === "Enter") loadProducts();
+        });
+        $("profileTags").addEventListener("input", renderProfileTagPicker);
+        $("productDetailOverlay").addEventListener("click", event => {
+            if (event.target.id === "productDetailOverlay") closeProductDetail();
+        });
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") closeProductDetail();
+        });
+        const authHash = location.hash.replace("#", "");
+        if (!state.user && (authHash === "login" || authHash === "register")) {
+            state.authMode = authHash;
+            state.authStage = "form";
+        }
+        setAuthMode(state.authMode);
+        updateAuthView();
+        if (state.user) loadProducts();
+        renderRecentViewed();
+    }
+
+    function renderCarousel() {
+        $("carouselDots").innerHTML = carouselSlides.map((_, index) => `
+            <button class="${index === state.currentSlide ? "active" : ""}" onclick="setSlide(${index})" aria-label="切换轮播"></button>
+        `).join("");
+        setSlide(0, false);
+        state.carouselTimer = setInterval(() => nextSlide(false), 5200);
+    }
+
+    function setSlide(index, resetTimer = true) {
+        state.currentSlide = (index + carouselSlides.length) % carouselSlides.length;
+        const slide = carouselSlides[state.currentSlide];
+        $("heroStage").style.setProperty("--hero-image", slide.image);
+        $("heroTitle").textContent = slide.title;
+        $("heroText").textContent = slide.text;
+        $("heroPrimary").textContent = state.currentSlide === 0 ? "立即选购" : `${slide.primary}专区`;
+        $("heroPrimary").onclick = () => selectCategory(slide.primary);
+        $("heroSecondary").textContent = `${slide.secondary}精选`;
+        $("heroSecondary").onclick = () => selectCategory(slide.secondary);
+        ["heroChipA", "heroChipB", "heroChipC"].forEach((id, chipIndex) => {
+            $(id).textContent = slide.chips[chipIndex] || "";
+        });
+        document.querySelectorAll(".carousel-dots button").forEach((button, dotIndex) => {
+            button.classList.toggle("active", dotIndex === state.currentSlide);
+        });
+        if (resetTimer) {
+            clearInterval(state.carouselTimer);
+            state.carouselTimer = setInterval(() => nextSlide(false), 5200);
+        }
+    }
+
+    function nextSlide(resetTimer = true) {
+        setSlide(state.currentSlide + 1, resetTimer);
+    }
+
+    function prevSlide() {
+        setSlide(state.currentSlide - 1);
+    }
+
+    function renderCategories() {
+        $("categoryList").innerHTML = categories.map(category => `
+            <button id="cat-${html(category)}" class="${category === state.selectedCategory ? "active" : ""}" onclick="selectCategory('${html(category)}')">
+                <span>${html(category)}</span><span>›</span>
+            </button>
+        `).join("");
+    }
+
+    function renderCategorySelect() {
+        $("productCategory").innerHTML = categories
+            .filter(category => category !== "全部")
+            .map(category => `<option value="${html(category)}">${html(category)}</option>`)
+            .join("");
+    }
+
+    function initProductImageDrop() {
+        const zone = $("productDropZone");
+        const fileInput = $("productImageFile");
+        zone.addEventListener("click", () => fileInput.click());
+        fileInput.addEventListener("change", event => {
+            const file = event.target.files && event.target.files[0];
+            if (file) handleProductImageFile(file);
+        });
+        ["dragenter", "dragover"].forEach(name => {
+            zone.addEventListener(name, event => {
+                event.preventDefault();
+                zone.classList.add("dragover");
+            });
+        });
+        ["dragleave", "drop"].forEach(name => {
+            zone.addEventListener(name, event => {
+                event.preventDefault();
+                zone.classList.remove("dragover");
+            });
+        });
+        zone.addEventListener("drop", event => {
+            const file = event.dataTransfer.files && event.dataTransfer.files[0];
+            if (file) handleProductImageFile(file);
+        });
+        $("productImage").addEventListener("input", event => {
+            state.productImageData = "";
+            updateProductPreview(event.target.value.trim());
+        });
+    }
+
+    async function handleProductImageFile(file) {
+        try {
+            if (!file.type.startsWith("image/")) throw new Error("请拖入图片文件");
+            const dataUrl = await resizeImage(file);
+            state.productImageData = dataUrl;
+            $("productImage").value = dataUrl;
+            updateProductPreview(dataUrl);
+            setNotice("图片已导入");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function resizeImage(file) {
+        return new Promise((resolve, reject) => {
+            const reader = new FileReader();
+            reader.onerror = () => reject(new Error("图片读取失败"));
+            reader.onload = () => {
+                const image = new Image();
+                image.onerror = () => reject(new Error("图片解析失败"));
+                image.onload = () => {
+                    const maxSize = 900;
+                    const ratio = Math.min(1, maxSize / Math.max(image.width, image.height));
+                    const canvas = document.createElement("canvas");
+                    canvas.width = Math.round(image.width * ratio);
+                    canvas.height = Math.round(image.height * ratio);
+                    const context = canvas.getContext("2d");
+                    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+                    resolve(canvas.toDataURL("image/jpeg", .84));
+                };
+                image.src = reader.result;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    function updateProductPreview(src) {
+        const hasImage = Boolean(src);
+        $("productImagePreview").classList.toggle("hidden", !hasImage);
+        if (hasImage) $("productPreviewImg").src = src;
+    }
+
+    function selectCategory(category) {
+        state.selectedCategory = category || "全部";
+        $("keyword").value = "";
+        $("topKeyword").value = "";
+        renderCategories();
+        showTab("products");
+        document.querySelector(".workspace")?.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    function goHome() {
+        state.selectedCategory = "全部";
+        $("keyword").value = "";
+        $("topKeyword").value = "";
+        resetFilters();
+        renderCategories();
+        showTab("products");
+        window.scrollTo({top: 0, behavior: "smooth"});
+    }
+
+    function updateAuthView() {
+        $("authShell").classList.toggle("hidden", Boolean(state.user));
+        $("appShell").classList.toggle("hidden", !state.user);
+        if (!state.user) {
+            document.querySelectorAll(".admin-only").forEach(el => el.classList.add("hidden"));
+            document.querySelectorAll(".super-only").forEach(el => el.classList.add("hidden"));
+            if (state.authStage === "form") {
+                openAuth(state.authMode, false);
+            } else {
+                showAuthEntry(false);
+            }
+            return;
+        }
+
+        clearAuthHash();
+
+        const name = state.user ? state.user.username : "未登录";
+        const role = state.user ? roleNames[state.user.role] || state.user.role : "游客";
+        const displayName = state.user.nickname || name;
+        $("headerUser").textContent = displayName;
+        $("roleBadge").textContent = role;
+        $("accountInfo").innerHTML = state.user
+            ? `您好，<strong>${html(displayName)}</strong>`
+            : "欢迎来到柚子妹妹网购";
+        $("memberName").textContent = displayName;
+        $("memberAvatar").textContent = displayName.slice(0, 1);
+        renderMemberTags();
+
+        document.querySelectorAll(".admin-only").forEach(el => el.classList.toggle("hidden", !isAdmin()));
+        document.querySelectorAll(".super-only").forEach(el => el.classList.toggle("hidden", !isSuper()));
+
+        if (!isAdmin() && state.tab === "admin") {
+            showTab("products");
+        }
+        if (!isSuper() && state.adminTab === "users") {
+            showAdminSection("overview");
+        }
+
+        if (state.user) {
+            prefillReceiver();
+            loadCartCount();
+            loadOrderCount();
+        } else {
+            $("cartCount").textContent = "0";
+            $("orderCount").textContent = "0";
+        }
+    }
+
+    function renderMemberTags() {
+        const tags = parseTags(state.user?.tags);
+        $("memberTags").innerHTML = tags.length
+            ? tags.map(tag => `<span class="mini-chip">${html(tag)}</span>`).join("")
+            : `<span class="mini-chip">普通会员</span>`;
+    }
+
+    function parseTags(value) {
+        return String(value || "")
+            .split(/[,，]/)
+            .map(item => item.trim())
+            .filter(Boolean)
+            .filter((item, index, rows) => rows.indexOf(item) === index);
+    }
+
+    function renderProfileTagPicker() {
+        if (!$("profileTagPicker")) return;
+        const selected = parseTags($("profileTags").value);
+        $("profileTagPicker").innerHTML = suggestedProfileTags.map(tag => `
+            <button type="button" class="${selected.includes(tag) ? "active" : ""}" onclick="toggleProfileTag('${html(tag)}')">${html(tag)}</button>
+        `).join("");
+    }
+
+    function toggleProfileTag(tag) {
+        const tags = parseTags($("profileTags").value);
+        const next = tags.includes(tag) ? tags.filter(item => item !== tag) : [...tags, tag];
+        $("profileTags").value = next.join(",");
+        renderProfileTagPicker();
+    }
+
+    function showAuthEntry(updateHash = true) {
+        state.authStage = "entry";
+        $("authEntry").classList.remove("hidden");
+        $("authForm").classList.add("hidden");
+        if (updateHash) clearAuthHash();
+    }
+
+    function openAuth(mode, updateHash = true) {
+        state.authStage = "form";
+        setAuthMode(mode);
+        $("authEntry").classList.add("hidden");
+        $("authForm").classList.remove("hidden");
+        if (updateHash) {
+            history.replaceState(null, "", `${location.pathname}${location.search}#${mode}`);
+        }
+        setTimeout(() => $("authUsername").focus(), 0);
+    }
+
+    function clearAuthHash() {
+        if (location.hash === "#login" || location.hash === "#register") {
+            history.replaceState(null, "", `${location.pathname}${location.search}`);
+        }
+    }
+
+    function setAuthMode(mode) {
+        state.authMode = mode;
+        const register = mode === "register";
+        $("authTitle").textContent = register ? "会员注册" : "会员登录";
+        $("authSubtitle").textContent = register ? "创建账号后即可进入商城。" : "欢迎回来，继续选购喜欢的商品。";
+        $("authPhone").classList.toggle("hidden", !register);
+        $("authNickname").classList.toggle("hidden", !register);
+        $("authAddress").classList.toggle("hidden", !register);
+        $("authSubmitBtn").textContent = register ? "注册并登录" : "登录";
+        $("authLoginModeBtn").className = register ? "ghost" : "dark";
+        $("authRegisterModeBtn").className = register ? "dark" : "ghost";
+    }
+
+    function submitAuth() {
+        return state.authMode === "register" ? registerUser() : login();
+    }
+
+    function showTab(tab) {
+        if (tab === "admin" && !isAdmin()) {
+            setNotice("管理员才能进入运营中心");
+            return;
+        }
+        state.tab = tab;
+        views.forEach(name => {
+            $(`${name}View`).classList.toggle("active", name === tab);
+            const button = $(`tab${name.charAt(0).toUpperCase() + name.slice(1)}Btn`);
+            if (button) button.className = name === tab ? "active" : "ghost";
+        });
+        if (tab === "products") loadProducts();
+        if (tab === "cart") loadCart();
+        if (tab === "favorites") loadFavorites();
+        if (tab === "orders") loadUserOrders();
+        if (tab === "profile") loadProfile();
+        if (tab === "admin") showAdminSection(state.adminTab);
+    }
+
+    function showAdminSection(name) {
+        if (!isAdmin()) {
+            setNotice("管理员才能进入运营中心");
+            return;
+        }
+        if (name === "users" && !isSuper()) {
+            setNotice("超级管理员才能管理用户权限");
+            return;
+        }
+        state.adminTab = name;
+        adminViews.forEach(view => {
+            $(`admin${view.charAt(0).toUpperCase() + view.slice(1)}Panel`).classList.toggle("active", view === name);
+            const button = $(`admin${view.charAt(0).toUpperCase() + view.slice(1)}Btn`);
+            if (button) button.className = view === name ? "active" : "ghost";
+        });
+        if (name === "overview") loadAdminOverview();
+        if (name === "products") loadAdminProducts();
+        if (name === "orders") loadAdminOrders();
+        if (name === "comments") loadAdminComments();
+        if (name === "users") loadUsers();
+    }
+
+    function searchFromHeader() {
+        $("keyword").value = $("topKeyword").value.trim();
+        state.selectedCategory = "全部";
+        renderCategories();
+        showTab("products");
+    }
+
+    function quickSearch(keyword) {
+        $("topKeyword").value = keyword;
+        $("keyword").value = keyword;
+        state.selectedCategory = "全部";
+        renderCategories();
+        showTab("products");
+    }
+
+    async function login() {
+        try {
+            const username = $("authUsername").value.trim();
+            const password = $("authPassword").value.trim();
+            if (!username || !password) throw new Error("请输入用户名和密码");
+            state.user = await request("/users/login", {
+                method: "POST",
+                body: JSON.stringify({username, password})
+            });
+            localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
+            setNotice("登录成功");
+            updateAuthView();
+            await loadProducts();
+            showTab("products");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function registerUser() {
+        try {
+            const username = $("authUsername").value.trim();
+            const password = $("authPassword").value.trim();
+            const phone = $("authPhone").value.trim();
+            const nickname = $("authNickname").value.trim();
+            const address = $("authAddress").value.trim();
+            if (!username || !password) throw new Error("注册需要填写用户名和密码");
+            if (phone && !/^1\d{10}$/.test(phone)) throw new Error("手机号格式不正确");
+            state.user = await request("/users/register", {
+                method: "POST",
+                body: JSON.stringify({username, password, phone, nickname, address})
+            });
+            localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
+            setNotice("注册成功");
+            updateAuthView();
+            await loadProducts();
+            showTab("products");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function logout() {
+        state.user = null;
+        localStorage.removeItem("yzmmMallCurrentUser");
+        setNotice("已退出登录");
+        state.authStage = "entry";
+        updateAuthView();
+    }
+
+    async function loadProducts() {
+        try {
+            const keyword = $("keyword").value.trim();
+            $("topKeyword").value = keyword;
+            const params = new URLSearchParams();
+            if (keyword) params.set("keyword", keyword);
+            if (state.selectedCategory && state.selectedCategory !== "全部") params.set("category", state.selectedCategory);
+            const rows = await request(`/products${params.toString() ? `?${params.toString()}` : ""}`);
+            state.products = rows;
+            renderProductList();
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function renderProductList() {
+        const min = Number($("minPrice")?.value || 0);
+        const max = Number($("maxPrice")?.value || 0);
+        const sortMode = $("sortMode")?.value || "default";
+        let rows = [...state.products];
+        if (state.stockOnly) rows = rows.filter(product => Number(product.stock || 0) > 0);
+        if (min > 0) rows = rows.filter(product => Number(product.price || 0) >= min);
+        if (max > 0) rows = rows.filter(product => Number(product.price || 0) <= max);
+        rows.sort((a, b) => {
+            if (sortMode === "sales") return Number(b.sales_count || 0) - Number(a.sales_count || 0);
+            if (sortMode === "rating") return Number(b.positive_rate || 0) - Number(a.positive_rate || 0);
+            if (sortMode === "priceAsc") return Number(a.price || 0) - Number(b.price || 0);
+            if (sortMode === "priceDesc") return Number(b.price || 0) - Number(a.price || 0);
+            return Number(b.id || 0) - Number(a.id || 0);
+        });
+        state.visibleProducts = rows;
+        $("products").innerHTML = rows.length ? rows.map(renderProductCard).join("") : emptyText("没有符合条件的商品");
+        const keyword = $("keyword").value.trim();
+        const categoryText = state.selectedCategory && state.selectedCategory !== "全部" ? `${state.selectedCategory} · ` : "";
+        $("productHint").textContent = `${categoryText}${keyword ? `搜索：${keyword} · ` : ""}共 ${rows.length} 件商品`;
+    }
+
+    function toggleStockOnly() {
+        state.stockOnly = !state.stockOnly;
+        $("stockOnlyBtn").className = state.stockOnly ? "mini-chip active" : "ghost";
+        renderProductList();
+    }
+
+    function resetFilters() {
+        $("sortMode").value = "default";
+        $("minPrice").value = "";
+        $("maxPrice").value = "";
+        state.stockOnly = false;
+        $("stockOnlyBtn").className = "ghost";
+        renderProductList();
+    }
+
+    function renderProductCard(product) {
+        const soldOut = Number(product.stock || 0) <= 0;
+        return `
+            <article class="product-card" onclick="openProductDetail(${product.id})">
+                <div class="image-wrap">
+                    <img src="${html(product.image || fallbackImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
+                    <span class="badge">${html(product.category || "综合")}</span>
+                </div>
+                <div>
+                    <h3>${html(product.name)}</h3>
+                    <div class="muted">${html(product.subtitle || "精选平台好物")}</div>
+                    <div class="product-meta">
+                        <span>库存 ${html(product.stock)}</span>
+                        <span>${soldOut ? "暂时缺货" : "现货"}</span>
+                    </div>
+                </div>
+                <div class="product-stats">
+                    <span>销量 ${intText(product.sales_count)}</span>
+                    <span>好评 ${percentText(product.positive_rate)}</span>
+                    <span>评价 ${intText(product.comment_count)}</span>
+                </div>
+                <div class="price">￥${money(product.price)}</div>
+                <div class="quantity-row">
+                    <input id="qty-${product.id}" type="number" min="1" value="1" onclick="event.stopPropagation()" ${soldOut ? "disabled" : ""}>
+                    <button onclick="event.stopPropagation(); addCart(${product.id})" ${soldOut ? "disabled" : ""}>加入购物车</button>
+                </div>
+                <div class="actions">
+                    <button class="secondary" onclick="event.stopPropagation(); addFavorite(${product.id})">收藏</button>
+                    <button class="ghost" onclick="event.stopPropagation(); openProductDetail(${product.id})">查看详情</button>
+                </div>
+            </article>
+        `;
+    }
+
+    function clearSearch() {
+        $("keyword").value = "";
+        $("topKeyword").value = "";
+        state.selectedCategory = "全部";
+        renderCategories();
+        loadProducts();
+    }
+
+    async function openProductDetail(productId) {
+        try {
+            const product = await request(`/products/${productId}`);
+            state.activeProduct = product;
+            addRecentViewed(product);
+            renderProductDetail(product);
+            $("productDetailOverlay").classList.add("show");
+            document.body.style.overflow = "hidden";
+            await loadProductComments(productId);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function addRecentViewed(product) {
+        const current = JSON.parse(localStorage.getItem("yzmmMallRecentViewed") || "[]");
+        const next = [
+            {
+                id: product.id,
+                name: product.name,
+                price: product.price,
+                image: product.image,
+                category: product.category
+            },
+            ...current.filter(item => Number(item.id) !== Number(product.id))
+        ].slice(0, 8);
+        localStorage.setItem("yzmmMallRecentViewed", JSON.stringify(next));
+        renderRecentViewed();
+    }
+
+    function renderRecentViewed() {
+        const rows = JSON.parse(localStorage.getItem("yzmmMallRecentViewed") || "[]");
+        $("recentViewed").classList.toggle("show", rows.length > 0);
+        $("recentList").innerHTML = rows.map(item => `
+            <article class="recent-card" onclick="openProductDetail(${item.id})">
+                <img src="${html(item.image || fallbackImage)}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
+                <strong>${html(item.name)}</strong>
+                <span class="price" style="font-size:16px">￥${money(item.price)}</span>
+            </article>
+        `).join("");
+    }
+
+    function clearRecentViewed() {
+        localStorage.removeItem("yzmmMallRecentViewed");
+        renderRecentViewed();
+    }
+
+    function closeProductDetail() {
+        $("productDetailOverlay").classList.remove("show");
+        document.body.style.overflow = "";
+    }
+
+    function renderProductDetail(product) {
+        const soldOut = Number(product.stock || 0) <= 0;
+        $("productDetail").innerHTML = `
+            <div class="detail-top">
+                <div class="detail-image">
+                    <img src="${html(product.image || fallbackImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
+                </div>
+                <div class="detail-info">
+                    <span class="badge">${html(product.category || "综合")}</span>
+                    <h2>${html(product.name)}</h2>
+                    <p class="muted">${html(product.subtitle || "精选平台好物")}</p>
+                    <div class="detail-price"><span>￥</span>${money(product.price)}</div>
+                    <div class="detail-metrics">
+                        <div><span>销量</span><strong>${intText(product.sales_count)}</strong></div>
+                        <div><span>好评率</span><strong>${percentText(product.positive_rate)}</strong></div>
+                        <div><span>评价</span><strong>${intText(product.comment_count)}</strong></div>
+                        <div><span>库存</span><strong>${html(product.stock)}</strong></div>
+                    </div>
+                    <div class="quantity-row">
+                        <input id="detailQty-${product.id}" type="number" min="1" value="1" ${soldOut ? "disabled" : ""}>
+                        <button onclick="addCart(${product.id}, Number($('detailQty-${product.id}').value))" ${soldOut ? "disabled" : ""}>加入购物车</button>
+                    </div>
+                    <div class="actions">
+                        <button onclick="buyNow(${product.id}, Number($('detailQty-${product.id}').value))" ${soldOut ? "disabled" : ""}>立即购买</button>
+                        <button class="secondary" onclick="addFavorite(${product.id})">收藏商品</button>
+                        <button class="ghost" onclick="closeProductDetail()">继续逛</button>
+                    </div>
+                </div>
+            </div>
+            <div class="detail-tabs">
+                <section class="detail-section">
+                    <div class="section-head">
+                        <h2>买家评价</h2>
+                        <div class="muted">${intText(product.comment_count)} 条评价 · ${percentText(product.positive_rate)} 好评</div>
+                    </div>
+                    <div class="form-grid" style="margin-bottom:12px">
+                        <textarea id="comment-${product.id}" placeholder="分享你的使用感受"></textarea>
+                        <div class="inline">
+                            <select id="score-${product.id}" style="max-width:120px">
+                                <option value="5">5分</option>
+                                <option value="4">4分</option>
+                                <option value="3">3分</option>
+                                <option value="2">2分</option>
+                                <option value="1">1分</option>
+                            </select>
+                            <button class="dark" onclick="commentProduct(${product.id})">发布评价</button>
+                        </div>
+                    </div>
+                    <div id="commentList-${product.id}" class="comment-list"></div>
+                </section>
+                <section class="detail-section">
+                    <h2 style="margin-bottom:10px">商品详情</h2>
+                    <p class="muted" style="font-size:14px;line-height:1.8">${html(product.description || "暂无详情描述")}</p>
+                </section>
+                <section class="detail-section">
+                    <h2 style="margin-bottom:10px">服务保障</h2>
+                    <div class="product-stats">
+                        <span>正品严选</span>
+                        <span>极速发货</span>
+                        <span>省心售后</span>
+                    </div>
+                </section>
+            </div>
+        `;
+    }
+
+    async function addCart(productId, countOverride) {
+        try {
+            requireLogin();
+            const count = Number(countOverride || $(`qty-${productId}`)?.value || 1);
+            await request("/cart", {
+                method: "POST",
+                body: JSON.stringify({userId: state.user.id, productId, count})
+            });
+            setNotice("已加入购物车");
+            await loadCartCount();
+            return true;
+        } catch (error) {
+            setNotice(error.message);
+            return false;
+        }
+    }
+
+    async function buyNow(productId, count) {
+        try {
+            requireLogin();
+            const added = await addCart(productId, count || 1);
+            if (!added) return;
+            closeProductDetail();
+            showTab("cart");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadCart() {
+        if (!state.user) {
+            $("cart").innerHTML = emptyText("请先登录");
+            $("orderTotal").textContent = "￥0.00";
+            return;
+        }
+        try {
+            const rows = await request(`/cart?userId=${state.user.id}`);
+            state.cartRows = rows;
+            const total = rows.reduce((sum, row) => sum + Number(row.subtotal || 0), 0);
+            $("orderTotal").textContent = `￥${money(total)}`;
+            $("cartCount").textContent = rows.length;
+            $("cart").innerHTML = rows.length ? rows.map(renderCartLine).join("") : emptyText("购物车为空");
+            prefillReceiver();
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function renderCartLine(item) {
+        return `
+            <div class="line-card">
+                <img src="${html(item.image || fallbackImage)}" alt="${html(item.product_name)}" onerror="this.src='${fallbackImage}'">
+                <div>
+                    <h3>${html(item.product_name)}</h3>
+                    <div class="muted">单价 ￥${money(item.price)} · 库存 ${html(item.stock)}</div>
+                    <div class="price">￥${money(item.subtotal)}</div>
+                </div>
+                <div class="actions">
+                    <input id="cart-count-${item.id}" type="number" min="1" value="${html(item.count)}" style="width:88px">
+                    <button class="secondary" onclick="updateCartCount(${item.id})">更新</button>
+                    <button class="ghost" onclick="removeCart(${item.id})">移除</button>
+                </div>
+            </div>
+        `;
+    }
+
+    async function loadCartCount() {
+        if (!state.user) return;
+        try {
+            const rows = await request(`/cart?userId=${state.user.id}`);
+            $("cartCount").textContent = rows.length;
+            if ($("profileCartCount")) $("profileCartCount").textContent = rows.length;
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function updateCartCount(id) {
+        try {
+            await request(`/cart/${id}`, {
+                method: "PUT",
+                body: JSON.stringify({count: Number($(`cart-count-${id}`).value)})
+            });
+            await loadCart();
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function removeCart(id) {
+        try {
+            await request(`/cart/${id}`, {method: "DELETE"});
+            await loadCart();
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function prefillReceiver() {
+        if (!state.user) return;
+        if (!$("receiverName").value) $("receiverName").value = state.user.nickname || state.user.username || "";
+        if (!$("receiverPhone").value) $("receiverPhone").value = state.user.phone || "";
+        if (!$("shippingAddress").value) $("shippingAddress").value = state.user.address || "";
+    }
+
+    async function loadProfile() {
+        if (!state.user) return;
+        try {
+            const fresh = await request(`/users/${state.user.id}`);
+            state.user = fresh;
+            localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
+            $("profileNickname").value = fresh.nickname || fresh.username || "";
+            $("profilePhone").value = fresh.phone || "";
+            $("profileAddress").value = fresh.address || "";
+            $("profileTags").value = fresh.tags || "";
+            $("profileRoleText").textContent = roleNames[fresh.role] || fresh.role || "会员";
+            renderProfileTagPicker();
+            updateAuthView();
+            await Promise.all([loadProfileFavorites(), loadProfileOrders(), loadCartCount()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function saveProfile() {
+        try {
+            requireLogin();
+            const phone = $("profilePhone").value.trim();
+            if (phone && !/^1\d{10}$/.test(phone)) throw new Error("手机号格式不正确");
+            const payload = {
+                nickname: $("profileNickname").value.trim(),
+                phone,
+                address: $("profileAddress").value.trim(),
+                tags: parseTags($("profileTags").value).join(",")
+            };
+            state.user = await request(`/users/${state.user.id}`, {
+                method: "PUT",
+                body: JSON.stringify(payload)
+            });
+            localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
+            setNotice("个人资料已保存");
+            $("profileTags").value = state.user.tags || "";
+            renderProfileTagPicker();
+            updateAuthView();
+            prefillReceiver();
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadProfileFavorites() {
+        if (!state.user) return;
+        const rows = await request(`/favorites?userId=${state.user.id}`);
+        $("profileFavoriteCount").textContent = rows.length;
+        $("profileFavorites").innerHTML = rows.length ? rows.slice(0, 4).map(item => `
+            <article class="product-card" onclick="openProductDetail(${item.product_id})">
+                <div class="image-wrap">
+                    <img src="${html(item.image || fallbackImage)}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
+                    <span class="badge">${html(item.category || "收藏")}</span>
+                </div>
+                <h3>${html(item.name)}</h3>
+                <div class="price">￥${money(item.price)}</div>
+            </article>
+        `).join("") : emptyText("暂无收藏");
+    }
+
+    async function loadProfileOrders() {
+        if (!state.user) return;
+        const rows = await request(`/orders?userId=${state.user.id}`);
+        $("profileOrderCount").textContent = rows.length;
+        $("profileOrders").innerHTML = rows.length ? rows.slice(0, 3).map(order => renderOrder(order, false)).join("") : emptyText("暂无订单");
+    }
+
+    async function createOrder() {
+        try {
+            requireLogin();
+            const payload = {
+                userId: state.user.id,
+                receiverName: $("receiverName").value.trim(),
+                receiverPhone: $("receiverPhone").value.trim(),
+                shippingAddress: $("shippingAddress").value.trim()
+            };
+            await request("/orders", {method: "POST", body: JSON.stringify(payload)});
+            setNotice("下单成功");
+            await Promise.all([loadCart(), loadUserOrders(), loadProducts()]);
+            showTab("orders");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function addFavorite(productId) {
+        try {
+            requireLogin();
+            await request("/favorites", {
+                method: "POST",
+                body: JSON.stringify({userId: state.user.id, productId})
+            });
+            setNotice("已收藏");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadFavorites() {
+        if (!state.user) {
+            $("favorites").innerHTML = emptyText("请先登录");
+            return;
+        }
+        try {
+            const rows = await request(`/favorites?userId=${state.user.id}`);
+            $("favorites").innerHTML = rows.length ? rows.map(item => `
+                <article class="product-card">
+                    <div class="image-wrap">
+                        <img src="${html(item.image || fallbackImage)}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
+                        <span class="badge">${html(item.category || "收藏")}</span>
+                    </div>
+                    <h3>${html(item.name)}</h3>
+                    <div class="price">￥${money(item.price)}</div>
+                    <div class="actions">
+                        <button onclick="addCart(${item.product_id})">加入购物车</button>
+                        <button class="ghost" onclick="removeFavorite(${item.id})">取消收藏</button>
+                    </div>
+                </article>
+            `).join("") : emptyText("暂无收藏");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function removeFavorite(id) {
+        try {
+            await request(`/favorites/${id}`, {method: "DELETE"});
+            await loadFavorites();
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadUserOrders() {
+        if (!state.user) {
+            $("userOrders").innerHTML = emptyText("请先登录");
+            return;
+        }
+        try {
+            const rows = await request(`/orders?userId=${state.user.id}`);
+            const details = await Promise.all(rows.map(order => request(`/orders/${order.id}`).catch(() => order)));
+            $("userOrders").innerHTML = details.length ? details.map(order => renderOrder(order, false)).join("") : emptyText("暂无订单");
+            $("orderCount").textContent = rows.length;
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadOrderCount() {
+        if (!state.user) return;
+        try {
+            const rows = await request(`/orders?userId=${state.user.id}`);
+            $("orderCount").textContent = rows.length;
+            if ($("profileOrderCount")) $("profileOrderCount").textContent = rows.length;
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function renderOrder(order, adminMode) {
+        const status = Number(order.status);
+        const statusClass = status === 0 ? "pending" : status === 3 ? "done" : "paid";
+        const items = (order.items || []).map(item => `${html(item.product_name)} x ${html(item.count)}`).join("，") || "无明细";
+        const logistics = order.logistics ? `${html(order.logistics.logistics_no)} / ${logisticsNames[order.logistics.status] || order.logistics.status}` : "暂无物流";
+        const address = order.shipping_address ? `${html(order.receiver_name || "")} ${html(order.receiver_phone || "")} · ${html(order.shipping_address)}` : "暂无收货信息";
+        const userActions = status === 0
+            ? `<button onclick="setOrderStatus(${order.id}, 1, false)">支付</button>`
+            : status === 2
+                ? `<button onclick="setOrderStatus(${order.id}, 3, false)">确认收货</button>`
+                : "";
+        const adminActions = `
+            <button class="secondary" onclick="setOrderStatus(${order.id}, 1, true)">已支付</button>
+            <button onclick="setOrderStatus(${order.id}, 2, true)">发货</button>
+            <button class="ghost" onclick="setOrderStatus(${order.id}, 3, true)">完成</button>
+        `;
+        return `
+            <div class="order-card">
+                <div class="section-head" style="margin-bottom:0">
+                    <div>
+                        <h3>${html(order.order_no)}</h3>
+                        <div class="muted">用户ID ${html(order.user_id)} · ${html(order.create_time)}</div>
+                    </div>
+                    <span class="status ${statusClass}">${statusNames[status] || status}</span>
+                </div>
+                <div class="price">￥${money(order.total_price)}</div>
+                <div class="order-steps">${renderOrderSteps(status)}</div>
+                <div class="muted">商品：${items}</div>
+                <div class="muted">收货：${address}</div>
+                <div class="muted">物流：${logistics}</div>
+                <div class="actions">${adminMode ? adminActions : userActions}</div>
+            </div>
+        `;
+    }
+
+    function renderOrderSteps(status) {
+        return statusNames.map((name, index) => `
+            <span class="step ${index <= status ? "done" : ""}">${html(name)}</span>
+        `).join("");
+    }
+
+    async function setOrderStatus(id, status, adminMode) {
+        try {
+            const payload = adminMode
+                ? {status, actorId: state.user.id}
+                : {status, userId: state.user.id};
+            await request(`/orders/${id}/status`, {method: "PUT", body: JSON.stringify(payload)});
+            setNotice("订单状态已更新");
+            if (adminMode) {
+                await Promise.all([loadAdminOrders(), loadAdminOverview()]);
+            } else {
+                await loadUserOrders();
+            }
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function toggleComments(productId) {
+        const box = $(`comments-${productId}`);
+        box.classList.toggle("show");
+        if (box.classList.contains("show")) {
+            await loadProductComments(productId);
+        }
+    }
+
+    async function commentProduct(productId) {
+        try {
+            requireLogin();
+            await request("/comments", {
+                method: "POST",
+                body: JSON.stringify({
+                    userId: state.user.id,
+                    productId,
+                    content: $(`comment-${productId}`).value.trim(),
+                    score: Number($(`score-${productId}`).value)
+                })
+            });
+            $(`comment-${productId}`).value = "";
+            setNotice("评价发布成功");
+            if (state.activeProduct && Number(state.activeProduct.id) === Number(productId)) {
+                const product = await request(`/products/${productId}`);
+                state.activeProduct = product;
+                renderProductDetail(product);
+            }
+            await Promise.all([loadProductComments(productId), loadProducts()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadProductComments(productId) {
+        try {
+            const rows = await request(`/comments?productId=${productId}`);
+            $(`commentList-${productId}`).innerHTML = rows.length ? rows.map(row => `
+                <div class="comment-item">
+                    <strong>${html(row.score)}分</strong> ${html(row.username)}：${html(row.content)}
+                </div>
+            `).join("") : `<div class="muted">暂无评价</div>`;
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadAdminOverview() {
+        try {
+            requireAdmin();
+            const [products, orders, comments, users] = await Promise.all([
+                request("/products"),
+                request(`/orders?actorId=${state.user.id}`),
+                request(`/comments?actorId=${state.user.id}`),
+                isSuper() ? request(`/users?actorId=${state.user.id}`) : Promise.resolve([])
+            ]);
+            $("metricProducts").textContent = products.length;
+            $("metricOrders").textContent = orders.length;
+            $("metricComments").textContent = comments.length;
+            $("metricUsers").textContent = isSuper() ? users.length : "-";
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function saveProduct() {
+        try {
+            requireAdmin();
+            const payload = {
+                actorId: state.user.id,
+                name: $("productName").value.trim(),
+                category: $("productCategory").value,
+                subtitle: $("productSubtitle").value.trim(),
+                description: $("productDescription").value.trim(),
+                price: Number($("productPrice").value),
+                stock: Number($("productStock").value),
+                saleCount: Number($("productSaleCount").value || 0),
+                image: $("productImage").value.trim()
+            };
+            const path = state.editingProductId ? `/products/${state.editingProductId}` : "/products";
+            const method = state.editingProductId ? "PUT" : "POST";
+            await request(path, {method, body: JSON.stringify(payload)});
+            setNotice(state.editingProductId ? "商品已更新" : "商品已新增");
+            resetProductForm();
+            await Promise.all([loadAdminProducts(), loadProducts(), loadAdminOverview()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function resetProductForm() {
+        state.editingProductId = null;
+        $("productName").value = "";
+        $("productCategory").value = categories[1];
+        $("productSubtitle").value = "";
+        $("productDescription").value = "";
+        $("productPrice").value = "";
+        $("productStock").value = "";
+        $("productSaleCount").value = "";
+        $("productImage").value = "";
+        state.productImageData = "";
+        updateProductPreview("");
+    }
+
+    async function loadAdminProducts() {
+        try {
+            requireAdmin();
+            const rows = await request("/products");
+            state.products = rows;
+            renderAdminProductsTable();
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function renderAdminProductsTable() {
+        const keyword = ($("adminProductKeyword")?.value || "").trim().toLowerCase();
+        const rows = state.products.filter(row => {
+            if (!keyword) return true;
+            return String(row.name || "").toLowerCase().includes(keyword)
+                || String(row.category || "").toLowerCase().includes(keyword);
+        });
+        $("adminProductsTable").innerHTML = rows.length ? `
+                <table>
+                    <thead>
+                    <tr><th>ID</th><th>图片</th><th>商品</th><th>分类</th><th>价格</th><th>库存</th><th>销量</th><th>操作</th></tr>
+                    </thead>
+                    <tbody>
+                    ${rows.map(row => `
+                        <tr>
+                            <td>${html(row.id)}</td>
+                            <td><img class="thumb" src="${html(row.image || fallbackImage)}" alt="${html(row.name)}" onerror="this.src='${fallbackImage}'"></td>
+                            <td>${html(row.name)}</td>
+                            <td><span class="badge">${html(row.category || "综合")}</span></td>
+                            <td>￥${money(row.price)}</td>
+                            <td>${html(row.stock)}</td>
+                            <td>${intText(row.sales_count)}</td>
+                            <td>
+                                <div class="actions">
+                                    <button class="secondary" onclick="editProductById(${row.id})">编辑</button>
+                                    <button class="ghost" onclick="deleteProduct(${row.id})">删除</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join("")}
+                    </tbody>
+                </table>
+            ` : emptyText("暂无商品");
+    }
+
+    function editProductById(id) {
+        const product = state.products.find(item => Number(item.id) === Number(id));
+        if (!product) return;
+        state.editingProductId = product.id;
+        $("productName").value = product.name || "";
+        $("productCategory").value = product.category || categories[1];
+        $("productSubtitle").value = product.subtitle || "";
+        $("productDescription").value = product.description || "";
+        $("productPrice").value = product.price || 0;
+        $("productStock").value = product.stock || 0;
+        $("productSaleCount").value = product.sale_count || 0;
+        $("productImage").value = product.image || "";
+        updateProductPreview(product.image || "");
+        setNotice(`正在编辑：${product.name}`);
+        $("productName").focus();
+        $("adminProductsPanel").scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    async function deleteProduct(id) {
+        try {
+            requireAdmin();
+            if (!confirm("确定删除这个商品吗？")) return;
+            await request(`/products/${id}?actorId=${state.user.id}`, {method: "DELETE"});
+            setNotice("商品已删除");
+            await Promise.all([loadAdminProducts(), loadProducts(), loadAdminOverview()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadAdminOrders() {
+        try {
+            requireAdmin();
+            const rows = await request(`/orders?actorId=${state.user.id}`);
+            const details = await Promise.all(rows.map(order => request(`/orders/${order.id}`).catch(() => order)));
+            $("adminOrders").innerHTML = details.length ? details.map(order => renderOrder(order, true)).join("") : emptyText("暂无订单");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadAdminComments() {
+        try {
+            requireAdmin();
+            const rows = await request(`/comments?actorId=${state.user.id}`);
+            $("adminComments").innerHTML = rows.length ? table(["ID", "用户", "商品", "评分", "内容", "时间"],
+                rows.map(row => [row.id, row.username, row.product_name, `${row.score}分`, row.content, row.create_time])) : emptyText("暂无评价");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadUsers() {
+        try {
+            if (!isSuper()) throw new Error("超级管理员才能管理用户权限");
+            const rows = await request(`/users?actorId=${state.user.id}`);
+            $("users").innerHTML = rows.length ? `
+                <table>
+                    <thead><tr><th>ID</th><th>用户名</th><th>手机号</th><th>身份</th><th>操作</th></tr></thead>
+                    <tbody>
+                    ${rows.map(row => `
+                        <tr>
+                            <td>${html(row.id)}</td>
+                            <td>${html(row.username)}</td>
+                            <td>${html(row.phone || "")}</td>
+                            <td><span class="badge">${html(roleNames[row.role] || row.role)}</span></td>
+                            <td>${row.role === "super_admin" ? "超级管理员" : `
+                                <div class="actions">
+                                    <select id="role-${row.id}" style="width:150px">
+                                        <option value="user" ${row.role === "user" ? "selected" : ""}>普通用户</option>
+                                        <option value="admin" ${row.role === "admin" ? "selected" : ""}>管理员</option>
+                                    </select>
+                                    <button onclick="updateUserRole(${row.id})">保存</button>
+                                </div>
+                            `}</td>
+                        </tr>
+                    `).join("")}
+                    </tbody>
+                </table>
+            ` : emptyText("暂无用户");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function updateUserRole(id) {
+        try {
+            if (!isSuper()) throw new Error("超级管理员才能管理用户权限");
+            await request(`/users/${id}/role`, {
+                method: "PUT",
+                body: JSON.stringify({actorId: state.user.id, role: $(`role-${id}`).value})
+            });
+            setNotice("用户身份已更新");
+            await Promise.all([loadUsers(), loadAdminOverview()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function table(headers, rows) {
+        return `
+            <table>
+                <thead><tr>${headers.map(item => `<th>${html(item)}</th>`).join("")}</tr></thead>
+                <tbody>${rows.map(row => `<tr>${row.map(cell => `<td>${html(cell)}</td>`).join("")}</tr>`).join("")}</tbody>
+            </table>
+        `;
+    }
+
+    function emptyText(text) {
+        return `<div class="empty">${html(text)}</div>`;
+    }
+
+    init();
+</script>
+</body>
+</html>

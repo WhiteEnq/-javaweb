@@ -14,17 +14,26 @@
             --soft: #f7f8fa;
             --gold: #f59e0b;
             --green: #059669;
+            --surface: #ffffff;
+            --surface-2: #f8fafc;
             --shadow: 0 14px 30px rgba(15, 23, 42, .08);
+            --shadow-strong: 0 22px 48px rgba(15, 23, 42, .14);
         }
 
         * {
             box-sizing: border-box;
         }
 
+        html {
+            scroll-behavior: smooth;
+        }
+
         body {
             margin: 0;
             color: var(--ink);
-            background: #f3f4f6;
+            background:
+                radial-gradient(circle at 18% 0, rgba(201, 22, 35, .08), transparent 28%),
+                linear-gradient(180deg, #fff 0, #f5f7fb 260px, #f3f4f6 100%);
             font-family: Arial, "Microsoft YaHei", sans-serif;
         }
 
@@ -71,10 +80,16 @@
             cursor: pointer;
             font-weight: 700;
             white-space: nowrap;
+            transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease, color .16s ease;
         }
 
         button:hover {
             filter: brightness(.98);
+            transform: translateY(-1px);
+        }
+
+        button:active {
+            transform: translateY(0) scale(.99);
         }
 
         button:disabled {
@@ -1316,6 +1331,428 @@
             box-shadow: 0 12px 28px rgba(15, 23, 42, .14);
         }
 
+        .channel-nav {
+            position: sticky;
+            top: 76px;
+            z-index: 18;
+            border-bottom: 1px solid rgba(226, 232, 240, .9);
+            background: rgba(255, 255, 255, .92);
+            backdrop-filter: blur(14px);
+        }
+
+        .channel-inner {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-height: 44px;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+
+        .channel-inner::-webkit-scrollbar {
+            display: none;
+        }
+
+        .channel-link {
+            min-height: 32px;
+            padding: 6px 12px;
+            border-color: transparent;
+            border-radius: 999px;
+            background: transparent;
+            color: #334155;
+            font-size: 14px;
+        }
+
+        .channel-link:hover,
+        .channel-link.active {
+            border-color: #fecaca;
+            background: #fff1f2;
+            color: var(--brand);
+        }
+
+        .nav-action {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+            gap: 7px;
+        }
+
+        .action-badge,
+        .float-badge {
+            display: inline-grid;
+            place-items: center;
+            min-width: 19px;
+            height: 19px;
+            padding: 0 5px;
+            border-radius: 999px;
+            background: var(--brand);
+            color: #fff;
+            font-size: 11px;
+            font-weight: 900;
+            line-height: 1;
+        }
+
+        .float-badge {
+            position: absolute;
+            top: -4px;
+            right: -5px;
+            border: 2px solid #fff;
+        }
+
+        .cart-float {
+            position: relative;
+        }
+
+        .hero-stage::after {
+            content: "";
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            background:
+                linear-gradient(90deg, rgba(15, 23, 42, .58), rgba(15, 23, 42, .08) 58%, rgba(15, 23, 42, .34)),
+                radial-gradient(circle at 74% 26%, rgba(255, 255, 255, .24), transparent 22%);
+        }
+
+        .hero-content {
+            isolation: isolate;
+        }
+
+        .hero-kpis {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 118px));
+            gap: 8px;
+            margin-top: 4px;
+        }
+
+        .hero-kpi {
+            padding: 9px 10px;
+            border: 1px solid rgba(255, 255, 255, .22);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .13);
+            color: rgba(255, 255, 255, .92);
+            backdrop-filter: blur(8px);
+        }
+
+        .hero-kpi strong {
+            display: block;
+            font-size: 18px;
+        }
+
+        .hero-kpi span {
+            color: rgba(255, 255, 255, .78);
+            font-size: 12px;
+        }
+
+        .quick-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .quick-grid button {
+            min-height: 42px;
+            padding: 7px 6px;
+            border-color: #e2e8f0;
+            background: #f8fafc;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        .quick-grid button:hover {
+            border-color: #fecaca;
+            background: #fff1f2;
+            color: var(--brand);
+        }
+
+        .active-filters {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            min-height: 34px;
+            margin: -2px 0 12px;
+        }
+
+        .filter-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-height: 28px;
+            padding: 4px 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 999px;
+            background: #fff;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .filter-chip strong {
+            color: var(--brand);
+        }
+
+        .product-grid.loading {
+            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+        }
+
+        .skeleton-card {
+            display: grid;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .skeleton-line,
+        .skeleton-image {
+            overflow: hidden;
+            border-radius: 6px;
+            background: linear-gradient(90deg, #eef2f7 0, #f8fafc 40%, #eef2f7 80%);
+            background-size: 220% 100%;
+            animation: shimmer 1.1s ease-in-out infinite;
+        }
+
+        .skeleton-image {
+            aspect-ratio: 4 / 3;
+        }
+
+        .skeleton-line {
+            height: 14px;
+        }
+
+        @keyframes shimmer {
+            from { background-position: 100% 0; }
+            to { background-position: -120% 0; }
+        }
+
+        .product-card {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .product-card.sold-out {
+            opacity: .72;
+        }
+
+        .product-card h3 {
+            display: -webkit-box;
+            min-height: 43px;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .product-card .muted {
+            display: -webkit-box;
+            min-height: 36px;
+            overflow: hidden;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .image-wrap img {
+            transition: transform .22s ease;
+        }
+
+        .product-card:hover .image-wrap img {
+            transform: scale(1.04);
+        }
+
+        .card-badges {
+            position: absolute;
+            left: 8px;
+            top: 8px;
+            z-index: 1;
+            display: flex;
+            gap: 6px;
+            flex-wrap: wrap;
+        }
+
+        .card-badges .badge {
+            position: static;
+        }
+
+        .sale-badge {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(201, 22, 35, .92);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 900;
+        }
+
+        .card-bottom {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+        }
+
+        .delivery-note {
+            color: #059669;
+            font-size: 12px;
+            font-weight: 800;
+            white-space: nowrap;
+        }
+
+        .card-actions {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+        }
+
+        .card-actions button,
+        .quantity-row button {
+            min-height: 38px;
+        }
+
+        .view.active {
+            animation: viewIn .18s ease;
+        }
+
+        @keyframes viewIn {
+            from { transform: translateY(6px); opacity: .72; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .detail-page {
+            overflow: hidden;
+        }
+
+        .detail-buy-panel {
+            display: grid;
+            gap: 10px;
+            padding: 12px;
+            border: 1px solid #fee2e2;
+            border-radius: 8px;
+            background: #fff7f7;
+        }
+
+        .detail-service-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .service-pill {
+            padding: 10px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            background: #fff;
+            color: #334155;
+            font-size: 13px;
+        }
+
+        .service-pill strong {
+            display: block;
+            margin-bottom: 3px;
+            color: #111827;
+        }
+
+        .review-summary {
+            display: grid;
+            grid-template-columns: 150px minmax(0, 1fr);
+            gap: 12px;
+            align-items: center;
+            margin-bottom: 12px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .review-score {
+            color: var(--brand);
+            font-size: 32px;
+            font-weight: 900;
+        }
+
+        .rating-stars {
+            color: #f59e0b;
+            font-size: 14px;
+            white-space: nowrap;
+        }
+
+        .comment-item {
+            display: grid;
+            gap: 6px;
+        }
+
+        .comment-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            color: #334155;
+        }
+
+        .qty-stepper {
+            display: inline-grid;
+            grid-template-columns: 34px 64px 34px;
+            gap: 0;
+            overflow: hidden;
+            border: 1px solid #d7dce3;
+            border-radius: 6px;
+            background: #fff;
+        }
+
+        .qty-stepper button,
+        .qty-stepper input {
+            width: 100%;
+            min-height: 34px;
+            border: 0;
+            border-radius: 0;
+            box-shadow: none;
+            text-align: center;
+        }
+
+        .qty-stepper button {
+            padding: 0;
+            background: #f8fafc;
+            color: #334155;
+        }
+
+        .checkout-box {
+            position: sticky;
+            top: 136px;
+        }
+
+        .checkout-note {
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .order-filter-bar {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-bottom: 12px;
+        }
+
+        .order-filter-bar button {
+            min-height: 32px;
+            padding: 6px 12px;
+            border-color: #e2e8f0;
+            border-radius: 999px;
+            background: #fff;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .order-filter-bar button.active {
+            border-color: #fecaca;
+            background: #fff1f2;
+            color: var(--brand);
+        }
+
         .hidden {
             display: none !important;
         }
@@ -1331,7 +1768,9 @@
             }
 
             .service-row,
-            .metric-grid {
+            .metric-grid,
+            .detail-service-grid,
+            .review-summary {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
@@ -1370,6 +1809,10 @@
                 justify-content: flex-start;
             }
 
+            .channel-nav {
+                position: static;
+            }
+
             .header-user {
                 text-align: left;
             }
@@ -1393,6 +1836,13 @@
 
             .hero-content h2 {
                 font-size: 28px;
+            }
+
+            .hero-kpis,
+            .quick-grid,
+            .detail-service-grid,
+            .review-summary {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -1476,8 +1926,8 @@
             <button onclick="searchFromHeader()">搜索</button>
         </div>
         <div class="header-actions">
-            <button class="ghost" onclick="showTab('cart')">购物车</button>
-            <button class="ghost" onclick="showTab('orders')">订单</button>
+            <button class="ghost nav-action" onclick="showTab('cart')"><span>购物车</span><span id="headerCartCount" class="action-badge">0</span></button>
+            <button class="ghost nav-action" onclick="showTab('orders')"><span>订单</span><span id="headerOrderCount" class="action-badge">0</span></button>
             <button class="ghost" onclick="showTab('profile')">个人主页</button>
             <button id="navAdminHeader" class="dark admin-only hidden" onclick="showTab('admin')">运营中心</button>
             <button class="ghost" onclick="logout()">退出</button>
@@ -1485,6 +1935,19 @@
         </div>
     </div>
 </header>
+
+<nav class="channel-nav">
+    <div class="wrap channel-inner">
+        <button class="channel-link active" data-tab="products" data-category="全部" onclick="goHome()">首页推荐</button>
+        <button class="channel-link" data-tab="products" data-category="手机数码" onclick="selectCategory('手机数码')">数码频道</button>
+        <button class="channel-link" data-tab="products" data-category="电脑办公" onclick="selectCategory('电脑办公')">办公好物</button>
+        <button class="channel-link" data-tab="products" data-category="家用电器" onclick="selectCategory('家用电器')">家电生活</button>
+        <button class="channel-link" data-tab="products" data-category="食品饮料" onclick="selectCategory('食品饮料')">食品饮料</button>
+        <button class="channel-link" data-tab="products" data-category="运动户外" onclick="selectCategory('运动户外')">运动户外</button>
+        <button class="channel-link" data-tab="favorites" onclick="showTab('favorites')">我的收藏</button>
+        <button class="channel-link" data-tab="orders" onclick="showTab('orders')">订单进度</button>
+    </div>
+</nav>
 
 <main>
     <div id="notice" class="wrap notice"></div>
@@ -1510,6 +1973,11 @@
                     <span id="heroChipB" class="hero-chip">热卖排行</span>
                     <span id="heroChipC" class="hero-chip">限时好价</span>
                 </div>
+                <div class="hero-kpis">
+                    <div class="hero-kpi"><strong>20+</strong><span>精选商品</span></div>
+                    <div class="hero-kpi"><strong>4步</strong><span>下单流程</span></div>
+                    <div class="hero-kpi"><strong>24h</strong><span>订单跟进</span></div>
+                </div>
             </div>
             <div id="carouselDots" class="carousel-dots"></div>
         </div>
@@ -1528,6 +1996,11 @@
             </div>
             <div id="memberTags" class="tag-list"></div>
             <button onclick="showTab('profile')">进入个人主页</button>
+            <div class="quick-grid">
+                <button onclick="showTab('cart')">购物车</button>
+                <button onclick="showTab('orders')">订单</button>
+                <button onclick="showTab('favorites')">收藏</button>
+            </div>
             <div class="metric-grid" style="grid-template-columns:repeat(2,minmax(0,1fr));gap:8px">
                 <div class="metric"><span>购物车</span><strong id="cartCount">0</strong></div>
                 <div class="metric"><span>订单</span><strong id="orderCount">0</strong></div>
@@ -1585,6 +2058,7 @@
                     <button id="stockOnlyBtn" class="ghost" onclick="toggleStockOnly()">仅看有货</button>
                     <button class="ghost" onclick="resetFilters()">重置筛选</button>
                 </div>
+                <div id="activeFilters" class="active-filters"></div>
                 <div id="products" class="product-grid"></div>
                 <div id="recentViewed" class="recent-strip">
                     <div class="section-head" style="margin-bottom:0">
@@ -1610,11 +2084,14 @@
                     <input id="receiverName" placeholder="收货人">
                     <input id="receiverPhone" placeholder="联系电话">
                     <textarea id="shippingAddress" placeholder="收货地址"></textarea>
+                    <button class="ghost" onclick="prefillReceiver(true)">使用个人主页地址</button>
                     <div class="total-line">
                         <span>合计</span>
                         <span id="orderTotal">￥0.00</span>
                     </div>
+                    <div class="checkout-note">提交订单后可在“我的订单”查看支付、发货和收货进度。</div>
                     <button onclick="createOrder()">提交订单</button>
+                    <button class="secondary" onclick="showTab('products')">继续选购</button>
                 </aside>
             </div>
         </div>
@@ -1634,6 +2111,13 @@
                 <div class="section-head">
                     <h2>我的订单</h2>
                     <button class="ghost" onclick="loadUserOrders()">刷新</button>
+                </div>
+                <div class="order-filter-bar">
+                    <button id="orderFilterAll" class="active" onclick="setOrderFilter('all')">全部</button>
+                    <button id="orderFilter0" onclick="setOrderFilter(0)">待支付</button>
+                    <button id="orderFilter1" onclick="setOrderFilter(1)">待发货</button>
+                    <button id="orderFilter2" onclick="setOrderFilter(2)">待收货</button>
+                    <button id="orderFilter3" onclick="setOrderFilter(3)">已完成</button>
                 </div>
                 <div id="userOrders" class="list-stack"></div>
             </div>
@@ -1790,6 +2274,13 @@
                                 <h2>订单物流</h2>
                                 <button class="ghost" onclick="loadAdminOrders()">刷新</button>
                             </div>
+                            <div class="order-filter-bar">
+                                <button id="adminOrderFilterAll" class="active" onclick="setAdminOrderFilter('all')">全部</button>
+                                <button id="adminOrderFilter0" onclick="setAdminOrderFilter(0)">待支付</button>
+                                <button id="adminOrderFilter1" onclick="setAdminOrderFilter(1)">待发货</button>
+                                <button id="adminOrderFilter2" onclick="setAdminOrderFilter(2)">配送中</button>
+                                <button id="adminOrderFilter3" onclick="setAdminOrderFilter(3)">已完成</button>
+                            </div>
                             <div id="adminOrders" class="list-stack"></div>
                         </div>
                     </div>
@@ -1820,7 +2311,7 @@
 </main>
 
 <div class="float-actions">
-    <button title="购物车" onclick="showTab('cart')">车</button>
+    <button class="cart-float" title="购物车" onclick="showTab('cart')">车<span id="floatCartBadge" class="float-badge">0</span></button>
     <button title="回到顶部" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 </div>
 
@@ -1884,12 +2375,29 @@
         carouselTimer: null,
         productImageData: "",
         stockOnly: false,
+        orderFilter: "all",
+        adminOrderFilter: "all",
         products: [],
         visibleProducts: [],
         cartRows: []
     };
 
     const $ = id => document.getElementById(id);
+
+    function setText(id, value) {
+        const element = $(id);
+        if (element) element.textContent = value;
+    }
+
+    function setCartBadges(count) {
+        const text = String(count || 0);
+        ["cartCount", "profileCartCount", "headerCartCount", "floatCartBadge"].forEach(id => setText(id, text));
+    }
+
+    function setOrderBadges(count) {
+        const text = String(count || 0);
+        ["orderCount", "profileOrderCount", "headerOrderCount"].forEach(id => setText(id, text));
+    }
 
     function html(value) {
         return String(value ?? "").replace(/[&<>"']/g, ch => ({
@@ -1908,6 +2416,11 @@
     function percentText(value) {
         if (value === null || value === undefined || value === "") return "100%";
         return `${Math.round(Number(value) || 0)}%`;
+    }
+
+    function stars(score) {
+        const full = Math.max(1, Math.min(5, Math.round(Number(score) || 5)));
+        return "★".repeat(full) + "☆".repeat(5 - full);
     }
 
     function isAdmin() {
@@ -1988,6 +2501,7 @@
         }
         setAuthMode(state.authMode);
         updateAuthView();
+        updateChannelNav();
         if (state.user) loadProducts();
         renderRecentViewed();
     }
@@ -2043,6 +2557,15 @@
             .filter(category => category !== "全部")
             .map(category => `<option value="${html(category)}">${html(category)}</option>`)
             .join("");
+    }
+
+    function updateChannelNav() {
+        document.querySelectorAll(".channel-link").forEach(button => {
+            const targetTab = button.dataset.tab || "products";
+            const targetCategory = button.dataset.category;
+            const active = state.tab === targetTab && (!targetCategory || targetCategory === state.selectedCategory);
+            button.classList.toggle("active", active);
+        });
     }
 
     function initProductImageDrop() {
@@ -2122,6 +2645,7 @@
         $("keyword").value = "";
         $("topKeyword").value = "";
         renderCategories();
+        updateChannelNav();
         showTab("products");
         document.querySelector(".workspace")?.scrollIntoView({behavior: "smooth", block: "start"});
     }
@@ -2132,6 +2656,7 @@
         $("topKeyword").value = "";
         resetFilters();
         renderCategories();
+        updateChannelNav();
         showTab("products");
         window.scrollTo({top: 0, behavior: "smooth"});
     }
@@ -2179,8 +2704,8 @@
             loadCartCount();
             loadOrderCount();
         } else {
-            $("cartCount").textContent = "0";
-            $("orderCount").textContent = "0";
+            setCartBadges(0);
+            setOrderBadges(0);
         }
     }
 
@@ -2261,6 +2786,7 @@
             return;
         }
         state.tab = tab;
+        updateChannelNav();
         views.forEach(name => {
             $(`${name}View`).classList.toggle("active", name === tab);
             const button = $(`tab${name.charAt(0).toUpperCase() + name.slice(1)}Btn`);
@@ -2309,6 +2835,33 @@
         state.selectedCategory = "全部";
         renderCategories();
         showTab("products");
+    }
+
+    function renderProductSkeletons() {
+        $("products").classList.add("loading");
+        $("products").innerHTML = Array.from({length: 8}).map(() => `
+            <article class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-line" style="width:86%"></div>
+                <div class="skeleton-line" style="width:64%"></div>
+                <div class="skeleton-line" style="width:42%"></div>
+            </article>
+        `).join("");
+    }
+
+    function renderActiveFilters(rows) {
+        const chips = [];
+        const keyword = $("keyword").value.trim();
+        const min = $("minPrice")?.value;
+        const max = $("maxPrice")?.value;
+        const sortText = $("sortMode")?.selectedOptions?.[0]?.textContent || "综合排序";
+        chips.push(`<span class="filter-chip">已找到 <strong>${rows.length}</strong> 件</span>`);
+        chips.push(`<span class="filter-chip">排序：${html(sortText)}</span>`);
+        if (state.selectedCategory && state.selectedCategory !== "全部") chips.push(`<span class="filter-chip">分类：${html(state.selectedCategory)}</span>`);
+        if (keyword) chips.push(`<span class="filter-chip">关键词：${html(keyword)}</span>`);
+        if (min || max) chips.push(`<span class="filter-chip">价格：${html(min || "0")} - ${html(max || "不限")}</span>`);
+        if (state.stockOnly) chips.push(`<span class="filter-chip">仅看有货</span>`);
+        $("activeFilters").innerHTML = chips.join("");
     }
 
     async function login() {
@@ -2365,6 +2918,8 @@
         try {
             const keyword = $("keyword").value.trim();
             $("topKeyword").value = keyword;
+            $("productHint").textContent = "正在加载商品";
+            renderProductSkeletons();
             const params = new URLSearchParams();
             if (keyword) params.set("keyword", keyword);
             if (state.selectedCategory && state.selectedCategory !== "全部") params.set("category", state.selectedCategory);
@@ -2372,6 +2927,7 @@
             state.products = rows;
             renderProductList();
         } catch (error) {
+            $("products").classList.remove("loading");
             setNotice(error.message);
         }
     }
@@ -2392,10 +2948,12 @@
             return Number(b.id || 0) - Number(a.id || 0);
         });
         state.visibleProducts = rows;
+        $("products").classList.remove("loading");
         $("products").innerHTML = rows.length ? rows.map(renderProductCard).join("") : emptyText("没有符合条件的商品");
         const keyword = $("keyword").value.trim();
         const categoryText = state.selectedCategory && state.selectedCategory !== "全部" ? `${state.selectedCategory} · ` : "";
         $("productHint").textContent = `${categoryText}${keyword ? `搜索：${keyword} · ` : ""}共 ${rows.length} 件商品`;
+        renderActiveFilters(rows);
     }
 
     function toggleStockOnly() {
@@ -2415,17 +2973,23 @@
 
     function renderProductCard(product) {
         const soldOut = Number(product.stock || 0) <= 0;
+        const hot = Number(product.sales_count || 0) >= 1500;
+        const lowStock = !soldOut && Number(product.stock || 0) <= 20;
         return `
-            <article class="product-card" onclick="openProductDetail(${product.id})">
+            <article class="product-card ${soldOut ? "sold-out" : ""}" onclick="openProductDetail(${product.id})">
                 <div class="image-wrap">
                     <img src="${html(product.image || fallbackImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
-                    <span class="badge">${html(product.category || "综合")}</span>
+                    <div class="card-badges">
+                        <span class="badge">${html(product.category || "综合")}</span>
+                        ${hot ? `<span class="sale-badge">热卖</span>` : ""}
+                        ${lowStock ? `<span class="sale-badge">库存紧张</span>` : ""}
+                    </div>
                 </div>
                 <div>
-                    <h3>${html(product.name)}</h3>
+                    <h3 title="${html(product.name)}">${html(product.name)}</h3>
                     <div class="muted">${html(product.subtitle || "精选平台好物")}</div>
                     <div class="product-meta">
-                        <span>库存 ${html(product.stock)}</span>
+                        <span>${stars(product.avg_score)} ${Number(product.avg_score || 5).toFixed(1)}</span>
                         <span>${soldOut ? "暂时缺货" : "现货"}</span>
                     </div>
                 </div>
@@ -2434,14 +2998,17 @@
                     <span>好评 ${percentText(product.positive_rate)}</span>
                     <span>评价 ${intText(product.comment_count)}</span>
                 </div>
-                <div class="price">￥${money(product.price)}</div>
+                <div class="card-bottom">
+                    <div class="price">￥${money(product.price)}</div>
+                    <span class="delivery-note">${soldOut ? "到货提醒" : "现货速发"}</span>
+                </div>
                 <div class="quantity-row">
                     <input id="qty-${product.id}" type="number" min="1" value="1" onclick="event.stopPropagation()" ${soldOut ? "disabled" : ""}>
                     <button onclick="event.stopPropagation(); addCart(${product.id})" ${soldOut ? "disabled" : ""}>加入购物车</button>
                 </div>
-                <div class="actions">
+                <div class="card-actions">
+                    <button onclick="event.stopPropagation(); buyNow(${product.id}, Number($('qty-${product.id}').value))" ${soldOut ? "disabled" : ""}>立即买</button>
                     <button class="secondary" onclick="event.stopPropagation(); addFavorite(${product.id})">收藏</button>
-                    <button class="ghost" onclick="event.stopPropagation(); openProductDetail(${product.id})">查看详情</button>
                 </div>
             </article>
         `;
@@ -2452,6 +3019,7 @@
         $("topKeyword").value = "";
         state.selectedCategory = "全部";
         renderCategories();
+        updateChannelNav();
         loadProducts();
     }
 
@@ -2509,6 +3077,7 @@
 
     function renderProductDetail(product) {
         const soldOut = Number(product.stock || 0) <= 0;
+        const avgScore = Number(product.avg_score || 5).toFixed(1);
         $("productDetail").innerHTML = `
             <div class="detail-top">
                 <div class="detail-image">
@@ -2525,14 +3094,21 @@
                         <div><span>评价</span><strong>${intText(product.comment_count)}</strong></div>
                         <div><span>库存</span><strong>${html(product.stock)}</strong></div>
                     </div>
-                    <div class="quantity-row">
-                        <input id="detailQty-${product.id}" type="number" min="1" value="1" ${soldOut ? "disabled" : ""}>
-                        <button onclick="addCart(${product.id}, Number($('detailQty-${product.id}').value))" ${soldOut ? "disabled" : ""}>加入购物车</button>
+                    <div class="detail-service-grid">
+                        <div class="service-pill"><strong>现货速发</strong><span>订单状态实时可见</span></div>
+                        <div class="service-pill"><strong>正品严选</strong><span>平台商品统一管理</span></div>
+                        <div class="service-pill"><strong>售后省心</strong><span>评价与物流可追踪</span></div>
                     </div>
-                    <div class="actions">
-                        <button onclick="buyNow(${product.id}, Number($('detailQty-${product.id}').value))" ${soldOut ? "disabled" : ""}>立即购买</button>
-                        <button class="secondary" onclick="addFavorite(${product.id})">收藏商品</button>
-                        <button class="ghost" onclick="closeProductDetail()">继续逛</button>
+                    <div class="detail-buy-panel">
+                        <div class="quantity-row">
+                            <input id="detailQty-${product.id}" type="number" min="1" value="1" ${soldOut ? "disabled" : ""}>
+                            <button onclick="addCart(${product.id}, Number($('detailQty-${product.id}').value))" ${soldOut ? "disabled" : ""}>加入购物车</button>
+                        </div>
+                        <div class="actions">
+                            <button onclick="buyNow(${product.id}, Number($('detailQty-${product.id}').value))" ${soldOut ? "disabled" : ""}>立即购买</button>
+                            <button class="secondary" onclick="addFavorite(${product.id})">收藏商品</button>
+                            <button class="ghost" onclick="closeProductDetail()">继续逛</button>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -2541,6 +3117,13 @@
                     <div class="section-head">
                         <h2>买家评价</h2>
                         <div class="muted">${intText(product.comment_count)} 条评价 · ${percentText(product.positive_rate)} 好评</div>
+                    </div>
+                    <div class="review-summary">
+                        <div>
+                            <div class="review-score">${avgScore}</div>
+                            <div class="rating-stars">${stars(product.avg_score)}</div>
+                        </div>
+                        <div class="muted">综合评分来自买家评价，销量与好评率会随订单和评论自动更新。</div>
                     </div>
                     <div class="form-grid" style="margin-bottom:12px">
                         <textarea id="comment-${product.id}" placeholder="分享你的使用感受"></textarea>
@@ -2606,6 +3189,7 @@
         if (!state.user) {
             $("cart").innerHTML = emptyText("请先登录");
             $("orderTotal").textContent = "￥0.00";
+            setCartBadges(0);
             return;
         }
         try {
@@ -2613,7 +3197,7 @@
             state.cartRows = rows;
             const total = rows.reduce((sum, row) => sum + Number(row.subtotal || 0), 0);
             $("orderTotal").textContent = `￥${money(total)}`;
-            $("cartCount").textContent = rows.length;
+            setCartBadges(rows.length);
             $("cart").innerHTML = rows.length ? rows.map(renderCartLine).join("") : emptyText("购物车为空");
             prefillReceiver();
         } catch (error) {
@@ -2631,7 +3215,11 @@
                     <div class="price">￥${money(item.subtotal)}</div>
                 </div>
                 <div class="actions">
-                    <input id="cart-count-${item.id}" type="number" min="1" value="${html(item.count)}" style="width:88px">
+                    <div class="qty-stepper">
+                        <button type="button" onclick="changeCartCount(${item.id}, -1)">−</button>
+                        <input id="cart-count-${item.id}" type="number" min="1" value="${html(item.count)}" onchange="updateCartCount(${item.id})">
+                        <button type="button" onclick="changeCartCount(${item.id}, 1)">+</button>
+                    </div>
                     <button class="secondary" onclick="updateCartCount(${item.id})">更新</button>
                     <button class="ghost" onclick="removeCart(${item.id})">移除</button>
                 </div>
@@ -2639,12 +3227,18 @@
         `;
     }
 
+    function changeCartCount(id, delta) {
+        const input = $(`cart-count-${id}`);
+        if (!input) return;
+        input.value = Math.max(1, Number(input.value || 1) + delta);
+        updateCartCount(id);
+    }
+
     async function loadCartCount() {
         if (!state.user) return;
         try {
             const rows = await request(`/cart?userId=${state.user.id}`);
-            $("cartCount").textContent = rows.length;
-            if ($("profileCartCount")) $("profileCartCount").textContent = rows.length;
+            setCartBadges(rows.length);
         } catch (error) {
             setNotice(error.message);
         }
@@ -2671,11 +3265,12 @@
         }
     }
 
-    function prefillReceiver() {
+    function prefillReceiver(force = false) {
         if (!state.user) return;
-        if (!$("receiverName").value) $("receiverName").value = state.user.nickname || state.user.username || "";
-        if (!$("receiverPhone").value) $("receiverPhone").value = state.user.phone || "";
-        if (!$("shippingAddress").value) $("shippingAddress").value = state.user.address || "";
+        if (force || !$("receiverName").value) $("receiverName").value = state.user.nickname || state.user.username || "";
+        if (force || !$("receiverPhone").value) $("receiverPhone").value = state.user.phone || "";
+        if (force || !$("shippingAddress").value) $("shippingAddress").value = state.user.address || "";
+        if (force) setNotice("已填入个人主页地址");
     }
 
     async function loadProfile() {
@@ -2785,7 +3380,7 @@
         try {
             const rows = await request(`/favorites?userId=${state.user.id}`);
             $("favorites").innerHTML = rows.length ? rows.map(item => `
-                <article class="product-card">
+                <article class="product-card" onclick="openProductDetail(${item.product_id})">
                     <div class="image-wrap">
                         <img src="${html(item.image || fallbackImage)}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
                         <span class="badge">${html(item.category || "收藏")}</span>
@@ -2793,8 +3388,8 @@
                     <h3>${html(item.name)}</h3>
                     <div class="price">￥${money(item.price)}</div>
                     <div class="actions">
-                        <button onclick="addCart(${item.product_id})">加入购物车</button>
-                        <button class="ghost" onclick="removeFavorite(${item.id})">取消收藏</button>
+                        <button onclick="event.stopPropagation(); addCart(${item.product_id})">加入购物车</button>
+                        <button class="ghost" onclick="event.stopPropagation(); removeFavorite(${item.id})">取消收藏</button>
                     </div>
                 </article>
             `).join("") : emptyText("暂无收藏");
@@ -2812,16 +3407,45 @@
         }
     }
 
+    function setOrderFilter(status) {
+        state.orderFilter = status;
+        updateOrderFilterButtons("orderFilter", status);
+        loadUserOrders();
+    }
+
+    function setAdminOrderFilter(status) {
+        state.adminOrderFilter = status;
+        updateOrderFilterButtons("adminOrderFilter", status);
+        loadAdminOrders();
+    }
+
+    function updateOrderFilterButtons(prefix, activeStatus) {
+        ["All", "0", "1", "2", "3"].forEach(key => {
+            const button = $(`${prefix}${key}`);
+            if (!button) return;
+            const value = key === "All" ? "all" : Number(key);
+            button.classList.toggle("active", value === activeStatus);
+        });
+    }
+
+    function filterOrdersByStatus(rows, status) {
+        if (status === "all") return rows;
+        return rows.filter(order => Number(order.status) === Number(status));
+    }
+
     async function loadUserOrders() {
         if (!state.user) {
             $("userOrders").innerHTML = emptyText("请先登录");
+            setOrderBadges(0);
             return;
         }
         try {
             const rows = await request(`/orders?userId=${state.user.id}`);
             const details = await Promise.all(rows.map(order => request(`/orders/${order.id}`).catch(() => order)));
-            $("userOrders").innerHTML = details.length ? details.map(order => renderOrder(order, false)).join("") : emptyText("暂无订单");
-            $("orderCount").textContent = rows.length;
+            const visible = filterOrdersByStatus(details, state.orderFilter);
+            updateOrderFilterButtons("orderFilter", state.orderFilter);
+            $("userOrders").innerHTML = visible.length ? visible.map(order => renderOrder(order, false)).join("") : emptyText("当前状态暂无订单");
+            setOrderBadges(rows.length);
         } catch (error) {
             setNotice(error.message);
         }
@@ -2831,8 +3455,7 @@
         if (!state.user) return;
         try {
             const rows = await request(`/orders?userId=${state.user.id}`);
-            $("orderCount").textContent = rows.length;
-            if ($("profileOrderCount")) $("profileOrderCount").textContent = rows.length;
+            setOrderBadges(rows.length);
         } catch (error) {
             setNotice(error.message);
         }
@@ -2849,6 +3472,9 @@
             : status === 2
                 ? `<button onclick="setOrderStatus(${order.id}, 3, false)">确认收货</button>`
                 : "";
+        const rebuyAction = !adminMode && (order.items || []).length
+            ? `<button class="ghost" onclick="rebuyOrder(${order.id})">再次购买</button>`
+            : "";
         const adminActions = `
             <button class="secondary" onclick="setOrderStatus(${order.id}, 1, true)">已支付</button>
             <button onclick="setOrderStatus(${order.id}, 2, true)">发货</button>
@@ -2868,7 +3494,7 @@
                 <div class="muted">商品：${items}</div>
                 <div class="muted">收货：${address}</div>
                 <div class="muted">物流：${logistics}</div>
-                <div class="actions">${adminMode ? adminActions : userActions}</div>
+                <div class="actions">${adminMode ? adminActions : userActions + rebuyAction}</div>
             </div>
         `;
     }
@@ -2891,6 +3517,28 @@
             } else {
                 await loadUserOrders();
             }
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function rebuyOrder(orderId) {
+        try {
+            requireLogin();
+            const order = await request(`/orders/${orderId}`);
+            const items = order.items || [];
+            if (!items.length) throw new Error("订单没有可再次购买的商品");
+            await Promise.all(items.map(item => request("/cart", {
+                method: "POST",
+                body: JSON.stringify({
+                    userId: state.user.id,
+                    productId: item.product_id,
+                    count: item.count
+                })
+            })));
+            setNotice("已加入购物车");
+            await loadCartCount();
+            showTab("cart");
         } catch (error) {
             setNotice(error.message);
         }
@@ -2934,7 +3582,12 @@
             const rows = await request(`/comments?productId=${productId}`);
             $(`commentList-${productId}`).innerHTML = rows.length ? rows.map(row => `
                 <div class="comment-item">
-                    <strong>${html(row.score)}分</strong> ${html(row.username)}：${html(row.content)}
+                    <div class="comment-meta">
+                        <strong>${html(row.username || "匿名用户")}</strong>
+                        <span class="rating-stars">${stars(row.score)} ${html(row.score)}分</span>
+                    </div>
+                    <div>${html(row.content)}</div>
+                    <div class="muted">${html(row.create_time || "")}</div>
                 </div>
             `).join("") : `<div class="muted">暂无评价</div>`;
         } catch (error) {
@@ -3080,7 +3733,9 @@
             requireAdmin();
             const rows = await request(`/orders?actorId=${state.user.id}`);
             const details = await Promise.all(rows.map(order => request(`/orders/${order.id}`).catch(() => order)));
-            $("adminOrders").innerHTML = details.length ? details.map(order => renderOrder(order, true)).join("") : emptyText("暂无订单");
+            const visible = filterOrdersByStatus(details, state.adminOrderFilter);
+            updateOrderFilterButtons("adminOrderFilter", state.adminOrderFilter);
+            $("adminOrders").innerHTML = visible.length ? visible.map(order => renderOrder(order, true)).join("") : emptyText("当前状态暂无订单");
         } catch (error) {
             setNotice(error.message);
         }

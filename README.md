@@ -1,28 +1,105 @@
 # 柚子妹妹网购
 
-基于 Java Web、Jersey、MySQL 的综合网购平台项目，包含商品浏览、搜索、购物车、收藏、订单、评价、物流、管理员商品维护和超级管理员用户授权。
+基于 Java Web、Jersey、MySQL、Tomcat 的综合网购平台项目。项目包含商品浏览、分类搜索、购物车、收藏、订单、评价、物流、个人主页、管理员商品维护和超级管理员用户授权等功能。
 
-## 运行步骤
+本文档用于小组成员拉取项目后的本地配置和运行。请按顺序操作，尤其注意 **Tomcat 必须使用 9.x**。
 
-1. 确认本机 MySQL 已启动。
-2. 复制 `src/main/resources/db.local.properties.example` 为 `src/main/resources/db.local.properties`。
-3. 在 `db.local.properties` 中填写自己本机的 MySQL 用户名和密码。
-4. 默认数据库名为 `YZMM_Mall`，项目启动时会自动创建数据库和表。
-5. 也可以手动执行 `src/main/resources/sql/schema.sql` 初始化数据。
-6. 在 IDEA 中重新构建并用 Tomcat 部署 `demo:war exploded`。
-7. 访问 `http://localhost:8080/demo/`。
+## 一、环境要求
 
-## 数据库配置说明
+| 工具 | 推荐版本 | 说明 |
+| --- | --- | --- |
+| JDK | 17 | `pom.xml` 中编译版本为 17 |
+| IntelliJ IDEA | 2023+ | 中文界面也可以，建议使用 Ultimate |
+| MySQL | 8.0 | 默认数据库名为 `YZMM_Mall` |
+| Tomcat | 9.x | 项目使用 `javax.*`，不要使用 Tomcat 10 |
+| Maven | 使用项目自带 Maven Wrapper | Windows 下运行 `mvnw.cmd` |
 
-项目会按下面的优先级读取数据库配置：
+为什么不能用 Tomcat 10：本项目依赖 `javax.servlet`、`javax.ws.rs` 和 Jersey 2.x，适配 Tomcat 9。Tomcat 10 使用 `jakarta.*`，会导致接口无法正常启动，登录时可能出现“接口返回异常”。
 
-```text
-环境变量 / JVM 参数 > db.local.properties > db.properties
+## 二、拉取项目
+
+```powershell
+git clone 你的仓库地址
+cd 项目目录
 ```
 
-`db.local.properties` 已加入 `.gitignore`，适合每个人保存自己的本地数据库密码，不建议把个人 MySQL 密码提交到 GitHub。
+如果已经拉取过项目，更新代码：
 
-示例：
+```powershell
+git pull
+```
+
+用 IDEA 打开项目时，选择包含 `pom.xml` 的项目根目录。
+
+## 三、Maven 依赖加载与打包
+
+### 1. IDEA 中加载 Maven
+
+1. 打开 IDEA。
+2. 等待右下角 Maven 自动导入。
+3. 如果没有自动导入，打开右侧 `Maven` 面板。
+4. 点击刷新按钮，重新加载 `pom.xml`。
+
+### 2. 命令行验证 Maven
+
+在项目根目录运行：
+
+```powershell
+.\mvnw.cmd -v
+```
+
+打包项目：
+
+```powershell
+.\mvnw.cmd clean package -DskipTests
+```
+
+打包成功后，会生成：
+
+```text
+target/demo-1.0-SNAPSHOT.war
+target/demo-1.0-SNAPSHOT/
+```
+
+如果 Maven 下载依赖失败，通常是网络或 Maven 镜像问题。可以先在 IDEA 的 Maven 面板点刷新，也可以换网络后重新执行 `.\mvnw.cmd clean package -DskipTests`。
+
+## 四、数据库搭建
+
+### 1. 启动 MySQL
+
+确认本机 MySQL 服务已经启动。
+
+Windows 可以在服务里查看：
+
+```text
+Win + R -> services.msc -> 找到 MySQL80 -> 启动
+```
+
+也可以在命令行测试：
+
+```powershell
+mysql -uroot -p
+```
+
+能进入 MySQL 命令行，说明 MySQL 基本可用。
+
+### 2. 创建本地数据库配置
+
+项目不要直接修改 `db.properties` 里的公共配置。每个人应该创建自己的本地配置文件。
+
+复制模板：
+
+```powershell
+Copy-Item src\main\resources\db.local.properties.example src\main\resources\db.local.properties
+```
+
+然后打开：
+
+```text
+src/main/resources/db.local.properties
+```
+
+改成自己本机的 MySQL 配置：
 
 ```properties
 db.url=jdbc:mysql://localhost:3306/?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
@@ -31,21 +108,293 @@ db.username=root
 db.password=你的MySQL密码
 ```
 
-如果修改数据库配置后仍然打不开，先停止 Tomcat，再重新 Build Artifact 或执行 Maven 打包，避免 Tomcat 继续使用旧的 `target/classes/db.properties`。
+`db.local.properties` 已经加入 `.gitignore`，不会被提交到 GitHub，适合保存每个人自己的数据库密码。
 
-## 内置账号
+项目读取数据库配置的优先级：
+
+```text
+环境变量 / JVM 参数 > db.local.properties > db.properties
+```
+
+### 3. 初始化完整演示数据库
+
+推荐手动执行项目自带 SQL，这样数据库、外键、演示数据一次到位。
+
+SQL 文件位置：
+
+```text
+src/main/resources/sql/schema.sql
+```
+
+它会创建并初始化：
+
+```text
+数据库：YZMM_Mall
+用户、商品、购物车、收藏、订单、订单明细、评价、物流、外键关系
+```
+
+如果使用 MySQL 命令行，可以先进入 MySQL：
+
+```powershell
+mysql -uroot -p --default-character-set=utf8mb4
+```
+
+进入后执行：
+
+```sql
+source D:/QiMoJavaWeb/demo/src/main/resources/sql/schema.sql;
+```
+
+注意：把路径换成你自己电脑上的项目路径，路径中建议使用 `/`。
+
+如果使用 Navicat、DataGrip 或 IDEA 数据库工具：
+
+1. 连接本机 MySQL。
+2. 打开 `src/main/resources/sql/schema.sql`。
+3. 选择全部 SQL。
+4. 点击运行。
+5. 刷新数据库列表，确认出现 `YZMM_Mall`。
+
+### 4. 检查数据库是否成功
+
+执行：
+
+```sql
+use YZMM_Mall;
+show tables;
+```
+
+应该看到这些表：
+
+```text
+admin
+user
+product
+cart
+favorite
+order_info
+order_item
+comment
+logistics
+```
+
+检查数据量：
+
+```sql
+select count(*) from product;
+select count(*) from user;
+select count(*) from order_info;
+```
+
+正常情况下大致为：
+
+```text
+product: 20
+user: 6
+order_info: 6
+```
+
+## 五、Tomcat 9 配置
+
+### 1. 添加 Tomcat
+
+在 IDEA 中文界面中：
+
+```text
+运行 -> 编辑配置 -> 左上角 + -> Tomcat 服务器 -> 本地
+```
+
+然后配置：
+
+```text
+应用程序服务器：选择 Tomcat 9.x 目录
+JRE：选择 JDK 17
+```
+
+如果没有 Tomcat 9，需要先下载 Tomcat 9。不要选择 Tomcat 10。
+
+### 2. 添加部署 Artifact
+
+在 Tomcat 配置窗口中：
+
+```text
+部署 -> + -> Artifact
+```
+
+选择：
+
+```text
+demo:war exploded
+```
+
+Application context 设置为：
+
+```text
+/demo
+```
+
+这样启动后的访问路径就是：
+
+```text
+http://localhost:8080/demo/
+```
+
+### 3. 启动项目
+
+点击 IDEA 右上角绿色运行按钮。
+
+控制台中看到 Tomcat 正常启动后，浏览器访问：
+
+```text
+http://localhost:8080/demo/
+```
+
+如果页面可以打开，再测试接口：
+
+```text
+http://localhost:8080/demo/api/products
+```
+
+如果返回 JSON 数据，说明后端接口和数据库连接正常。
+
+## 六、内置账号
 
 ```text
 普通用户：zhangsan / 123456
+普通用户：lisi / 123456
+普通用户：wangwu / 123456
+普通用户：zhaoliu / 123456
 管理员：admin / 123456
 超级管理员：superadmin / 123456
 ```
 
-## 环境变量
+权限说明：
 
 ```text
-YZMM_MALL_DB_URL
-YZMM_MALL_DB_NAME
-YZMM_MALL_DB_USERNAME
-YZMM_MALL_DB_PASSWORD
+user：普通用户，只能选购商品、收藏、购物车、下单、评论
+admin：管理员，可以进入运营中心管理商品、订单、物流、评价
+super_admin：超级管理员，可以设置普通用户为管理员
+```
+
+## 七、常见问题
+
+### 1. 登录提示“接口返回异常”
+
+优先检查：
+
+```text
+http://localhost:8080/demo/api/products
+```
+
+如果这个地址不是 JSON，而是 404、500 或 HTML 页面，说明后端接口没有正常工作。
+
+常见原因：
+
+```text
+1. 使用了 Tomcat 10，而不是 Tomcat 9
+2. Application context 不是 /demo
+3. 没有部署 demo:war exploded
+4. Tomcat 没有重新启动，仍然使用旧配置
+5. 数据库连接失败，后端启动时报错
+```
+
+### 2. 数据库连接失败
+
+如果控制台出现：
+
+```text
+Access denied for user
+```
+
+说明 `db.local.properties` 里的用户名或密码错误。
+
+如果出现：
+
+```text
+Communications link failure
+```
+
+说明 MySQL 没启动，或者端口不是 3306。
+
+如果出现：
+
+```text
+Unknown database
+```
+
+说明数据库没有创建，先执行 `schema.sql`，或者确认 `db.name=YZMM_Mall`。
+
+### 3. 修改数据库密码后仍然不生效
+
+停止 Tomcat，然后重新构建项目：
+
+```powershell
+.\mvnw.cmd clean package -DskipTests
+```
+
+再重新部署 `demo:war exploded`。
+
+原因是 Tomcat 可能还在使用旧的 `target/classes/db.properties`。
+
+### 4. Maven 依赖下载失败
+
+先尝试：
+
+```powershell
+.\mvnw.cmd clean package -DskipTests
+```
+
+如果还是失败：
+
+```text
+1. 检查网络
+2. 在 IDEA Maven 面板点击刷新
+3. 检查 Maven 设置中的本地仓库和镜像源
+4. 换网络后重新下载依赖
+```
+
+### 5. ER 图没有连线
+
+现在 `schema.sql` 已经包含外键。执行 SQL 后，需要在建模工具里重新：
+
+```text
+从数据库导入 / 逆向数据库 / 刷新模型
+```
+
+只看旧模型不会自动出现连线。
+
+## 八、项目目录说明
+
+```text
+src/main/java/org/example/demo/common
+公共工具类、数据库连接、异常处理
+
+src/main/java/org/example/demo/resource
+后端 REST 接口，包含用户、商品、购物车、订单、评价等接口
+
+src/main/resources/db.properties
+默认数据库配置，不建议每个人直接改
+
+src/main/resources/db.local.properties
+本地数据库配置，每个人自己创建，不提交 GitHub
+
+src/main/resources/sql/schema.sql
+完整建库建表和演示数据 SQL
+
+src/main/webapp/index.html
+前端页面和交互逻辑
+```
+
+## 九、快速运行检查清单
+
+```text
+JDK 17 已配置
+MySQL 8 已启动
+db.local.properties 已创建并填写正确密码
+schema.sql 已执行
+Maven 依赖已加载
+Tomcat 使用 9.x
+部署项为 demo:war exploded
+Application context 为 /demo
+能访问 /demo/api/products 并返回 JSON
 ```

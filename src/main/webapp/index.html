@@ -1833,7 +1833,8 @@
 </div>
 
 <script>
-    const contextPath = location.pathname.split("/").filter(Boolean)[0] || "";
+    const firstPathPart = location.pathname.split("/").filter(Boolean)[0] || "";
+    const contextPath = firstPathPart.includes(".") ? "" : firstPathPart;
     const api = `${location.origin}${contextPath ? `/${contextPath}` : ""}/api`;
     const fallbackImage = "https://dummyimage.com/800x600/f1f5f9/475569&text=YZMM";
     const categories = ["全部", "手机数码", "电脑办公", "家用电器", "服饰箱包", "美妆个护", "食品饮料", "家居日用", "运动户外"];
@@ -1946,9 +1947,15 @@
         } catch (error) {
             throw new Error("无法连接后端服务，请确认 Tomcat 已启动并完成部署");
         }
-        const body = await response.json().catch(() => null);
+        const raw = await response.text().catch(() => "");
+        let body = null;
+        try {
+            body = raw ? JSON.parse(raw) : null;
+        } catch (error) {
+            body = null;
+        }
         if (!body) {
-            throw new Error("接口返回异常，请检查部署路径");
+            throw new Error(`接口返回异常：${response.status} ${response.url}`);
         }
         if (!response.ok || body.success === false) {
             throw new Error(body.message || "请求失败");

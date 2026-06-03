@@ -5,8 +5,12 @@ import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 public final class Db {
@@ -100,28 +104,102 @@ public final class Db {
         private static void initialize(Connection connection) throws SQLException {
             try (Statement statement = connection.createStatement()) {
                 statement.executeUpdate("""
-                        create table if not exists `admin` (
-                            id int primary key auto_increment,
-                            username varchar(50) not null unique,
-                            password varchar(50) not null
-                        ) engine=InnoDB default charset=utf8mb4
-                        """);
-                statement.executeUpdate("""
                         create table if not exists `user` (
                             id int primary key auto_increment,
                             username varchar(50) not null unique,
-                            password varchar(50) not null,
+                            password varchar(255) not null,
                             nickname varchar(50),
                             phone varchar(11),
                             address varchar(200),
                             tags varchar(200),
-                            role varchar(20) not null default 'user'
+                            status tinyint not null default 1
                         ) engine=InnoDB default charset=utf8mb4
                         """);
-                addColumnIfMissing(statement, "alter table `user` add column role varchar(20) not null default 'user'");
+                statement.executeUpdate("alter table `user` modify column password varchar(255) not null");
                 addColumnIfMissing(statement, "alter table `user` add column nickname varchar(50)");
                 addColumnIfMissing(statement, "alter table `user` add column address varchar(200)");
                 addColumnIfMissing(statement, "alter table `user` add column tags varchar(200)");
+                addColumnIfMissing(statement, "alter table `user` add column status tinyint not null default 1");
+                statement.executeUpdate("update `user` set status = 1 where status is null");
+                statement.executeUpdate("""
+                        create table if not exists auth_token (
+                            id int primary key auto_increment,
+                            account_type varchar(20) not null default 'user',
+                            user_id int,
+                            admin_id int,
+                            token_hash char(64) not null unique,
+                            expire_time timestamp not null,
+                            create_time timestamp not null default current_timestamp,
+                            key idx_auth_token_user (user_id),
+                            key idx_auth_token_admin (admin_id)
+                        ) engine=InnoDB default charset=utf8mb4
+                        """);
+                addColumnIfMissing(statement, "alter table auth_token add column account_type varchar(20) not null default 'user'");
+                addColumnIfMissing(statement, "alter table auth_token add column admin_id int");
+                dropForeignKeyIfExists(statement, "alter table auth_token drop foreign key fk_auth_token_user");
+                statement.executeUpdate("alter table auth_token modify column user_id int");
+                statement.executeUpdate("""
+                        create table if not exists login_attempt (
+                            username varchar(50) primary key,
+                            failed_count int not null default 0,
+                            last_failed_time timestamp null,
+                            locked_until timestamp null,
+                            last_success_time timestamp null
+                        ) engine=InnoDB default charset=utf8mb4
+                        """);
+                statement.executeUpdate("""
+                        create table if not exists `admin` (
+                            id int primary key auto_increment,
+                            username varchar(50) not null unique,
+                            password varchar(255) not null,
+                            nickname varchar(50),
+                            phone varchar(11),
+                            admin_level varchar(20) not null default 'admin',
+                            status tinyint not null default 1,
+                            department varchar(50),
+                            remark varchar(200),
+                            create_time timestamp not null default current_timestamp
+                        ) engine=InnoDB default charset=utf8mb4
+                        """);
+                addColumnIfMissing(statement, "alter table `admin` add column username varchar(50)");
+                addColumnIfMissing(statement, "alter table `admin` add column password varchar(255)");
+                addColumnIfMissing(statement, "alter table `admin` add column nickname varchar(50)");
+                addColumnIfMissing(statement, "alter table `admin` add column phone varchar(11)");
+                addColumnIfMissing(statement, "alter table `admin` add column admin_level varchar(20) not null default 'admin'");
+                addColumnIfMissing(statement, "alter table `admin` add column status tinyint not null default 1");
+                addColumnIfMissing(statement, "alter table `admin` add column department varchar(50)");
+                addColumnIfMissing(statement, "alter table `admin` add column remark varchar(200)");
+                addColumnIfMissing(statement, "alter table `admin` add column create_time timestamp not null default current_timestamp");
+                ignoreError(statement, "alter table `admin` modify column user_id int", 1054);
+                ignoreError(statement, """
+                        update `admin` a
+                        join `user` u on u.id = a.user_id
+                        set a.username = coalesce(a.username, u.username),
+                            a.password = coalesce(a.password, u.password),
+                            a.nickname = coalesce(a.nickname, u.nickname),
+                            a.phone = coalesce(a.phone, u.phone),
+                            a.admin_level = case when u.username = 'superadmin' then 'super_admin' else a.admin_level end
+                        where a.username is null or a.password is null
+                        """, 1054);
+                ignoreError(statement, """
+                        insert into `admin`(username, password, nickname, phone, admin_level, status, department, remark)
+                        select username, password, coalesce(nickname, username), phone,
+                               case when role = 'super_admin' then 'super_admin' else 'admin' end,
+                               coalesce(status, 1), '运营中心', '由旧用户角色迁移'
+                        from `user`
+                        where role in ('admin', 'super_admin')
+                        on duplicate key update
+                        password = values(password),
+                        nickname = values(nickname),
+                        phone = values(phone),
+                        admin_level = values(admin_level),
+                        status = values(status)
+                        """, 1054);
+                ignoreError(statement, "update `user` set status = 0 where role in ('admin', 'super_admin')", 1054);
+                dropForeignKeysForColumnIfExists(connection, "admin", "user_id");
+                ignoreError(statement, "alter table `admin` drop column user_id", 1091);
+                ignoreError(statement, "alter table `user` drop column role", 1091);
+                statement.executeUpdate("update `admin` set status = 1 where status is null");
                 statement.executeUpdate("""
                         create table if not exists product (
                             id int primary key auto_increment,
@@ -132,6 +210,7 @@ public final class Db {
                             price decimal(10, 2) not null default 0.00,
                             stock int not null default 0,
                             sale_count int not null default 0,
+                            status tinyint not null default 1,
                             image mediumtext
                         ) engine=InnoDB default charset=utf8mb4
                         """);
@@ -139,20 +218,78 @@ public final class Db {
                 addColumnIfMissing(statement, "alter table product add column subtitle varchar(200)");
                 addColumnIfMissing(statement, "alter table product add column description text");
                 addColumnIfMissing(statement, "alter table product add column sale_count int not null default 0");
+                addColumnIfMissing(statement, "alter table product add column status tinyint not null default 1");
+                statement.executeUpdate("update product set status = 1 where status is null");
                 statement.executeUpdate("alter table product modify column image mediumtext");
+                statement.executeUpdate("""
+                        create table if not exists product_sku (
+                            id int primary key auto_increment,
+                            product_id int not null,
+                            spec_name varchar(50) not null,
+                            spec_value varchar(80) not null,
+                            price decimal(10, 2) not null default 0.00,
+                            stock int not null default 0,
+                            image mediumtext,
+                            sort_order int not null default 0,
+                            unique key uk_product_sku_spec (product_id, spec_name, spec_value),
+                            key idx_product_sku_product (product_id),
+                            constraint fk_product_sku_product foreign key (product_id) references product(id)
+                                on delete cascade on update cascade
+                        ) engine=InnoDB default charset=utf8mb4
+                        """);
+                statement.executeUpdate("""
+                        create table if not exists coupon (
+                            id int primary key auto_increment,
+                            name varchar(80) not null,
+                            code varchar(50) not null unique,
+                            discount_amount decimal(10, 2) not null default 0.00,
+                            threshold_amount decimal(10, 2) not null default 0.00,
+                            stock int not null default 0,
+                            status tinyint not null default 1,
+                            start_time timestamp null,
+                            end_time timestamp null,
+                            create_time timestamp not null default current_timestamp
+                        ) engine=InnoDB default charset=utf8mb4
+                        """);
+                statement.executeUpdate("""
+                        create table if not exists user_coupon (
+                            id int primary key auto_increment,
+                            user_id int not null,
+                            coupon_id int not null,
+                            status tinyint not null default 0,
+                            used_order_id int,
+                            receive_time timestamp not null default current_timestamp,
+                            used_time timestamp null,
+                            unique key uk_user_coupon (user_id, coupon_id),
+                            key idx_user_coupon_user (user_id),
+                            key idx_user_coupon_coupon (coupon_id),
+                            constraint fk_user_coupon_user foreign key (user_id) references `user`(id)
+                                on delete cascade on update cascade,
+                            constraint fk_user_coupon_coupon foreign key (coupon_id) references coupon(id)
+                                on delete cascade on update cascade
+                        ) engine=InnoDB default charset=utf8mb4
+                        """);
                 statement.executeUpdate("""
                         create table if not exists cart (
                             id int primary key auto_increment,
                             user_id int not null,
                             product_id int not null,
+                            sku_id int,
                             count int not null default 1,
-                            unique key uk_cart_user_product (user_id, product_id),
+                            update_time timestamp not null default current_timestamp on update current_timestamp,
+                            unique key uk_cart_user_product_sku (user_id, product_id, sku_id),
                             constraint fk_cart_user foreign key (user_id) references `user`(id)
                                 on delete cascade on update cascade,
                             constraint fk_cart_product foreign key (product_id) references product(id)
-                                on delete cascade on update cascade
+                                on delete cascade on update cascade,
+                            constraint fk_cart_sku foreign key (sku_id) references product_sku(id)
+                                on delete set null on update cascade
                         ) engine=InnoDB default charset=utf8mb4
                         """);
+                addColumnIfMissing(statement, "alter table cart add column sku_id int");
+                addColumnIfMissing(statement, "alter table cart add column update_time timestamp not null default current_timestamp on update current_timestamp");
+                dropIndexIfExists(statement, "alter table cart drop index uk_cart_user_product");
+                addIndexIfMissing(statement, "alter table cart add unique key uk_cart_user_product_sku (user_id, product_id, sku_id)");
                 statement.executeUpdate("""
                         create table if not exists favorite (
                             id int primary key auto_increment,
@@ -171,6 +308,8 @@ public final class Db {
                             order_no varchar(50) not null unique,
                             user_id int not null,
                             total_price decimal(10, 2) not null,
+                            discount_amount decimal(10, 2) not null default 0.00,
+                            coupon_id int,
                             status tinyint not null default 0,
                             receiver_name varchar(50),
                             receiver_phone varchar(20),
@@ -181,6 +320,8 @@ public final class Db {
                                 on delete restrict on update cascade
                         ) engine=InnoDB default charset=utf8mb4
                         """);
+                addColumnIfMissing(statement, "alter table order_info add column discount_amount decimal(10, 2) not null default 0.00");
+                addColumnIfMissing(statement, "alter table order_info add column coupon_id int");
                 addColumnIfMissing(statement, "alter table order_info add column receiver_name varchar(50)");
                 addColumnIfMissing(statement, "alter table order_info add column receiver_phone varchar(20)");
                 addColumnIfMissing(statement, "alter table order_info add column shipping_address varchar(200)");
@@ -189,16 +330,23 @@ public final class Db {
                             id int primary key auto_increment,
                             order_id int not null,
                             product_id int not null,
+                            sku_id int,
+                            sku_text varchar(120),
                             count int not null,
                             price decimal(10, 2) not null,
                             key idx_order_item_order (order_id),
                             key idx_order_item_product (product_id),
+                            key idx_order_item_sku (sku_id),
                             constraint fk_order_item_order foreign key (order_id) references order_info(id)
                                 on delete cascade on update cascade,
                             constraint fk_order_item_product foreign key (product_id) references product(id)
-                                on delete restrict on update cascade
+                                on delete restrict on update cascade,
+                            constraint fk_order_item_sku foreign key (sku_id) references product_sku(id)
+                                on delete set null on update cascade
                         ) engine=InnoDB default charset=utf8mb4
                         """);
+                addColumnIfMissing(statement, "alter table order_item add column sku_id int");
+                addColumnIfMissing(statement, "alter table order_item add column sku_text varchar(120)");
                 statement.executeUpdate("""
                         create table if not exists `comment` (
                             id int primary key auto_increment,
@@ -206,6 +354,7 @@ public final class Db {
                             product_id int not null,
                             content varchar(500) not null,
                             score tinyint not null,
+                            images mediumtext,
                             create_time timestamp not null default current_timestamp,
                             key idx_comment_user (user_id),
                             key idx_comment_product (product_id),
@@ -215,14 +364,38 @@ public final class Db {
                                 on delete cascade on update cascade
                         ) engine=InnoDB default charset=utf8mb4
                         """);
+                addColumnIfMissing(statement, "alter table `comment` add column images mediumtext");
                 statement.executeUpdate("""
                         create table if not exists logistics (
                             id int primary key auto_increment,
                             order_id int not null unique,
                             logistics_no varchar(50) not null,
+                            courier_company varchar(50),
+                            delivery_method varchar(50),
                             status varchar(20) not null default 'pending',
                             update_time timestamp not null default current_timestamp on update current_timestamp,
                             constraint fk_logistics_order foreign key (order_id) references order_info(id)
+                                on delete cascade on update cascade
+                        ) engine=InnoDB default charset=utf8mb4
+                        """);
+                addColumnIfMissing(statement, "alter table logistics add column courier_company varchar(50)");
+                addColumnIfMissing(statement, "alter table logistics add column delivery_method varchar(50)");
+                statement.executeUpdate("""
+                        create table if not exists after_sale (
+                            id int primary key auto_increment,
+                            order_id int not null,
+                            user_id int not null,
+                            type varchar(20) not null,
+                            reason varchar(500) not null,
+                            status varchar(20) not null default 'pending',
+                            reply varchar(500),
+                            create_time timestamp not null default current_timestamp,
+                            update_time timestamp not null default current_timestamp on update current_timestamp,
+                            key idx_after_sale_order (order_id),
+                            key idx_after_sale_user (user_id),
+                            constraint fk_after_sale_order foreign key (order_id) references order_info(id)
+                                on delete cascade on update cascade,
+                            constraint fk_after_sale_user foreign key (user_id) references `user`(id)
                                 on delete cascade on update cascade
                         ) engine=InnoDB default charset=utf8mb4
                         """);
@@ -232,12 +405,53 @@ public final class Db {
         }
 
         private static void ensureForeignKeys(Statement statement) throws SQLException {
+            addIndexIfMissing(statement, "alter table `admin` add unique key uk_admin_username (username)");
+            addIndexIfMissing(statement, "alter table auth_token add index idx_auth_token_user (user_id)");
+            addIndexIfMissing(statement, "alter table auth_token add index idx_auth_token_admin (admin_id)");
+            addIndexIfMissing(statement, "alter table product_sku add index idx_product_sku_product (product_id)");
+            addIndexIfMissing(statement, "alter table user_coupon add index idx_user_coupon_user (user_id)");
+            addIndexIfMissing(statement, "alter table user_coupon add index idx_user_coupon_coupon (coupon_id)");
+            addIndexIfMissing(statement, "alter table user_coupon add index idx_user_coupon_used_order (used_order_id)");
             addIndexIfMissing(statement, "alter table order_info add index idx_order_info_user (user_id)");
+            addIndexIfMissing(statement, "alter table order_info add index idx_order_info_coupon (coupon_id)");
             addIndexIfMissing(statement, "alter table order_item add index idx_order_item_order (order_id)");
             addIndexIfMissing(statement, "alter table order_item add index idx_order_item_product (product_id)");
+            addIndexIfMissing(statement, "alter table order_item add index idx_order_item_sku (sku_id)");
             addIndexIfMissing(statement, "alter table `comment` add index idx_comment_user (user_id)");
             addIndexIfMissing(statement, "alter table `comment` add index idx_comment_product (product_id)");
+            addIndexIfMissing(statement, "alter table after_sale add index idx_after_sale_order (order_id)");
+            addIndexIfMissing(statement, "alter table after_sale add index idx_after_sale_user (user_id)");
 
+            addForeignKeyIfMissing(statement, """
+                    alter table auth_token add constraint fk_auth_token_user
+                    foreign key (user_id) references `user`(id)
+                    on delete cascade on update cascade
+                    """);
+            addForeignKeyIfMissing(statement, """
+                    alter table auth_token add constraint fk_auth_token_admin
+                    foreign key (admin_id) references `admin`(id)
+                    on delete cascade on update cascade
+                    """);
+            addForeignKeyIfMissing(statement, """
+                    alter table product_sku add constraint fk_product_sku_product
+                    foreign key (product_id) references product(id)
+                    on delete cascade on update cascade
+                    """);
+            addForeignKeyIfMissing(statement, """
+                    alter table user_coupon add constraint fk_user_coupon_user
+                    foreign key (user_id) references `user`(id)
+                    on delete cascade on update cascade
+                    """);
+            addForeignKeyIfMissing(statement, """
+                    alter table user_coupon add constraint fk_user_coupon_coupon
+                    foreign key (coupon_id) references coupon(id)
+                    on delete cascade on update cascade
+                    """);
+            addForeignKeyIfMissing(statement, """
+                    alter table user_coupon add constraint fk_user_coupon_used_order
+                    foreign key (used_order_id) references order_info(id)
+                    on delete set null on update cascade
+                    """);
             addForeignKeyIfMissing(statement, """
                     alter table cart add constraint fk_cart_user
                     foreign key (user_id) references `user`(id)
@@ -247,6 +461,11 @@ public final class Db {
                     alter table cart add constraint fk_cart_product
                     foreign key (product_id) references product(id)
                     on delete cascade on update cascade
+                    """);
+            addForeignKeyIfMissing(statement, """
+                    alter table cart add constraint fk_cart_sku
+                    foreign key (sku_id) references product_sku(id)
+                    on delete set null on update cascade
                     """);
             addForeignKeyIfMissing(statement, """
                     alter table favorite add constraint fk_favorite_user
@@ -264,6 +483,11 @@ public final class Db {
                     on delete restrict on update cascade
                     """);
             addForeignKeyIfMissing(statement, """
+                    alter table order_info add constraint fk_order_info_coupon
+                    foreign key (coupon_id) references coupon(id)
+                    on delete set null on update cascade
+                    """);
+            addForeignKeyIfMissing(statement, """
                     alter table order_item add constraint fk_order_item_order
                     foreign key (order_id) references order_info(id)
                     on delete cascade on update cascade
@@ -272,6 +496,11 @@ public final class Db {
                     alter table order_item add constraint fk_order_item_product
                     foreign key (product_id) references product(id)
                     on delete restrict on update cascade
+                    """);
+            addForeignKeyIfMissing(statement, """
+                    alter table order_item add constraint fk_order_item_sku
+                    foreign key (sku_id) references product_sku(id)
+                    on delete set null on update cascade
                     """);
             addForeignKeyIfMissing(statement, """
                     alter table `comment` add constraint fk_comment_user
@@ -288,19 +517,38 @@ public final class Db {
                     foreign key (order_id) references order_info(id)
                     on delete cascade on update cascade
                     """);
+            addForeignKeyIfMissing(statement, """
+                    alter table after_sale add constraint fk_after_sale_order
+                    foreign key (order_id) references order_info(id)
+                    on delete cascade on update cascade
+                    """);
+            addForeignKeyIfMissing(statement, """
+                    alter table after_sale add constraint fk_after_sale_user
+                    foreign key (user_id) references `user`(id)
+                    on delete cascade on update cascade
+                    """);
         }
 
         private static void seed(Statement statement) throws SQLException {
-            statement.executeUpdate("insert ignore into `admin`(id, username, password) values (1, 'admin', '123456')");
-            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags, role) values (1, 'zhangsan', '123456', '张三', '13800000001', '北京市朝阳区示例路 18 号', '数码,家居', 'user')");
-            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags, role) values (2, 'lisi', '123456', '李四', '13800000002', '上海市浦东新区示例大道 66 号', '食品,运动', 'user')");
-            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags, role) values (3, 'admin', '123456', '运营管理员', '13800000003', '广东省深圳市南山区示例中心', '运营,商品', 'admin')");
-            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags, role) values (4, 'superadmin', '123456', '超级管理员', '13800000000', '浙江省杭州市西湖区示例园区', '管理,数据', 'super_admin')");
-            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags, role) values (5, 'wangwu', '123456', '王五', '13800000005', '江苏省南京市鼓楼区示例街 28 号', '办公,美妆,礼品', 'user')");
-            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags, role) values (6, 'zhaoliu', '123456', '赵六', '13800000006', '四川省成都市高新区示例路 88 号', '运动,数码,食品', 'user')");
+            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags) values (1, 'zhangsan', '123456', '张三', '13800000001', '北京市朝阳区示例路 18 号', '数码,家居')");
+            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags) values (2, 'lisi', '123456', '李四', '13800000002', '上海市浦东新区示例大道 66 号', '食品,运动')");
+            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags) values (5, 'wangwu', '123456', '王五', '13800000005', '江苏省南京市鼓楼区示例街 28 号', '办公,美妆,礼品')");
+            statement.executeUpdate("insert ignore into `user`(id, username, password, nickname, phone, address, tags) values (6, 'zhaoliu', '123456', '赵六', '13800000006', '四川省成都市高新区示例路 88 号', '运动,数码,食品')");
             statement.executeUpdate("update `user` set nickname = coalesce(nickname, username)");
-            statement.executeUpdate("update `user` set role = 'admin' where username = 'admin'");
-            statement.executeUpdate("update `user` set role = 'super_admin' where username = 'superadmin'");
+            statement.executeUpdate("update `user` set status = 0 where username in ('admin', 'superadmin')");
+            statement.executeUpdate("""
+                    insert into `admin`(id, username, password, nickname, phone, admin_level, department, remark, status) values
+                    (1, 'admin', '123456', '运营管理员', '13800000003', 'admin', '商品运营部', '负责商品、订单、评价和物流日常维护', 1),
+                    (2, 'superadmin', '123456', '超级管理员', '13800000000', 'super_admin', '平台管理部', '负责用户权限和平台配置', 1)
+                    on duplicate key update
+                    username = values(username),
+                    nickname = values(nickname),
+                    phone = values(phone),
+                    admin_level = values(admin_level),
+                    department = values(department),
+                    remark = values(remark),
+                    status = values(status)
+                    """);
             statement.executeUpdate("""
                     insert into product(id, name, category, subtitle, description, price, stock, sale_count, image) values
                     (1, '无线蓝牙耳机', '手机数码', '低延迟蓝牙连接，通勤运动都能稳稳佩戴', '高清通话、长续航充电仓、轻量化入耳设计。适合通勤、运动、视频会议等日常场景。', 139.00, 120, 2380, 'https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?auto=format&fit=crop&w=800&q=80'),
@@ -330,6 +578,44 @@ public final class Db {
                     stock = greatest(stock, values(stock)),
                     sale_count = greatest(sale_count, values(sale_count)),
                     image = coalesce(image, values(image))
+                    """);
+            statement.executeUpdate("""
+                    insert into product_sku(id, product_id, spec_name, spec_value, price, stock, image, sort_order) values
+                    (1, 1, '颜色', '雅黑', 139.00, 60, null, 1),
+                    (2, 1, '颜色', '珍珠白', 149.00, 45, null, 2),
+                    (3, 2, '轴体', '茶轴', 219.00, 35, null, 1),
+                    (4, 2, '轴体', '红轴', 229.00, 28, null, 2),
+                    (5, 7, '内存', '16G+512G', 4999.00, 20, null, 1),
+                    (6, 7, '内存', '32G+1T', 5899.00, 12, null, 2),
+                    (7, 10, '尺码', '39', 269.00, 18, null, 1),
+                    (8, 10, '尺码', '40', 269.00, 20, null, 2),
+                    (9, 10, '尺码', '41', 269.00, 22, null, 3),
+                    (10, 15, '规格', '120g', 59.90, 90, null, 1),
+                    (11, 15, '规格', '120g*2', 99.00, 55, null, 2)
+                    on duplicate key update
+                    price = values(price),
+                    stock = greatest(stock, values(stock)),
+                    sort_order = values(sort_order)
+                    """);
+            statement.executeUpdate("""
+                    insert into coupon(id, name, code, discount_amount, threshold_amount, stock, status, start_time, end_time) values
+                    (1, '新人满 99 减 10', 'NEW10', 10.00, 99.00, 500, 1, '2026-01-01 00:00:00', '2026-12-31 23:59:59'),
+                    (2, '家电满 499 减 50', 'HOME50', 50.00, 499.00, 300, 1, '2026-01-01 00:00:00', '2026-12-31 23:59:59'),
+                    (3, '全场满 199 减 20', 'ALL20', 20.00, 199.00, 800, 1, '2026-01-01 00:00:00', '2026-12-31 23:59:59')
+                    on duplicate key update
+                    name = values(name),
+                    discount_amount = values(discount_amount),
+                    threshold_amount = values(threshold_amount),
+                    stock = greatest(stock, values(stock)),
+                    status = values(status)
+                    """);
+            statement.executeUpdate("""
+                    insert ignore into user_coupon(id, user_id, coupon_id, status) values
+                    (1, 1, 1, 0),
+                    (2, 1, 3, 0),
+                    (3, 2, 1, 0),
+                    (4, 5, 3, 0),
+                    (5, 6, 2, 0)
                     """);
             statement.executeUpdate("""
                     insert ignore into `comment`(id, user_id, product_id, content, score, create_time) values
@@ -396,11 +682,20 @@ public final class Db {
                     (10, 6, 18, 1, 89.00)
                     """);
             statement.executeUpdate("""
-                    insert ignore into logistics(id, order_id, logistics_no, status, update_time) values
-                    (1, 1, 'WL202606020001', 'signed', '2026-06-02 18:00:00'),
-                    (2, 2, 'WL202606020002', 'shipping', '2026-06-02 18:10:00'),
-                    (3, 5, 'WL202606020005', 'signed', '2026-06-02 18:20:00'),
-                    (4, 6, 'WL202606020006', 'signed', '2026-06-02 18:30:00')
+                    insert into logistics(id, order_id, logistics_no, courier_company, delivery_method, status, update_time) values
+                    (1, 1, 'WL202606020001', '顺丰速运', '标准配送', 'signed', '2026-06-02 18:00:00'),
+                    (2, 2, 'WL202606020002', '京东快递', '次日达', 'delivering', '2026-06-02 18:10:00'),
+                    (3, 5, 'WL202606020005', '中通快递', '标准配送', 'signed', '2026-06-02 18:20:00'),
+                    (4, 6, 'WL202606020006', '圆通速递', '普通配送', 'signed', '2026-06-02 18:30:00')
+                    on duplicate key update
+                    courier_company = values(courier_company),
+                    delivery_method = values(delivery_method),
+                    status = values(status)
+                    """);
+            statement.executeUpdate("""
+                    insert ignore into after_sale(id, order_id, user_id, type, reason, status, reply, create_time) values
+                    (1, 1, 1, 'return', '包装完好，想申请退货测试售后流程', 'approved', '已通过，请保持商品完好等待上门取件。', '2026-06-02 19:00:00'),
+                    (2, 2, 2, 'repair', '收到后需要咨询使用问题', 'processing', '客服已接入，正在核对订单信息。', '2026-06-02 19:30:00')
                     """);
         }
 
@@ -424,12 +719,67 @@ public final class Db {
             }
         }
 
+        private static void dropIndexIfExists(Statement statement, String sql) throws SQLException {
+            try {
+                statement.executeUpdate(sql);
+            } catch (SQLException e) {
+                if (e.getErrorCode() != 1091) {
+                    throw e;
+                }
+            }
+        }
+
+        private static void dropForeignKeyIfExists(Statement statement, String sql) throws SQLException {
+            try {
+                statement.executeUpdate(sql);
+            } catch (SQLException e) {
+                if (e.getErrorCode() != 1091) {
+                    throw e;
+                }
+            }
+        }
+
+        private static void ignoreError(Statement statement, String sql, int errorCode) throws SQLException {
+            try {
+                statement.executeUpdate(sql);
+            } catch (SQLException e) {
+                if (e.getErrorCode() != errorCode) {
+                    throw e;
+                }
+            }
+        }
+
         private static void addForeignKeyIfMissing(Statement statement, String sql) throws SQLException {
             try {
                 statement.executeUpdate(sql);
             } catch (SQLException e) {
                 if (e.getErrorCode() != 1022 && e.getErrorCode() != 1826) {
                     throw e;
+                }
+            }
+        }
+
+        private static void dropForeignKeysForColumnIfExists(Connection connection, String table, String column) throws SQLException {
+            List<String> names = new ArrayList<>();
+            try (PreparedStatement statement = connection.prepareStatement("""
+                    select constraint_name
+                    from information_schema.key_column_usage
+                    where constraint_schema = database()
+                      and table_name = ?
+                      and column_name = ?
+                      and referenced_table_name is not null
+                    """)) {
+                statement.setString(1, table);
+                statement.setString(2, column);
+                try (ResultSet resultSet = statement.executeQuery()) {
+                    while (resultSet.next()) {
+                        names.add(resultSet.getString("constraint_name"));
+                    }
+                }
+            }
+            for (String name : names) {
+                try (Statement statement = connection.createStatement()) {
+                    statement.executeUpdate("alter table " + identifier(table) + " drop foreign key " + identifier(name));
                 }
             }
         }

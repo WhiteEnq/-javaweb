@@ -7,6 +7,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import org.example.demo.common.BaseResource;
 
@@ -26,14 +28,31 @@ public class LogisticsResource extends BaseResource {
 
     @PUT
     @Path("/{id}")
-    public Map<String, Object> updateLogistics(@PathParam("id") int id, LogisticsRequest request) throws Exception {
-        require(request.status != null && !request.status.isBlank(), "Logistics status is required");
-        requireRows(update("update logistics set status = ?, update_time = now() where id = ?", request.status, id),
-                "Logistics not found");
+    public Map<String, Object> updateLogistics(@Context HttpHeaders headers,
+                                               @PathParam("id") int id,
+                                               LogisticsRequest request) throws Exception {
+        requireManager(headers, null, "只有管理员可以更新物流");
+        require(request.status != null && !request.status.isBlank(), "物流状态不能为空");
+        requireRows(update("""
+                        update logistics
+                        set status = ?,
+                            courier_company = coalesce(?, courier_company),
+                            delivery_method = coalesce(?, delivery_method),
+                            update_time = now()
+                        where id = ?
+                        """,
+                request.status, blankToNull(request.courierCompany), blankToNull(request.deliveryMethod), id),
+                "物流不存在");
         return ok(queryOne("select * from logistics where id = ?", id));
+    }
+
+    private String blankToNull(String value) {
+        return value == null || value.isBlank() ? null : value.trim();
     }
 
     public static class LogisticsRequest {
         public String status;
+        public String courierCompany;
+        public String deliveryMethod;
     }
 }

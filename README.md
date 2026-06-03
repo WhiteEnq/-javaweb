@@ -1,6 +1,6 @@
 # 柚子妹妹网购
 
-基于 Java Web、Jersey、MySQL、Tomcat 的综合网购平台项目。项目包含商品浏览、分类搜索、购物车、收藏、订单、评价、物流、个人主页、管理员商品维护和超级管理员用户授权等功能。
+基于 Java Web、Jersey、MySQL、Tomcat 的综合网购平台项目。项目包含商品浏览、分类搜索、SKU 规格、购物车超时提醒、优惠券、收藏、订单、评价图片、物流、售后、个人主页、管理员运营中心和超级管理员用户授权等功能。
 
 本文档用于小组成员拉取项目后的本地配置和运行。请按顺序操作，尤其注意 **Tomcat 必须使用 9.x**。
 
@@ -130,7 +130,7 @@ src/main/resources/sql/schema.sql
 
 ```text
 数据库：YZMM_Mall
-用户、商品、购物车、收藏、订单、订单明细、评价、物流、外键关系
+用户、管理员扩展、商品、SKU、优惠券、购物车、收藏、订单、订单明细、评价、物流、售后、登录安全、外键关系
 ```
 
 如果使用 MySQL 命令行，可以先进入 MySQL：
@@ -167,15 +167,21 @@ show tables;
 应该看到这些表：
 
 ```text
-admin
 user
+login_attempt
+auth_token
+admin
 product
+product_sku
+coupon
+user_coupon
 cart
 favorite
 order_info
 order_item
 comment
 logistics
+after_sale
 ```
 
 检查数据量：
@@ -190,6 +196,8 @@ select count(*) from order_info;
 
 ```text
 product: 20
+product_sku: 11
+coupon: 3
 user: 6
 order_info: 6
 ```
@@ -268,12 +276,26 @@ http://localhost:8080/demo/api/products
 超级管理员：superadmin / 123456
 ```
 
+普通用户账号存放在 `user` 表中；管理员和超级管理员账号存放在 `admin` 表中。前端仍然只有一个登录入口，后端会先匹配普通用户，再匹配管理员，并根据登录来源返回 `role=user/admin/super_admin`。首次登录内置账号时，后端会把旧的 `123456` 明文密码自动升级为 PBKDF2 哈希。
+
 权限说明：
 
 ```text
-user：普通用户，只能选购商品、收藏、购物车、下单、评论
-admin：管理员，可以进入运营中心管理商品、订单、物流、评价
-super_admin：超级管理员，可以设置普通用户为管理员
+user：普通用户，只能选购商品、领取优惠券、收藏、购物车、下单、评论、申请售后
+admin：管理员，账号在 admin 表，可以进入运营中心管理商品、SKU、优惠券、订单、物流、评价、售后，并禁用普通用户
+super_admin：超级管理员，账号在 admin 表，可以把普通用户转为管理员，也可以禁用普通用户和管理员
+```
+
+安全说明：
+
+```text
+1. 登录成功后后端返回 token，前端会自动通过 Authorization: Bearer token 调用需要权限的接口。
+2. 管理员接口不再信任前端传入的 actorId，权限以 token 对应账号为准。
+3. 删除用户改为禁用账号，user.status = 0 后无法登录，但历史订单会保留。
+4. 管理员拖入的商品图片会保存到 Web 应用 uploads 目录，数据库只保存图片路径。
+5. 购物车超时不仅前端倒计时提醒，后端查询和下单前也会清理过期项。
+6. 商品 SKU、优惠券、订单明细、评价图片和售后工单都有对应表结构与外键约束。
+7. user 表只保存消费者账号，admin 表独立保存管理员账号，auth_token 通过 account_type 区分登录身份。
 ```
 
 ## 七、常见问题

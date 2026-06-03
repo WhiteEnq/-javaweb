@@ -1,0 +1,183 @@
+erDiagram
+    USER {
+        int id PK
+        varchar username UK
+        varchar password
+        varchar nickname
+        varchar phone
+        varchar address
+        varchar tags
+        tinyint status
+    }
+
+    LOGIN_ATTEMPT {
+        varchar username PK
+        int failed_count
+        timestamp last_failed_time
+        timestamp locked_until
+        timestamp last_success_time
+    }
+
+    AUTH_TOKEN {
+        int id PK
+        varchar account_type
+        int user_id FK
+        int admin_id FK
+        char token_hash UK
+        timestamp expire_time
+        timestamp create_time
+    }
+
+    ADMIN {
+        int id PK
+        varchar username UK
+        varchar password
+        varchar nickname
+        varchar phone
+        varchar admin_level
+        tinyint status
+        varchar department
+        varchar remark
+        timestamp create_time
+    }
+
+    PRODUCT {
+        int id PK
+        varchar name
+        varchar category
+        varchar subtitle
+        text description
+        decimal price
+        int stock
+        int sale_count
+        tinyint status
+        mediumtext image
+    }
+
+    PRODUCT_SKU {
+        int id PK
+        int product_id FK
+        varchar spec_name
+        varchar spec_value
+        decimal price
+        int stock
+        mediumtext image
+        int sort_order
+    }
+
+    COUPON {
+        int id PK
+        varchar name
+        varchar code UK
+        decimal discount_amount
+        decimal threshold_amount
+        int stock
+        tinyint status
+        timestamp start_time
+        timestamp end_time
+    }
+
+    USER_COUPON {
+        int id PK
+        int user_id FK
+        int coupon_id FK
+        tinyint status
+        int used_order_id FK
+        timestamp receive_time
+        timestamp used_time
+    }
+
+    CART {
+        int id PK
+        int user_id FK
+        int product_id FK
+        int sku_id FK
+        int count
+        timestamp update_time
+    }
+
+    FAVORITE {
+        int id PK
+        int user_id FK
+        int product_id FK
+    }
+
+    ORDER_INFO {
+        int id PK
+        varchar order_no UK
+        int user_id FK
+        decimal total_price
+        decimal discount_amount
+        int coupon_id FK
+        tinyint status
+        varchar receiver_name
+        varchar receiver_phone
+        varchar shipping_address
+        timestamp create_time
+    }
+
+    ORDER_ITEM {
+        int id PK
+        int order_id FK
+        int product_id FK
+        int sku_id FK
+        varchar sku_text
+        int count
+        decimal price
+    }
+
+    COMMENT {
+        int id PK
+        int user_id FK
+        int product_id FK
+        varchar content
+        tinyint score
+        mediumtext images
+        timestamp create_time
+    }
+
+    LOGISTICS {
+        int id PK
+        int order_id FK
+        varchar logistics_no
+        varchar courier_company
+        varchar delivery_method
+        varchar status
+        timestamp update_time
+    }
+
+    AFTER_SALE {
+        int id PK
+        int order_id FK
+        int user_id FK
+        varchar type
+        varchar reason
+        varchar status
+        varchar reply
+        timestamp create_time
+        timestamp update_time
+    }
+
+    USER ||--o{ AUTH_TOKEN : "login token"
+    ADMIN ||--o{ AUTH_TOKEN : "admin token"
+    USER ||--o{ CART : "adds"
+    USER ||--o{ FAVORITE : "collects"
+    USER ||--o{ ORDER_INFO : "places"
+    USER ||--o{ COMMENT : "writes"
+    USER ||--o{ USER_COUPON : "receives"
+    USER ||--o{ AFTER_SALE : "requests"
+
+    PRODUCT ||--o{ PRODUCT_SKU : "has sku"
+    PRODUCT ||--o{ CART : "in cart"
+    PRODUCT_SKU ||--o{ CART : "selected sku"
+    PRODUCT ||--o{ FAVORITE : "is collected"
+    PRODUCT ||--o{ ORDER_ITEM : "sold as"
+    PRODUCT_SKU ||--o{ ORDER_ITEM : "sold sku"
+    PRODUCT ||--o{ COMMENT : "receives"
+
+    COUPON ||--o{ USER_COUPON : "is claimed"
+    COUPON ||--o{ ORDER_INFO : "discounts"
+    ORDER_INFO ||--o{ USER_COUPON : "uses"
+    ORDER_INFO ||--o{ ORDER_ITEM : "contains"
+    ORDER_INFO ||--o| LOGISTICS : "tracks"
+    ORDER_INFO ||--o{ AFTER_SALE : "after sale"

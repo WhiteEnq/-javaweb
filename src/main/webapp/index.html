@@ -70,6 +70,12 @@
             resize: vertical;
         }
 
+        input[readonly] {
+            background: #f8fafc;
+            color: #64748b;
+            cursor: default;
+        }
+
         button {
             min-height: 40px;
             padding: 9px 15px;
@@ -1403,6 +1409,210 @@
             position: relative;
         }
 
+        .market-panel {
+            display: grid;
+            gap: 16px;
+        }
+
+        .market-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1.35fr) minmax(260px, .65fr);
+            gap: 16px;
+            overflow: hidden;
+            padding: 20px;
+            border-radius: 8px;
+            background:
+                    linear-gradient(120deg, rgba(17, 24, 39, .74), rgba(185, 28, 28, .52)),
+                    var(--market-image, url('https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1400&q=80')) center/cover;
+            color: #fff;
+        }
+
+        .market-hero h2 {
+            max-width: 720px;
+            margin: 8px 0 8px;
+            font-size: 30px;
+            line-height: 1.15;
+        }
+
+        .market-hero p {
+            max-width: 680px;
+            color: rgba(255, 255, 255, .82);
+            line-height: 1.7;
+        }
+
+        .market-hero .actions {
+            margin-top: 16px;
+        }
+
+        .market-hero .secondary {
+            border-color: rgba(255, 255, 255, .38);
+            background: rgba(255, 255, 255, .14);
+            color: #fff;
+        }
+
+        .market-kpis {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+            align-content: end;
+        }
+
+        .market-kpi {
+            min-height: 92px;
+            padding: 13px;
+            border: 1px solid rgba(255, 255, 255, .20);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .13);
+            backdrop-filter: blur(12px);
+        }
+
+        .market-kpi span {
+            display: block;
+            color: rgba(255, 255, 255, .78);
+            font-size: 12px;
+        }
+
+        .market-kpi strong {
+            display: block;
+            margin-top: 8px;
+            font-size: 24px;
+        }
+
+        .channel-card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+
+        .channel-card {
+            overflow: hidden;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            cursor: pointer;
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+        }
+
+        .channel-card:hover {
+            transform: translateY(-3px);
+            border-color: #fecaca;
+            box-shadow: 0 16px 34px rgba(15, 23, 42, .10);
+        }
+
+        .channel-card.sold-out {
+            opacity: .72;
+        }
+
+        .channel-card img {
+            width: 100%;
+            aspect-ratio: 4 / 3;
+            object-fit: cover;
+            background: #e5e7eb;
+        }
+
+        .channel-card-body {
+            display: grid;
+            gap: 8px;
+            padding: 12px;
+        }
+
+        .channel-card h3 {
+            min-height: 42px;
+        }
+
+        .channel-card .muted {
+            min-height: 36px;
+        }
+
+        .channel-row {
+            display: grid;
+            grid-template-columns: 1.05fr .95fr;
+            gap: 14px;
+        }
+
+        .brand-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .brand-tile {
+            min-height: 136px;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            color: #334155;
+            cursor: pointer;
+            text-align: left;
+            transition: transform .18s ease, border-color .18s ease;
+        }
+
+        .brand-tile:hover {
+            transform: translateY(-2px);
+            border-color: #fecaca;
+        }
+
+        .brand-tile strong {
+            display: block;
+            margin: 6px 0;
+            font-size: 18px;
+        }
+
+        .deal-ribbon {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 12px 14px;
+            border-radius: 8px;
+            background: #fff1f2;
+            color: #991b1b;
+            font-weight: 800;
+        }
+
+        .progress-track {
+            overflow: hidden;
+            height: 8px;
+            border-radius: 999px;
+            background: #fee2e2;
+        }
+
+        .progress-track span {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: var(--brand);
+        }
+
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 12px;
+        }
+
+        .service-card {
+            min-height: 150px;
+            padding: 15px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            color: #334155;
+            text-align: left;
+            transition: transform .18s ease, border-color .18s ease, box-shadow .18s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-2px);
+            border-color: #fecaca;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, .08);
+        }
+
+        .service-card h3 {
+            margin-bottom: 8px;
+        }
+
         .hero-stage::after {
             content: "";
             position: absolute;
@@ -1729,6 +1939,37 @@
             line-height: 1.6;
         }
 
+        .cart-expiry {
+            display: inline-flex;
+            align-items: center;
+            min-height: 26px;
+            padding: 4px 9px;
+            border-radius: 999px;
+            background: #fff7ed;
+            color: #c2410c;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .cart-expiry.safe {
+            background: #ecfdf5;
+            color: #047857;
+        }
+
+        .logistics-line {
+            display: grid;
+            gap: 5px;
+            padding: 10px;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .logistics-line strong {
+            color: #111827;
+        }
+
         .order-filter-bar {
             display: flex;
             align-items: center;
@@ -1753,6 +1994,140 @@
             color: var(--brand);
         }
 
+        .pagination {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 14px;
+        }
+
+        .pagination button {
+            min-height: 34px;
+            padding: 6px 12px;
+        }
+
+        .sku-picker,
+        .coupon-panel,
+        .chart-grid,
+        .bar-list,
+        .comment-images,
+        .after-sale-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .sku-options,
+        .coupon-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .sku-list {
+            display: grid;
+            gap: 10px;
+        }
+
+        .sku-editor-row,
+        .coupon-editor-row {
+            display: grid;
+            grid-template-columns: repeat(5, minmax(0, 1fr)) auto;
+            gap: 8px;
+            align-items: center;
+            padding: 10px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .sku-option {
+            min-height: 34px;
+            border-color: #e2e8f0;
+            background: #fff;
+            color: #334155;
+        }
+
+        .sku-option.active {
+            border-color: var(--brand);
+            background: #fff1f2;
+            color: var(--brand);
+        }
+
+        .coupon-card {
+            display: grid;
+            grid-template-columns: 1fr auto;
+            gap: 10px;
+            align-items: center;
+            padding: 12px;
+            border: 1px solid #fecaca;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #fff7ed, #fff1f2);
+        }
+
+        .coupon-card strong {
+            color: var(--brand);
+        }
+
+        .coupon-meta {
+            color: #64748b;
+            font-size: 13px;
+            line-height: 1.6;
+        }
+
+        .comment-images {
+            grid-template-columns: repeat(auto-fill, minmax(82px, 1fr));
+            margin-top: 8px;
+        }
+
+        .comment-images img,
+        .comment-preview img {
+            width: 100%;
+            aspect-ratio: 1;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid var(--line);
+        }
+
+        .chart-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            margin-top: 14px;
+        }
+
+        .bar-item {
+            display: grid;
+            grid-template-columns: 110px 1fr 72px;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .bar-track {
+            height: 10px;
+            overflow: hidden;
+            border-radius: 999px;
+            background: #f1f5f9;
+        }
+
+        .bar-track span {
+            display: block;
+            height: 100%;
+            border-radius: inherit;
+            background: linear-gradient(90deg, var(--brand), #f59e0b);
+        }
+
+        .chart-card {
+            min-width: 0;
+            padding: 14px;
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+        }
+
+        .chart-card h3 {
+            margin-bottom: 10px;
+        }
+
         .hidden {
             display: none !important;
         }
@@ -1763,12 +2138,17 @@
             .admin-layout,
             .profile-layout,
             .admin-product-grid,
-            .detail-top {
+            .market-hero,
+            .channel-row,
+            .detail-top,
+            .sku-editor-row,
+            .coupon-editor-row {
                 grid-template-columns: 1fr;
             }
 
             .service-row,
             .metric-grid,
+            .market-kpis,
             .detail-service-grid,
             .review-summary {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1824,6 +2204,9 @@
             .two-col,
             .service-row,
             .metric-grid,
+            .market-kpis,
+            .brand-grid,
+            .channel-card-grid,
             .quantity-row,
             .detail-metrics {
                 grid-template-columns: 1fr;
@@ -1904,6 +2287,9 @@
         <div class="strip-links">
             <button onclick="goHome()">首页</button>
             <button onclick="selectCategory('全部')">全部商品</button>
+            <button onclick="showTab('deals')">补贴秒杀</button>
+            <button onclick="showTab('brands')">品牌馆</button>
+            <button onclick="showTab('service')">客户服务</button>
             <button onclick="showTab('favorites')">收藏夹</button>
             <button onclick="showTab('orders')">我的订单</button>
             <button onclick="showTab('profile')">个人中心</button>
@@ -1939,10 +2325,16 @@
 <nav class="channel-nav">
     <div class="wrap channel-inner">
         <button class="channel-link active" data-tab="products" data-category="全部" onclick="goHome()">首页推荐</button>
+        <button class="channel-link" data-tab="deals" onclick="showTab('deals')">补贴秒杀</button>
+        <button class="channel-link" data-tab="group" onclick="showTab('group')">拼团好价</button>
+        <button class="channel-link" data-tab="brands" onclick="showTab('brands')">品牌馆</button>
         <button class="channel-link" data-tab="products" data-category="手机数码" onclick="selectCategory('手机数码')">数码频道</button>
         <button class="channel-link" data-tab="products" data-category="电脑办公" onclick="selectCategory('电脑办公')">办公好物</button>
         <button class="channel-link" data-tab="products" data-category="家用电器" onclick="selectCategory('家用电器')">家电生活</button>
         <button class="channel-link" data-tab="products" data-category="食品饮料" onclick="selectCategory('食品饮料')">食品饮料</button>
+        <button class="channel-link" data-tab="fresh" onclick="showTab('fresh')">生鲜到家</button>
+        <button class="channel-link" data-tab="member" onclick="showTab('member')">会员频道</button>
+        <button class="channel-link" data-tab="service" onclick="showTab('service')">服务中心</button>
         <button class="channel-link" data-tab="products" data-category="运动户外" onclick="selectCategory('运动户外')">运动户外</button>
         <button class="channel-link" data-tab="favorites" onclick="showTab('favorites')">我的收藏</button>
         <button class="channel-link" data-tab="orders" onclick="showTab('orders')">订单进度</button>
@@ -2010,9 +2402,9 @@
 
     <section class="wrap service-row">
         <button class="service-item" onclick="selectCategory('手机数码')"><strong>正品严选</strong><span class="muted">精选平台好物</span></button>
-        <button class="service-item" onclick="showTab('orders')"><strong>极速发货</strong><span class="muted">订单进度清晰</span></button>
-        <button class="service-item" onclick="selectCategory('家居日用')"><strong>省心售后</strong><span class="muted">购物更安心</span></button>
-        <button class="service-item" onclick="showTab('favorites')"><strong>会员专享</strong><span class="muted">收藏好物不丢失</span></button>
+        <button class="service-item" onclick="showTab('deals')"><strong>补贴秒杀</strong><span class="muted">热门好价集中看</span></button>
+        <button class="service-item" onclick="showTab('brands')"><strong>品牌优选</strong><span class="muted">按场景快速选</span></button>
+        <button class="service-item" onclick="showTab('service')"><strong>省心售后</strong><span class="muted">订单物流随时查</span></button>
     </section>
 
     <section class="wrap workspace">
@@ -2034,7 +2426,7 @@
                     </div>
                     <div class="toolbar">
                         <input id="keyword" placeholder="搜索商品名称、卖点">
-                        <button onclick="loadProducts()">搜索</button>
+                        <button onclick="loadProducts(true)">搜索</button>
                         <button class="ghost" onclick="clearSearch()">全部</button>
                     </div>
                 </div>
@@ -2046,20 +2438,21 @@
                     <button onclick="selectCategory('运动户外')">运动户外</button>
                 </div>
                 <div class="filter-bar">
-                    <select id="sortMode" onchange="renderProductList()">
+                    <select id="sortMode" onchange="resetProductPage()">
                         <option value="default">综合排序</option>
                         <option value="sales">销量优先</option>
                         <option value="rating">好评优先</option>
                         <option value="priceAsc">价格从低到高</option>
                         <option value="priceDesc">价格从高到低</option>
                     </select>
-                    <input id="minPrice" type="number" min="0" placeholder="最低价" oninput="renderProductList()">
-                    <input id="maxPrice" type="number" min="0" placeholder="最高价" oninput="renderProductList()">
+                    <input id="minPrice" type="number" min="0" placeholder="最低价" oninput="resetProductPage()">
+                    <input id="maxPrice" type="number" min="0" placeholder="最高价" oninput="resetProductPage()">
                     <button id="stockOnlyBtn" class="ghost" onclick="toggleStockOnly()">仅看有货</button>
                     <button class="ghost" onclick="resetFilters()">重置筛选</button>
                 </div>
                 <div id="activeFilters" class="active-filters"></div>
                 <div id="products" class="product-grid"></div>
+                <div id="productPagination" class="pagination"></div>
                 <div id="recentViewed" class="recent-strip">
                     <div class="section-head" style="margin-bottom:0">
                         <h2>最近浏览</h2>
@@ -2067,6 +2460,199 @@
                     </div>
                     <div id="recentList" class="recent-list"></div>
                 </div>
+            </div>
+        </div>
+
+        <div id="dealsView" class="view">
+            <div class="market-panel">
+                <section class="market-hero" style="--market-image:url('https://images.unsplash.com/photo-1607082350899-7e105aa886ae?auto=format&fit=crop&w=1400&q=80')">
+                    <div>
+                        <span class="sale-badge">补贴秒杀</span>
+                        <h2>热卖好物集中开抢</h2>
+                        <p>精选高销量、高好评、现货商品，热门爆款和限时好价集中呈现。</p>
+                        <div class="actions">
+                            <button onclick="selectCategory('手机数码')">看数码爆款</button>
+                            <button class="secondary" onclick="selectCategory('家用电器')">看家电好价</button>
+                        </div>
+                    </div>
+                    <div class="market-kpis">
+                        <div class="market-kpi"><span>频道商品</span><strong id="dealMetricCount">0</strong></div>
+                        <div class="market-kpi"><span>热卖门槛</span><strong>1500+</strong></div>
+                        <div class="market-kpi"><span>配送状态</span><strong>现货</strong></div>
+                        <div class="market-kpi"><span>排序</span><strong>销量</strong></div>
+                    </div>
+                </section>
+                <div class="deal-ribbon">
+                    <span>今日热卖榜</span>
+                    <span id="dealClock">距离本场结束 02:00:00</span>
+                </div>
+                <section class="section-box">
+                    <div class="section-head">
+                        <h2>正在热卖</h2>
+                        <button class="ghost" onclick="loadDealsPage()">刷新</button>
+                    </div>
+                    <div id="dealsProducts" class="channel-card-grid"></div>
+                </section>
+            </div>
+        </div>
+
+        <div id="brandsView" class="view">
+            <div class="market-panel">
+                <section class="market-hero" style="--market-image:url('https://images.unsplash.com/photo-1556741533-6e6a62bd8b49?auto=format&fit=crop&w=1400&q=80')">
+                    <div>
+                        <span class="sale-badge">品牌馆</span>
+                        <h2>按生活场景挑品牌好物</h2>
+                        <p>数码办公、家居生活、食品运动、美妆穿搭等场景集中陈列，逛起来更有方向。</p>
+                        <div class="actions">
+                            <button onclick="selectCategory('电脑办公')">办公装备</button>
+                            <button class="secondary" onclick="selectCategory('美妆个护')">美妆个护</button>
+                        </div>
+                    </div>
+                    <div class="market-kpis">
+                        <div class="market-kpi"><span>场馆</span><strong>6</strong></div>
+                        <div class="market-kpi"><span>好评</span><strong>优先</strong></div>
+                        <div class="market-kpi"><span>上新</span><strong>持续</strong></div>
+                        <div class="market-kpi"><span>选品</span><strong>分类</strong></div>
+                    </div>
+                </section>
+                <section class="channel-row">
+                    <div class="section-box">
+                        <div class="section-head">
+                            <h2>品牌场馆</h2>
+                            <button class="ghost" onclick="loadBrandsPage()">刷新</button>
+                        </div>
+                        <div id="brandList" class="brand-grid"></div>
+                    </div>
+                    <div class="section-box">
+                        <div class="section-head">
+                            <h2>品牌热卖</h2>
+                            <button class="ghost" onclick="selectCategory('全部')">全部商品</button>
+                        </div>
+                        <div id="brandProducts" class="channel-card-grid"></div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div id="groupView" class="view">
+            <div class="market-panel">
+                <section class="market-hero" style="--market-image:url('https://images.unsplash.com/photo-1556745753-b2904692b3cd?auto=format&fit=crop&w=1400&q=80')">
+                    <div>
+                        <span class="sale-badge">拼团好价</span>
+                        <h2>多人一起买，热门商品更好选</h2>
+                        <p>热门现货、多人凑单、快速下单，适合和日常补给一起加入购物车。</p>
+                        <div class="actions">
+                            <button onclick="loadGroupPage()">换一批</button>
+                            <button class="secondary" onclick="showTab('cart')">查看购物车</button>
+                        </div>
+                    </div>
+                    <div class="market-kpis">
+                        <div class="market-kpi"><span>拼团池</span><strong id="groupMetricCount">0</strong></div>
+                        <div class="market-kpi"><span>成团节奏</span><strong>快速</strong></div>
+                        <div class="market-kpi"><span>优先</span><strong>有货</strong></div>
+                        <div class="market-kpi"><span>下单</span><strong>一键</strong></div>
+                    </div>
+                </section>
+                <section class="section-box">
+                    <div class="section-head">
+                        <h2>可拼商品</h2>
+                        <button class="ghost" onclick="loadGroupPage()">刷新</button>
+                    </div>
+                    <div id="groupProducts" class="channel-card-grid"></div>
+                </section>
+            </div>
+        </div>
+
+        <div id="freshView" class="view">
+            <div class="market-panel">
+                <section class="market-hero" style="--market-image:url('https://images.unsplash.com/photo-1542838132-92c53300491e?auto=format&fit=crop&w=1400&q=80')">
+                    <div>
+                        <span class="sale-badge">生鲜到家</span>
+                        <h2>食品饮料和日用补给一屏选齐</h2>
+                        <p>食品饮料、家居日用和运动户外补给集中挑，家里常备好物一站配齐。</p>
+                        <div class="actions">
+                            <button onclick="selectCategory('食品饮料')">食品饮料</button>
+                            <button class="secondary" onclick="selectCategory('家居日用')">家居日用</button>
+                        </div>
+                    </div>
+                    <div class="market-kpis">
+                        <div class="market-kpi"><span>配送</span><strong>到家</strong></div>
+                        <div class="market-kpi"><span>补给</span><strong>日常</strong></div>
+                        <div class="market-kpi"><span>库存</span><strong>现货</strong></div>
+                        <div class="market-kpi"><span>场景</span><strong>生活</strong></div>
+                    </div>
+                </section>
+                <section class="section-box">
+                    <div class="section-head">
+                        <h2>到家补给</h2>
+                        <button class="ghost" onclick="loadFreshPage()">刷新</button>
+                    </div>
+                    <div id="freshProducts" class="channel-card-grid"></div>
+                </section>
+            </div>
+        </div>
+
+        <div id="memberView" class="view">
+            <div class="market-panel">
+                <section class="market-hero" style="--market-image:url('https://images.unsplash.com/photo-1607083206968-13611e3d76db?auto=format&fit=crop&w=1400&q=80')">
+                    <div>
+                        <span class="sale-badge">会员频道</span>
+                        <h2 id="memberChannelTitle">会员专属推荐</h2>
+                        <p id="memberChannelText">收藏、订单和偏好标签都在这里延伸成新的推荐，越逛越贴近日常需要。</p>
+                        <div class="actions">
+                            <button onclick="showTab('profile')">完善资料</button>
+                            <button class="secondary" onclick="showTab('favorites')">我的收藏</button>
+                        </div>
+                    </div>
+                    <div class="market-kpis">
+                        <div class="market-kpi"><span>购物车</span><strong id="memberCartMetric">0</strong></div>
+                        <div class="market-kpi"><span>订单</span><strong id="memberOrderMetric">0</strong></div>
+                        <div class="market-kpi"><span>身份</span><strong id="memberRoleMetric">会员</strong></div>
+                        <div class="market-kpi"><span>偏好</span><strong id="memberTagMetric">推荐</strong></div>
+                    </div>
+                </section>
+                <section class="section-box">
+                    <div class="section-head">
+                        <h2>猜你喜欢</h2>
+                        <button class="ghost" onclick="loadMemberPage()">刷新</button>
+                    </div>
+                    <div id="memberProducts" class="channel-card-grid"></div>
+                </section>
+            </div>
+        </div>
+
+        <div id="serviceView" class="view">
+            <div class="market-panel">
+                <section class="market-hero" style="--market-image:url('https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=1400&q=80')">
+                    <div>
+                        <span class="sale-badge">服务中心</span>
+                        <h2>订单、物流、地址、售后集中处理</h2>
+                        <p>支付进度、配送状态、收货资料和常用售后入口都在这里，购物后也能清清楚楚。</p>
+                        <div class="actions">
+                            <button onclick="showTab('orders')">查看订单</button>
+                            <button class="secondary" onclick="showTab('profile')">收货地址</button>
+                        </div>
+                    </div>
+                    <div class="market-kpis">
+                        <div class="market-kpi"><span>待支付</span><strong id="servicePendingMetric">0</strong></div>
+                        <div class="market-kpi"><span>配送中</span><strong id="serviceShippingMetric">0</strong></div>
+                        <div class="market-kpi"><span>售后入口</span><strong>4</strong></div>
+                        <div class="market-kpi"><span>资料</span><strong>可编辑</strong></div>
+                    </div>
+                </section>
+                <section class="service-grid">
+                    <button class="service-card" onclick="showTab('orders')"><h3>物流查询</h3><p class="muted">查看支付、发货、配送和签收状态。</p></button>
+                    <button class="service-card" onclick="showTab('profile')"><h3>地址管理</h3><p class="muted">维护默认收货地址和联系方式。</p></button>
+                    <button class="service-card" onclick="showTab('cart')"><h3>购物车保留</h3><p class="muted">处理即将超时的购物车商品。</p></button>
+                    <button class="service-card" onclick="showTab('favorites')"><h3>收藏回访</h3><p class="muted">继续查看已经收藏的商品。</p></button>
+                </section>
+                <section class="section-box">
+                    <div class="section-head">
+                        <h2>最近订单</h2>
+                        <button class="ghost" onclick="loadServicePage()">刷新</button>
+                    </div>
+                    <div id="serviceOrders" class="list-stack"></div>
+                </section>
             </div>
         </div>
 
@@ -2085,6 +2671,10 @@
                     <input id="receiverPhone" placeholder="联系电话">
                     <textarea id="shippingAddress" placeholder="收货地址"></textarea>
                     <button class="ghost" onclick="prefillReceiver(true)">使用个人主页地址</button>
+                    <select id="checkoutCoupon" onchange="renderCouponTotal()">
+                        <option value="">不使用优惠券</option>
+                    </select>
+                    <div id="couponHint" class="checkout-note">可用优惠券会根据购物车金额自动匹配。</div>
                     <div class="total-line">
                         <span>合计</span>
                         <span id="orderTotal">￥0.00</span>
@@ -2134,9 +2724,15 @@
                         <button class="ghost" onclick="loadProfile()">刷新</button>
                     </div>
                     <div class="form-grid">
-                        <div class="field-block">
-                            <label for="profileNickname">昵称</label>
-                            <input id="profileNickname" placeholder="昵称">
+                        <div class="two-col">
+                            <div class="field-block">
+                                <label for="profileUsername">登录账号</label>
+                                <input id="profileUsername" placeholder="用户名" readonly>
+                            </div>
+                            <div class="field-block">
+                                <label for="profileNickname">昵称</label>
+                                <input id="profileNickname" placeholder="昵称">
+                            </div>
                         </div>
                         <div class="field-block">
                             <label for="profilePhone">联系方式</label>
@@ -2169,6 +2765,13 @@
                         <div class="metric"><span>身份</span><strong id="profileRoleText">会员</strong></div>
                     </div>
                     <div style="margin-top:14px">
+                        <div class="section-head" style="margin-bottom:10px">
+                            <h3>我的优惠券</h3>
+                            <button class="ghost" onclick="loadProfileCoupons()">刷新</button>
+                        </div>
+                        <div id="profileCoupons" class="coupon-panel"></div>
+                    </div>
+                    <div style="margin-top:14px">
                         <h3 style="margin-bottom:10px">最近收藏</h3>
                         <div id="profileFavorites" class="product-grid"></div>
                     </div>
@@ -2187,18 +2790,21 @@
                     <button id="adminProductsBtn" class="ghost" onclick="showAdminSection('products')">商品管理</button>
                     <button id="adminOrdersBtn" class="ghost" onclick="showAdminSection('orders')">订单物流</button>
                     <button id="adminCommentsBtn" class="ghost" onclick="showAdminSection('comments')">评价管理</button>
-                    <button id="adminUsersBtn" class="ghost super-only hidden" onclick="showAdminSection('users')">用户权限</button>
+                    <button id="adminCouponsBtn" class="ghost" onclick="showAdminSection('coupons')">优惠券</button>
+                    <button id="adminAfterSalesBtn" class="ghost" onclick="showAdminSection('afterSales')">售后管理</button>
+                    <button id="adminUsersBtn" class="ghost" onclick="showAdminSection('users')">用户管理</button>
                 </nav>
 
                 <div>
                     <div id="adminOverviewPanel" class="admin-view active">
-                        <div class="metric-grid">
-                            <div class="metric"><span>商品</span><strong id="metricProducts">0</strong></div>
-                            <div class="metric"><span>订单</span><strong id="metricOrders">0</strong></div>
-                            <div class="metric"><span>评价</span><strong id="metricComments">0</strong></div>
-                            <div class="metric"><span>用户</span><strong id="metricUsers">0</strong></div>
-                        </div>
+                    <div class="metric-grid">
+                        <div class="metric"><span>商品</span><strong id="metricProducts">0</strong></div>
+                        <div class="metric"><span>订单</span><strong id="metricOrders">0</strong></div>
+                        <div class="metric"><span>评价</span><strong id="metricComments">0</strong></div>
+                        <div class="metric"><span>用户</span><strong id="metricUsers">0</strong></div>
                     </div>
+                    <div id="dashboardCharts" class="chart-grid"></div>
+                </div>
 
                     <div id="adminProductsPanel" class="admin-view">
                         <div class="editor-box">
@@ -2237,6 +2843,11 @@
                                     <div class="field-block">
                                         <label for="productSaleCount">基础销量</label>
                                         <input id="productSaleCount" placeholder="用于新商品初始展示，可填 0" type="number" min="0">
+                                    </div>
+                                    <div class="field-block">
+                                        <label>商品规格 SKU</label>
+                                        <div id="skuRows" class="sku-list"></div>
+                                        <button type="button" class="ghost" onclick="addSkuRow()">添加规格</button>
                                     </div>
                                 </div>
                                 <div class="form-grid">
@@ -2295,13 +2906,65 @@
                         </div>
                     </div>
 
+                    <div id="adminCouponsPanel" class="admin-view">
+                        <div class="section-box">
+                            <div class="section-head">
+                                <h2>优惠券管理</h2>
+                                <button class="ghost" onclick="resetCouponForm()">清空</button>
+                            </div>
+                            <div class="form-grid">
+                                <div class="coupon-editor-row">
+                                    <input id="couponName" placeholder="优惠券名称">
+                                    <input id="couponCode" placeholder="编码">
+                                    <input id="couponDiscount" type="number" min="0" step="0.01" placeholder="优惠金额">
+                                    <input id="couponThreshold" type="number" min="0" step="0.01" placeholder="使用门槛">
+                                    <input id="couponStock" type="number" min="0" placeholder="库存">
+                                    <select id="couponStatus">
+                                        <option value="1">启用</option>
+                                        <option value="0">停用</option>
+                                    </select>
+                                </div>
+                                <div class="two-col">
+                                    <input id="couponStart" type="datetime-local">
+                                    <input id="couponEnd" type="datetime-local">
+                                </div>
+                                <div class="actions">
+                                    <button onclick="saveCoupon()">保存优惠券</button>
+                                    <button class="ghost" onclick="loadAdminCoupons()">刷新列表</button>
+                                </div>
+                            </div>
+                            <div id="adminCoupons" class="table-wrap" style="margin-top:14px"></div>
+                        </div>
+                    </div>
+
+                    <div id="adminAfterSalesPanel" class="admin-view">
+                        <div class="section-box">
+                            <div class="section-head">
+                                <h2>售后管理</h2>
+                                <button class="ghost" onclick="loadAdminAfterSales()">刷新</button>
+                            </div>
+                            <div id="adminAfterSales" class="table-wrap"></div>
+                        </div>
+                    </div>
+
                     <div id="adminUsersPanel" class="admin-view">
                         <div class="section-box">
                             <div class="section-head">
-                                <h2>用户权限</h2>
+                                <h2>用户管理</h2>
                                 <button class="ghost" onclick="loadUsers()">刷新</button>
                             </div>
+                            <div class="order-filter-bar">
+                                <button id="userStatus1" class="active" onclick="setUserStatusFilter('1')">正常账号</button>
+                                <button id="userStatus0" onclick="setUserStatusFilter('0')">已禁用</button>
+                                <button id="userStatusall" onclick="setUserStatusFilter('all')">全部</button>
+                            </div>
                             <div id="users" class="table-wrap"></div>
+                            <div id="usersPagination" class="pagination"></div>
+                            <div class="section-head" style="margin-top:18px">
+                                <h2>管理员账号</h2>
+                                <button class="ghost" onclick="loadAdmins()">刷新</button>
+                            </div>
+                            <div id="admins" class="table-wrap"></div>
                         </div>
                     </div>
                 </div>
@@ -2356,10 +3019,14 @@
         }
     ];
     const statusNames = ["待支付", "已支付", "已发货", "已完成"];
-    const logisticsNames = {pending: "待发货", shipping: "运输中", signed: "已签收"};
+    const logisticsNames = {pending: "待发货", picked: "已揽收", shipping: "运输中", delivering: "派送中", signed: "已签收"};
+    const afterSaleNames = {pending: "待处理", processing: "处理中", approved: "已通过", rejected: "已拒绝", completed: "已完成"};
+    const afterSaleTypeNames = {refund: "退款", return: "退货退款", repair: "维修"};
     const roleNames = {user: "普通用户", admin: "管理员", super_admin: "超级管理员"};
-    const views = ["products", "cart", "favorites", "orders", "profile", "admin"];
-    const adminViews = ["overview", "products", "orders", "comments", "users"];
+    const marketViews = ["deals", "brands", "group", "fresh", "member", "service"];
+    const views = ["products", ...marketViews, "cart", "favorites", "orders", "profile", "admin"];
+    const adminViews = ["overview", "products", "orders", "comments", "coupons", "afterSales", "users"];
+    const consumerViews = ["cart", "favorites", "orders", "profile", "member", "service"];
     const suggestedProfileTags = ["数码", "办公", "家居", "食品", "运动", "美妆", "通勤", "礼品"];
 
     const state = {
@@ -2370,16 +3037,30 @@
         authStage: "entry",
         selectedCategory: "全部",
         editingProductId: null,
+        editingCouponId: null,
         activeProduct: null,
+        selectedSkuId: null,
         currentSlide: 0,
         carouselTimer: null,
+        dealClockTimer: null,
         productImageData: "",
+        editingSkus: [],
+        commentImages: {},
         stockOnly: false,
         orderFilter: "all",
         adminOrderFilter: "all",
+        userStatusFilter: "1",
+        userPage: 1,
+        productPage: 1,
+        productPageSize: 12,
+        cartExpiryTimer: null,
+        cartExpiryWarned: {},
+        cartExpiryRemoving: {},
+        catalogProducts: [],
         products: [],
         visibleProducts: [],
-        cartRows: []
+        cartRows: [],
+        coupons: []
     };
 
     const $ = id => document.getElementById(id);
@@ -2409,6 +3090,14 @@
         return Number(value || 0).toFixed(2);
     }
 
+    function productPrice(product) {
+        return Number(product?.min_sku_price ?? product?.price ?? 0);
+    }
+
+    function productStock(product) {
+        return Number(product?.sku_stock ?? product?.stock ?? 0);
+    }
+
     function intText(value) {
         return Number(value || 0).toLocaleString("zh-CN");
     }
@@ -2418,13 +3107,38 @@
         return `${Math.round(Number(value) || 0)}%`;
     }
 
+    function countdownText(milliseconds) {
+        const totalSeconds = Math.max(0, Math.ceil(milliseconds / 1000));
+        const minutes = Math.floor(totalSeconds / 60);
+        const seconds = totalSeconds % 60;
+        return `${minutes}分${String(seconds).padStart(2, "0")}秒`;
+    }
+
     function stars(score) {
         const full = Math.max(1, Math.min(5, Math.round(Number(score) || 5)));
         return "★".repeat(full) + "☆".repeat(5 - full);
     }
 
+    function parseImageList(value) {
+        if (!value) return [];
+        try {
+            const parsed = JSON.parse(value);
+            return Array.isArray(parsed) ? parsed.filter(Boolean) : [];
+        } catch (error) {
+            return String(value).split("|").map(item => item.trim()).filter(Boolean);
+        }
+    }
+
+    function datetimePayload(value) {
+        return value ? `${value.replace("T", " ")}:00` : null;
+    }
+
     function isAdmin() {
         return state.user && (state.user.role === "admin" || state.user.role === "super_admin");
+    }
+
+    function isConsumer() {
+        return state.user && state.user.role === "user" && state.user.account_type !== "admin";
     }
 
     function isSuper() {
@@ -2433,6 +3147,11 @@
 
     function requireLogin() {
         if (!state.user) throw new Error("请先登录");
+    }
+
+    function requireConsumer() {
+        requireLogin();
+        if (!isConsumer()) throw new Error("管理员账号请进入运营中心处理业务");
     }
 
     function requireAdmin() {
@@ -2452,10 +3171,17 @@
 
     async function request(path, options = {}) {
         let response;
+        const headers = {
+            "Content-Type": "application/json",
+            ...(options.headers || {})
+        };
+        if (state.user?.token) {
+            headers.Authorization = `Bearer ${state.user.token}`;
+        }
         try {
             response = await fetch(`${api}${path}`, {
-                headers: {"Content-Type": "application/json"},
-                ...options
+                ...options,
+                headers
             });
         } catch (error) {
             throw new Error("无法连接后端服务，请确认 Tomcat 已启动并完成部署");
@@ -2470,6 +3196,13 @@
         if (!body) {
             throw new Error(`接口返回异常：${response.status} ${response.url}`);
         }
+        if (response.status === 401 && state.user) {
+            state.user = null;
+            localStorage.removeItem("yzmmMallCurrentUser");
+            state.authStage = "entry";
+            updateAuthView();
+            throw new Error("登录已过期，请重新登录");
+        }
         if (!response.ok || body.success === false) {
             throw new Error(body.message || "请求失败");
         }
@@ -2480,12 +3213,13 @@
         renderCategories();
         renderCategorySelect();
         renderCarousel();
+        renderSkuEditor();
         initProductImageDrop();
         $("topKeyword").addEventListener("keydown", event => {
             if (event.key === "Enter") searchFromHeader();
         });
         $("keyword").addEventListener("keydown", event => {
-            if (event.key === "Enter") loadProducts();
+            if (event.key === "Enter") loadProducts(true);
         });
         $("profileTags").addEventListener("input", renderProfileTagPicker);
         $("productDetailOverlay").addEventListener("click", event => {
@@ -2642,6 +3376,7 @@
 
     function selectCategory(category) {
         state.selectedCategory = category || "全部";
+        state.productPage = 1;
         $("keyword").value = "";
         $("topKeyword").value = "";
         renderCategories();
@@ -2652,6 +3387,7 @@
 
     function goHome() {
         state.selectedCategory = "全部";
+        state.productPage = 1;
         $("keyword").value = "";
         $("topKeyword").value = "";
         resetFilters();
@@ -2695,11 +3431,11 @@
         if (!isAdmin() && state.tab === "admin") {
             showTab("products");
         }
-        if (!isSuper() && state.adminTab === "users") {
-            showAdminSection("overview");
+        if (isAdmin() && consumerViews.includes(state.tab)) {
+            showTab("admin");
+            return;
         }
-
-        if (state.user) {
+        if (isConsumer()) {
             prefillReceiver();
             loadCartCount();
             loadOrderCount();
@@ -2710,6 +3446,10 @@
     }
 
     function renderMemberTags() {
+        if (isAdmin()) {
+            $("memberTags").innerHTML = `<span class="mini-chip">运营账号</span><span class="mini-chip">${html(roleNames[state.user.role] || state.user.role)}</span>`;
+            return;
+        }
         const tags = parseTags(state.user?.tags);
         $("memberTags").innerHTML = tags.length
             ? tags.map(tag => `<span class="mini-chip">${html(tag)}</span>`).join("")
@@ -2785,18 +3525,34 @@
             setNotice("管理员才能进入运营中心");
             return;
         }
+        if (consumerViews.includes(tab) && !isConsumer()) {
+            setNotice(state.user ? "管理员账号请进入运营中心处理业务" : "请先登录");
+            if (isAdmin()) {
+                showTab("admin");
+            }
+            return;
+        }
         state.tab = tab;
         updateChannelNav();
         views.forEach(name => {
             $(`${name}View`).classList.toggle("active", name === tab);
             const button = $(`tab${name.charAt(0).toUpperCase() + name.slice(1)}Btn`);
-            if (button) button.className = name === tab ? "active" : "ghost";
+            if (button) {
+                button.classList.toggle("active", name === tab);
+                button.classList.toggle("ghost", name !== tab);
+            }
         });
         if (tab === "products") loadProducts();
         if (tab === "cart") loadCart();
         if (tab === "favorites") loadFavorites();
         if (tab === "orders") loadUserOrders();
         if (tab === "profile") loadProfile();
+        if (tab === "deals") loadDealsPage();
+        if (tab === "brands") loadBrandsPage();
+        if (tab === "group") loadGroupPage();
+        if (tab === "fresh") loadFreshPage();
+        if (tab === "member") loadMemberPage();
+        if (tab === "service") loadServicePage();
         if (tab === "admin") showAdminSection(state.adminTab);
     }
 
@@ -2805,26 +3561,31 @@
             setNotice("管理员才能进入运营中心");
             return;
         }
-        if (name === "users" && !isSuper()) {
-            setNotice("超级管理员才能管理用户权限");
-            return;
-        }
         state.adminTab = name;
         adminViews.forEach(view => {
             $(`admin${view.charAt(0).toUpperCase() + view.slice(1)}Panel`).classList.toggle("active", view === name);
             const button = $(`admin${view.charAt(0).toUpperCase() + view.slice(1)}Btn`);
-            if (button) button.className = view === name ? "active" : "ghost";
+            if (button) {
+                button.classList.toggle("active", view === name);
+                button.classList.toggle("ghost", view !== name);
+            }
         });
         if (name === "overview") loadAdminOverview();
         if (name === "products") loadAdminProducts();
         if (name === "orders") loadAdminOrders();
         if (name === "comments") loadAdminComments();
-        if (name === "users") loadUsers();
+        if (name === "coupons") loadAdminCoupons();
+        if (name === "afterSales") loadAdminAfterSales();
+        if (name === "users") {
+            loadUsers();
+            loadAdmins();
+        }
     }
 
     function searchFromHeader() {
         $("keyword").value = $("topKeyword").value.trim();
         state.selectedCategory = "全部";
+        state.productPage = 1;
         renderCategories();
         showTab("products");
     }
@@ -2833,6 +3594,7 @@
         $("topKeyword").value = keyword;
         $("keyword").value = keyword;
         state.selectedCategory = "全部";
+        state.productPage = 1;
         renderCategories();
         showTab("products");
     }
@@ -2906,18 +3668,30 @@
         }
     }
 
-    function logout() {
-        state.user = null;
-        localStorage.removeItem("yzmmMallCurrentUser");
-        setNotice("已退出登录");
-        state.authStage = "entry";
-        updateAuthView();
+    async function logout() {
+        try {
+            if (state.user?.token) {
+                await request("/users/logout", {method: "POST"});
+            }
+        } catch (error) {
+            // 本地退出优先，后端令牌失效失败不阻塞用户离开。
+        } finally {
+            state.user = null;
+            localStorage.removeItem("yzmmMallCurrentUser");
+            setNotice("已退出登录");
+            state.authStage = "entry";
+            clearCartExpiryWatcher();
+            clearInterval(state.dealClockTimer);
+            updateAuthView();
+        }
     }
 
-    async function loadProducts() {
+    async function loadProducts(resetPage = false) {
         try {
+            if (resetPage) state.productPage = 1;
             const keyword = $("keyword").value.trim();
             $("topKeyword").value = keyword;
+            if (keyword) saveSearchKeyword(keyword);
             $("productHint").textContent = "正在加载商品";
             renderProductSkeletons();
             const params = new URLSearchParams();
@@ -2925,6 +3699,9 @@
             if (state.selectedCategory && state.selectedCategory !== "全部") params.set("category", state.selectedCategory);
             const rows = await request(`/products${params.toString() ? `?${params.toString()}` : ""}`);
             state.products = rows;
+            if (!keyword && (!state.selectedCategory || state.selectedCategory === "全部")) {
+                state.catalogProducts = rows;
+            }
             renderProductList();
         } catch (error) {
             $("products").classList.remove("loading");
@@ -2937,27 +3714,33 @@
         const max = Number($("maxPrice")?.value || 0);
         const sortMode = $("sortMode")?.value || "default";
         let rows = [...state.products];
-        if (state.stockOnly) rows = rows.filter(product => Number(product.stock || 0) > 0);
-        if (min > 0) rows = rows.filter(product => Number(product.price || 0) >= min);
-        if (max > 0) rows = rows.filter(product => Number(product.price || 0) <= max);
+        if (state.stockOnly) rows = rows.filter(product => productStock(product) > 0);
+        if (min > 0) rows = rows.filter(product => productPrice(product) >= min);
+        if (max > 0) rows = rows.filter(product => productPrice(product) <= max);
         rows.sort((a, b) => {
             if (sortMode === "sales") return Number(b.sales_count || 0) - Number(a.sales_count || 0);
             if (sortMode === "rating") return Number(b.positive_rate || 0) - Number(a.positive_rate || 0);
-            if (sortMode === "priceAsc") return Number(a.price || 0) - Number(b.price || 0);
-            if (sortMode === "priceDesc") return Number(b.price || 0) - Number(a.price || 0);
+            if (sortMode === "priceAsc") return productPrice(a) - productPrice(b);
+            if (sortMode === "priceDesc") return productPrice(b) - productPrice(a);
             return Number(b.id || 0) - Number(a.id || 0);
         });
         state.visibleProducts = rows;
+        const totalPages = Math.max(1, Math.ceil(rows.length / state.productPageSize));
+        state.productPage = Math.min(Math.max(1, state.productPage), totalPages);
+        const start = (state.productPage - 1) * state.productPageSize;
+        const pageRows = rows.slice(start, start + state.productPageSize);
         $("products").classList.remove("loading");
-        $("products").innerHTML = rows.length ? rows.map(renderProductCard).join("") : emptyText("没有符合条件的商品");
+        $("products").innerHTML = pageRows.length ? pageRows.map(renderProductCard).join("") : emptyText("没有符合条件的商品");
         const keyword = $("keyword").value.trim();
         const categoryText = state.selectedCategory && state.selectedCategory !== "全部" ? `${state.selectedCategory} · ` : "";
         $("productHint").textContent = `${categoryText}${keyword ? `搜索：${keyword} · ` : ""}共 ${rows.length} 件商品`;
         renderActiveFilters(rows);
+        renderProductPagination(totalPages);
     }
 
     function toggleStockOnly() {
         state.stockOnly = !state.stockOnly;
+        state.productPage = 1;
         $("stockOnlyBtn").className = state.stockOnly ? "mini-chip active" : "ghost";
         renderProductList();
     }
@@ -2967,14 +3750,43 @@
         $("minPrice").value = "";
         $("maxPrice").value = "";
         state.stockOnly = false;
+        state.productPage = 1;
         $("stockOnlyBtn").className = "ghost";
         renderProductList();
     }
 
+    function resetProductPage() {
+        state.productPage = 1;
+        renderProductList();
+    }
+
+    function changeProductPage(delta) {
+        state.productPage += delta;
+        renderProductList();
+        $("productsView").scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    function renderProductPagination(totalPages) {
+        $("productPagination").innerHTML = totalPages > 1 ? `
+            <button class="ghost" onclick="changeProductPage(-1)" ${state.productPage <= 1 ? "disabled" : ""}>上一页</button>
+            <span class="muted">第 ${state.productPage} / ${totalPages} 页</span>
+            <button class="ghost" onclick="changeProductPage(1)" ${state.productPage >= totalPages ? "disabled" : ""}>下一页</button>
+        ` : "";
+    }
+
+    function saveSearchKeyword(keyword) {
+        const current = JSON.parse(localStorage.getItem("yzmmMallSearchHistory") || "[]");
+        const next = [keyword, ...current.filter(item => item !== keyword)].slice(0, 8);
+        localStorage.setItem("yzmmMallSearchHistory", JSON.stringify(next));
+    }
+
     function renderProductCard(product) {
-        const soldOut = Number(product.stock || 0) <= 0;
+        const displayStock = productStock(product);
+        const displayPrice = productPrice(product);
+        const soldOut = displayStock <= 0;
         const hot = Number(product.sales_count || 0) >= 1500;
-        const lowStock = !soldOut && Number(product.stock || 0) <= 20;
+        const lowStock = !soldOut && displayStock <= 20;
+        const hasSku = Number(product.sku_count || 0) > 0;
         return `
             <article class="product-card ${soldOut ? "sold-out" : ""}" onclick="openProductDetail(${product.id})">
                 <div class="image-wrap">
@@ -2999,8 +3811,8 @@
                     <span>评价 ${intText(product.comment_count)}</span>
                 </div>
                 <div class="card-bottom">
-                    <div class="price">￥${money(product.price)}</div>
-                    <span class="delivery-note">${soldOut ? "到货提醒" : "现货速发"}</span>
+                    <div class="price">￥${money(displayPrice)}${hasSku ? "起" : ""}</div>
+                    <span class="delivery-note">${soldOut ? "到货提醒" : hasSku ? "多规格" : "现货速发"}</span>
                 </div>
                 <div class="quantity-row">
                     <input id="qty-${product.id}" type="number" min="1" value="1" onclick="event.stopPropagation()" ${soldOut ? "disabled" : ""}>
@@ -3014,10 +3826,205 @@
         `;
     }
 
+    async function ensureCatalogProducts() {
+        if (state.catalogProducts.length) return state.catalogProducts;
+        state.catalogProducts = await request("/products");
+        return state.catalogProducts;
+    }
+
+    function inStockProducts(rows) {
+        return rows.filter(product => productStock(product) > 0);
+    }
+
+    function sortBySales(rows) {
+        return [...rows].sort((a, b) => Number(b.sales_count || 0) - Number(a.sales_count || 0));
+    }
+
+    function sortByRating(rows) {
+        return [...rows].sort((a, b) => Number(b.positive_rate || 0) - Number(a.positive_rate || 0));
+    }
+
+    function channelLoading(id) {
+        if ($(id)) $(id).innerHTML = emptyText("正在加载");
+    }
+
+    function renderChannelProductCard(product, label, note = "", progress = 0) {
+        const soldOut = productStock(product) <= 0;
+        const progressWidth = Math.max(0, Math.min(100, Number(progress || 0)));
+        return `
+            <article class="channel-card ${soldOut ? "sold-out" : ""}" onclick="openProductDetail(${product.id})">
+                <img src="${html(product.image || fallbackImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
+                <div class="channel-card-body">
+                    <div class="card-badges" style="position:static">
+                        <span class="badge">${html(product.category || "综合")}</span>
+                        <span class="sale-badge">${html(label)}</span>
+                    </div>
+                    <h3 title="${html(product.name)}">${html(product.name)}</h3>
+                    <div class="muted">${html(product.subtitle || "精选平台好物")}</div>
+                    <div class="product-stats">
+                        <span>销量 ${intText(product.sales_count)}</span>
+                        <span>好评 ${percentText(product.positive_rate)}</span>
+                        <span>${soldOut ? "暂时缺货" : "现货"}</span>
+                    </div>
+                    ${note ? `<div class="muted">${html(note)}</div>` : ""}
+                    ${progressWidth ? `<div class="progress-track"><span style="width:${progressWidth}%"></span></div>` : ""}
+                    <div class="card-bottom">
+                        <div class="price">￥${money(productPrice(product))}</div>
+                        <span class="delivery-note">${soldOut ? "到货提醒" : "现货速发"}</span>
+                    </div>
+                    <div class="card-actions">
+                        <button onclick="event.stopPropagation(); buyNow(${product.id}, 1)" ${soldOut ? "disabled" : ""}>立即买</button>
+                        <button class="secondary" onclick="event.stopPropagation(); addFavorite(${product.id})">收藏</button>
+                    </div>
+                </div>
+            </article>
+        `;
+    }
+
+    function renderChannelCards(id, rows, label, emptyMessage, noteBuilder = () => "", progressBuilder = () => 0) {
+        $(id).innerHTML = rows.length
+            ? rows.map((row, index) => renderChannelProductCard(row, label, noteBuilder(row, index), progressBuilder(row, index))).join("")
+            : emptyText(emptyMessage);
+    }
+
+    function startDealClock() {
+        clearInterval(state.dealClockTimer);
+        const tick = () => {
+            const now = new Date();
+            const end = new Date(now);
+            const nextHour = Math.ceil((now.getHours() + 1) / 2) * 2;
+            end.setHours(nextHour, 0, 0, 0);
+            if (end <= now) end.setHours(end.getHours() + 2);
+            const totalSeconds = Math.max(0, Math.floor((end - now) / 1000));
+            const hours = Math.floor(totalSeconds / 3600);
+            const minutes = Math.floor((totalSeconds % 3600) / 60);
+            const seconds = totalSeconds % 60;
+            setText("dealClock", `距离本场结束 ${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`);
+        };
+        tick();
+        state.dealClockTimer = setInterval(tick, 1000);
+    }
+
+    async function loadDealsPage() {
+        try {
+            channelLoading("dealsProducts");
+            startDealClock();
+            const rows = sortBySales(inStockProducts(await ensureCatalogProducts())).slice(0, 8);
+            setText("dealMetricCount", rows.length);
+            renderChannelCards("dealsProducts", rows, "热卖", "暂无热卖商品",
+                (row, index) => `热卖榜第 ${index + 1} 名 · 已售 ${intText(row.sales_count)} 件`,
+                row => Math.min(96, 38 + Number(row.sales_count || 0) % 58));
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadBrandsPage() {
+        try {
+            channelLoading("brandProducts");
+            const rows = await ensureCatalogProducts();
+            const brandGroups = [
+                {name: "柚选数码馆", category: "手机数码", text: "耳机、穿戴、智能配件"},
+                {name: "效率办公馆", category: "电脑办公", text: "键盘、投影、桌面装备"},
+                {name: "家电生活馆", category: "家用电器", text: "厨房、清洁、生活电器"},
+                {name: "美妆穿搭馆", category: "美妆个护", text: "个护、美妆、服饰箱包"},
+                {name: "食品补给馆", category: "食品饮料", text: "饮品、零食、日常补给"},
+                {name: "运动户外馆", category: "运动户外", text: "健身、出行、户外装备"}
+            ];
+            $("brandList").innerHTML = brandGroups.map(group => {
+                const count = rows.filter(product => product.category === group.category).length;
+                return `
+                    <button class="brand-tile" onclick="selectCategory('${html(group.category)}')">
+                        <span class="badge">${html(group.category)}</span>
+                        <strong>${html(group.name)}</strong>
+                        <div class="muted">${html(group.text)}</div>
+                        <div class="delivery-note" style="margin-top:10px">${count} 件在售</div>
+                    </button>
+                `;
+            }).join("");
+            const picks = sortByRating(inStockProducts(rows)).slice(0, 4);
+            renderChannelCards("brandProducts", picks, "品牌精选", "暂无品牌精选商品",
+                row => `${stars(row.avg_score)} ${Number(row.avg_score || 5).toFixed(1)} · 好评 ${percentText(row.positive_rate)}`);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadGroupPage() {
+        try {
+            channelLoading("groupProducts");
+            const rows = sortBySales(inStockProducts(await ensureCatalogProducts()))
+                .filter(product => productStock(product) >= 10)
+                .slice(0, 8);
+            setText("groupMetricCount", rows.length);
+            renderChannelCards("groupProducts", rows, "可拼", "暂无可拼商品",
+                row => `${Math.min(9, Math.max(2, Math.ceil(Number(row.sales_count || 0) / 420)))} 人正在拼 · 库存 ${intText(productStock(row))}`,
+                row => Math.min(92, 32 + productStock(row) % 60));
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadFreshPage() {
+        try {
+            channelLoading("freshProducts");
+            const rows = await ensureCatalogProducts();
+            const freshCategories = ["食品饮料", "家居日用", "运动户外"];
+            let picks = inStockProducts(rows).filter(product => freshCategories.includes(product.category));
+            if (!picks.length) picks = inStockProducts(rows);
+            picks = sortBySales(picks).slice(0, 8);
+            renderChannelCards("freshProducts", picks, "到家补给", "暂无到家补给商品",
+                row => `${row.category || "生活"} · 适合日常补货`);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadMemberPage() {
+        try {
+            requireConsumer();
+            channelLoading("memberProducts");
+            const rows = await ensureCatalogProducts();
+            const tags = parseTags(state.user?.tags);
+            const displayName = state.user?.nickname || state.user?.username || "会员";
+            $("memberChannelTitle").textContent = `${displayName}的会员频道`;
+            setText("memberCartMetric", $("cartCount")?.textContent || "0");
+            setText("memberOrderMetric", $("orderCount")?.textContent || "0");
+            setText("memberRoleMetric", roleNames[state.user?.role] || "会员");
+            setText("memberTagMetric", tags[0] || "推荐");
+            let picks = inStockProducts(rows).filter(product => {
+                const source = `${product.name || ""}${product.subtitle || ""}${product.category || ""}`;
+                return tags.some(tag => source.includes(tag));
+            });
+            if (!picks.length) picks = sortByRating(inStockProducts(rows));
+            renderChannelCards("memberProducts", picks.slice(0, 8), "会员推荐", "暂无会员推荐商品",
+                row => `${row.category || "综合"} · 好评 ${percentText(row.positive_rate)}`);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadServicePage() {
+        try {
+            requireConsumer();
+            $("serviceOrders").innerHTML = emptyText("正在加载");
+            const orders = await request(`/orders?userId=${state.user.id}`);
+            setText("servicePendingMetric", orders.filter(order => Number(order.status) === 0).length);
+            setText("serviceShippingMetric", orders.filter(order => Number(order.status) === 2).length);
+            const details = await Promise.all(orders.slice(0, 3).map(order => request(`/orders/${order.id}`).catch(() => order)));
+            $("serviceOrders").innerHTML = details.length
+                ? details.map(order => renderOrder(order, false)).join("")
+                : emptyText("暂无订单");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
     function clearSearch() {
         $("keyword").value = "";
         $("topKeyword").value = "";
         state.selectedCategory = "全部";
+        state.productPage = 1;
         renderCategories();
         updateChannelNav();
         loadProducts();
@@ -3027,6 +4034,7 @@
         try {
             const product = await request(`/products/${productId}`);
             state.activeProduct = product;
+            state.selectedSkuId = null;
             addRecentViewed(product);
             renderProductDetail(product);
             $("productDetailOverlay").classList.add("show");
@@ -3043,7 +4051,7 @@
             {
                 id: product.id,
                 name: product.name,
-                price: product.price,
+                price: productPrice(product),
                 image: product.image,
                 category: product.category
             },
@@ -3076,24 +4084,52 @@
     }
 
     function renderProductDetail(product) {
-        const soldOut = Number(product.stock || 0) <= 0;
+        const skus = product.skus || [];
+        if (skus.length && !skus.some(sku => Number(sku.id) === Number(state.selectedSkuId))) {
+            state.selectedSkuId = Number(skus[0].id);
+        }
+        if (!skus.length) {
+            state.selectedSkuId = null;
+        }
+        const selectedSku = skus.find(sku => Number(sku.id) === Number(state.selectedSkuId));
+        const detailPrice = Number(selectedSku?.price ?? product.price ?? 0);
+        const detailStock = Number(selectedSku?.stock ?? product.stock ?? 0);
+        const detailImage = selectedSku?.image || product.image || fallbackImage;
+        const soldOut = detailStock <= 0;
         const avgScore = Number(product.avg_score || 5).toFixed(1);
+        const previewImages = state.commentImages[product.id] || [];
+        const skuPanel = skus.length ? `
+            <div class="sku-picker">
+                <strong>选择规格</strong>
+                <div class="sku-options">
+                    ${skus.map(sku => `
+                        <button class="sku-option ${Number(sku.id) === Number(state.selectedSkuId) ? "active" : ""}"
+                                onclick="selectSku(${sku.id})">
+                            ${html(sku.spec_name)}：${html(sku.spec_value)}
+                            · ￥${money(sku.price)}
+                            · 库存${html(sku.stock)}
+                        </button>
+                    `).join("")}
+                </div>
+            </div>
+        ` : "";
         $("productDetail").innerHTML = `
             <div class="detail-top">
                 <div class="detail-image">
-                    <img src="${html(product.image || fallbackImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
+                    <img src="${html(detailImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
                 </div>
                 <div class="detail-info">
                     <span class="badge">${html(product.category || "综合")}</span>
                     <h2>${html(product.name)}</h2>
                     <p class="muted">${html(product.subtitle || "精选平台好物")}</p>
-                    <div class="detail-price"><span>￥</span>${money(product.price)}</div>
+                    <div class="detail-price"><span>￥</span>${money(detailPrice)}</div>
                     <div class="detail-metrics">
                         <div><span>销量</span><strong>${intText(product.sales_count)}</strong></div>
                         <div><span>好评率</span><strong>${percentText(product.positive_rate)}</strong></div>
                         <div><span>评价</span><strong>${intText(product.comment_count)}</strong></div>
-                        <div><span>库存</span><strong>${html(product.stock)}</strong></div>
+                        <div><span>库存</span><strong>${html(detailStock)}</strong></div>
                     </div>
+                    ${skuPanel}
                     <div class="detail-service-grid">
                         <div class="service-pill"><strong>现货速发</strong><span>订单状态实时可见</span></div>
                         <div class="service-pill"><strong>正品严选</strong><span>平台商品统一管理</span></div>
@@ -3102,10 +4138,10 @@
                     <div class="detail-buy-panel">
                         <div class="quantity-row">
                             <input id="detailQty-${product.id}" type="number" min="1" value="1" ${soldOut ? "disabled" : ""}>
-                            <button onclick="addCart(${product.id}, Number($('detailQty-${product.id}').value))" ${soldOut ? "disabled" : ""}>加入购物车</button>
+                            <button onclick="addCart(${product.id}, Number($('detailQty-${product.id}').value), state.selectedSkuId)" ${soldOut ? "disabled" : ""}>加入购物车</button>
                         </div>
                         <div class="actions">
-                            <button onclick="buyNow(${product.id}, Number($('detailQty-${product.id}').value))" ${soldOut ? "disabled" : ""}>立即购买</button>
+                            <button onclick="buyNow(${product.id}, Number($('detailQty-${product.id}').value), state.selectedSkuId)" ${soldOut ? "disabled" : ""}>立即购买</button>
                             <button class="secondary" onclick="addFavorite(${product.id})">收藏商品</button>
                             <button class="ghost" onclick="closeProductDetail()">继续逛</button>
                         </div>
@@ -3127,6 +4163,12 @@
                     </div>
                     <div class="form-grid" style="margin-bottom:12px">
                         <textarea id="comment-${product.id}" placeholder="分享你的使用感受"></textarea>
+                        <input id="commentImageInput-${product.id}" type="file" accept="image/*" multiple onchange="handleCommentImages(${product.id}, this.files)">
+                        <div id="commentPreview-${product.id}" class="comment-preview ${previewImages.length ? "" : "hidden"}">
+                            <div class="comment-images">
+                                ${previewImages.map(src => `<img src="${html(src)}" alt="评价图片">`).join("")}
+                            </div>
+                        </div>
                         <div class="inline">
                             <select id="score-${product.id}" style="max-width:120px">
                                 <option value="5">5分</option>
@@ -3156,13 +4198,21 @@
         `;
     }
 
-    async function addCart(productId, countOverride) {
+    function selectSku(skuId) {
+        state.selectedSkuId = skuId;
+        if (!state.activeProduct) return;
+        renderProductDetail(state.activeProduct);
+        loadProductComments(state.activeProduct.id);
+    }
+
+    async function addCart(productId, countOverride, skuIdOverride = null) {
         try {
-            requireLogin();
+            requireConsumer();
             const count = Number(countOverride || $(`qty-${productId}`)?.value || 1);
+            const skuId = skuIdOverride || (Number(state.activeProduct?.id) === Number(productId) ? state.selectedSkuId : null);
             await request("/cart", {
                 method: "POST",
-                body: JSON.stringify({userId: state.user.id, productId, count})
+                body: JSON.stringify({userId: state.user.id, productId, skuId, count})
             });
             setNotice("已加入购物车");
             await loadCartCount();
@@ -3173,10 +4223,10 @@
         }
     }
 
-    async function buyNow(productId, count) {
+    async function buyNow(productId, count, skuId = null) {
         try {
-            requireLogin();
-            const added = await addCart(productId, count || 1);
+            requireConsumer();
+            const added = await addCart(productId, count || 1, skuId);
             if (!added) return;
             closeProductDetail();
             showTab("cart");
@@ -3186,32 +4236,48 @@
     }
 
     async function loadCart() {
-        if (!state.user) {
+        if (!isConsumer()) {
             $("cart").innerHTML = emptyText("请先登录");
             $("orderTotal").textContent = "￥0.00";
+            state.cartRows = [];
+            state.coupons = [];
+            $("checkoutCoupon").innerHTML = `<option value="">不使用优惠券</option>`;
+            $("couponHint").textContent = "登录后可使用已领取优惠券。";
             setCartBadges(0);
+            clearCartExpiryWatcher();
             return;
         }
         try {
-            const rows = await request(`/cart?userId=${state.user.id}`);
+            const rows = prepareCartRows(await request(`/cart?userId=${state.user.id}`));
             state.cartRows = rows;
             const total = rows.reduce((sum, row) => sum + Number(row.subtotal || 0), 0);
-            $("orderTotal").textContent = `￥${money(total)}`;
             setCartBadges(rows.length);
             $("cart").innerHTML = rows.length ? rows.map(renderCartLine).join("") : emptyText("购物车为空");
+            await loadCheckoutCoupons(total);
+            renderCouponTotal();
+            startCartExpiryWatcher();
             prefillReceiver();
         } catch (error) {
             setNotice(error.message);
         }
     }
 
+    function prepareCartRows(rows) {
+        return rows.map(row => ({
+            ...row,
+            expiresAt: Date.now() + Number(row.expires_in_seconds ?? 1800) * 1000
+        }));
+    }
+
     function renderCartLine(item) {
+        const left = item.expiresAt - Date.now();
         return `
             <div class="line-card">
                 <img src="${html(item.image || fallbackImage)}" alt="${html(item.product_name)}" onerror="this.src='${fallbackImage}'">
                 <div>
                     <h3>${html(item.product_name)}</h3>
-                    <div class="muted">单价 ￥${money(item.price)} · 库存 ${html(item.stock)}</div>
+                    <div class="muted">${item.sku_text ? `${html(item.sku_text)} · ` : ""}单价 ￥${money(item.price)} · 库存 ${html(item.stock)}</div>
+                    <div id="cart-expire-${item.id}" class="cart-expiry ${left > 5 * 60 * 1000 ? "safe" : ""}">保留 ${countdownText(left)}</div>
                     <div class="price">￥${money(item.subtotal)}</div>
                 </div>
                 <div class="actions">
@@ -3227,6 +4293,33 @@
         `;
     }
 
+    async function loadCheckoutCoupons(total) {
+        if (!$("checkoutCoupon") || !isConsumer()) return;
+        const rows = await request(`/coupons?userId=${state.user.id}`);
+        state.coupons = rows.filter(row => Number(row.user_status) === 0 && Number(row.status) === 1);
+        $("checkoutCoupon").innerHTML = `<option value="">不使用优惠券</option>` + state.coupons.map(row => {
+            const usable = total >= Number(row.threshold_amount || 0);
+            return `
+                <option value="${html(row.user_coupon_id)}" ${usable ? "" : "disabled"}>
+                    ${html(row.name)} · 满${money(row.threshold_amount)}减${money(row.discount_amount)}${usable ? "" : " · 未达门槛"}
+                </option>
+            `;
+        }).join("");
+    }
+
+    function renderCouponTotal() {
+        const total = state.cartRows.reduce((sum, row) => sum + Number(row.subtotal || 0), 0);
+        const selectedId = Number($("checkoutCoupon")?.value || 0);
+        const coupon = state.coupons.find(row => Number(row.user_coupon_id) === selectedId);
+        const discount = coupon && total >= Number(coupon.threshold_amount || 0)
+            ? Math.min(total, Number(coupon.discount_amount || 0))
+            : 0;
+        $("orderTotal").textContent = `￥${money(total - discount)}`;
+        $("couponHint").textContent = discount > 0
+            ? `已优惠 ￥${money(discount)}，原价 ￥${money(total)}`
+            : state.coupons.length ? "可用优惠券会根据购物车金额自动匹配。" : "暂无可用优惠券，可在个人主页领取。";
+    }
+
     function changeCartCount(id, delta) {
         const input = $(`cart-count-${id}`);
         if (!input) return;
@@ -3234,8 +4327,48 @@
         updateCartCount(id);
     }
 
+    function startCartExpiryWatcher() {
+        clearCartExpiryWatcher();
+        if (!state.cartRows.length) return;
+        state.cartExpiryTimer = setInterval(checkCartExpiry, 1000);
+        checkCartExpiry();
+    }
+
+    function clearCartExpiryWatcher() {
+        if (state.cartExpiryTimer) clearInterval(state.cartExpiryTimer);
+        state.cartExpiryTimer = null;
+    }
+
+    function checkCartExpiry() {
+        let hasActive = false;
+        state.cartRows.forEach(item => {
+            const left = item.expiresAt - Date.now();
+            const badge = $(`cart-expire-${item.id}`);
+            if (badge) {
+                badge.textContent = left <= 0 ? "已超时，正在移除" : `保留 ${countdownText(left)}`;
+                badge.classList.toggle("safe", left > 5 * 60 * 1000);
+            }
+            if (left > 0) {
+                hasActive = true;
+                if (left <= 5 * 60 * 1000 && !state.cartExpiryWarned[item.id]) {
+                    state.cartExpiryWarned[item.id] = true;
+                    setNotice(`${item.product_name} 即将超时，请尽快结算`);
+                }
+                return;
+            }
+            if (!state.cartExpiryRemoving[item.id]) {
+                state.cartExpiryRemoving[item.id] = true;
+                removeCart(item.id);
+            }
+        });
+        if (!hasActive) clearCartExpiryWatcher();
+    }
+
     async function loadCartCount() {
-        if (!state.user) return;
+        if (!isConsumer()) {
+            setCartBadges(0);
+            return;
+        }
         try {
             const rows = await request(`/cart?userId=${state.user.id}`);
             setCartBadges(rows.length);
@@ -3266,7 +4399,7 @@
     }
 
     function prefillReceiver(force = false) {
-        if (!state.user) return;
+        if (!isConsumer()) return;
         if (force || !$("receiverName").value) $("receiverName").value = state.user.nickname || state.user.username || "";
         if (force || !$("receiverPhone").value) $("receiverPhone").value = state.user.phone || "";
         if (force || !$("shippingAddress").value) $("shippingAddress").value = state.user.address || "";
@@ -3274,11 +4407,16 @@
     }
 
     async function loadProfile() {
-        if (!state.user) return;
+        if (!isConsumer()) {
+            showTab(isAdmin() ? "admin" : "products");
+            return;
+        }
         try {
+            const token = state.user.token;
             const fresh = await request(`/users/${state.user.id}`);
-            state.user = fresh;
+            state.user = {...fresh, token};
             localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
+            $("profileUsername").value = fresh.username || "";
             $("profileNickname").value = fresh.nickname || fresh.username || "";
             $("profilePhone").value = fresh.phone || "";
             $("profileAddress").value = fresh.address || "";
@@ -3286,7 +4424,7 @@
             $("profileRoleText").textContent = roleNames[fresh.role] || fresh.role || "会员";
             renderProfileTagPicker();
             updateAuthView();
-            await Promise.all([loadProfileFavorites(), loadProfileOrders(), loadCartCount()]);
+            await Promise.all([loadProfileCoupons(), loadProfileFavorites(), loadProfileOrders(), loadCartCount()]);
         } catch (error) {
             setNotice(error.message);
         }
@@ -3294,7 +4432,8 @@
 
     async function saveProfile() {
         try {
-            requireLogin();
+            requireConsumer();
+            const token = state.user.token;
             const phone = $("profilePhone").value.trim();
             if (phone && !/^1\d{10}$/.test(phone)) throw new Error("手机号格式不正确");
             const payload = {
@@ -3303,10 +4442,11 @@
                 address: $("profileAddress").value.trim(),
                 tags: parseTags($("profileTags").value).join(",")
             };
-            state.user = await request(`/users/${state.user.id}`, {
+            const fresh = await request(`/users/${state.user.id}`, {
                 method: "PUT",
                 body: JSON.stringify(payload)
             });
+            state.user = {...fresh, token};
             localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
             setNotice("个人资料已保存");
             $("profileTags").value = state.user.tags || "";
@@ -3318,8 +4458,58 @@
         }
     }
 
+    async function loadProfileCoupons() {
+        if (!isConsumer() || !$("profileCoupons")) return;
+        try {
+            const [mine, available] = await Promise.all([
+                request(`/coupons?userId=${state.user.id}`),
+                request("/coupons")
+            ]);
+            const mineIds = new Set(mine.map(row => Number(row.coupon_id)));
+            const unused = mine.filter(row => Number(row.user_status) === 0);
+            const active = available.filter(row => !mineIds.has(Number(row.id))).slice(0, 3);
+            const mineHtml = unused.slice(0, 3).map(row => `
+                <div class="coupon-card">
+                    <div>
+                        <strong>${html(row.name)}</strong>
+                        <div class="coupon-meta">满 ${money(row.threshold_amount)} 减 ${money(row.discount_amount)} · ${html(row.code)}</div>
+                    </div>
+                    <span class="badge">可用</span>
+                </div>
+            `).join("");
+            const claimHtml = active.map(row => `
+                <div class="coupon-card">
+                    <div>
+                        <strong>${html(row.name)}</strong>
+                        <div class="coupon-meta">满 ${money(row.threshold_amount)} 减 ${money(row.discount_amount)} · 剩余 ${html(row.stock)}</div>
+                    </div>
+                    <button onclick="claimCoupon(${row.id})">领取</button>
+                </div>
+            `).join("");
+            $("profileCoupons").innerHTML = (mineHtml || claimHtml)
+                ? `${mineHtml}${claimHtml}`
+                : emptyText("暂无可领取优惠券");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function claimCoupon(couponId) {
+        try {
+            requireConsumer();
+            await request("/coupons/claim", {
+                method: "POST",
+                body: JSON.stringify({userId: state.user.id, couponId})
+            });
+            setNotice("优惠券已领取");
+            await loadProfileCoupons();
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
     async function loadProfileFavorites() {
-        if (!state.user) return;
+        if (!isConsumer()) return;
         const rows = await request(`/favorites?userId=${state.user.id}`);
         $("profileFavoriteCount").textContent = rows.length;
         $("profileFavorites").innerHTML = rows.length ? rows.slice(0, 4).map(item => `
@@ -3335,7 +4525,7 @@
     }
 
     async function loadProfileOrders() {
-        if (!state.user) return;
+        if (!isConsumer()) return;
         const rows = await request(`/orders?userId=${state.user.id}`);
         $("profileOrderCount").textContent = rows.length;
         $("profileOrders").innerHTML = rows.length ? rows.slice(0, 3).map(order => renderOrder(order, false)).join("") : emptyText("暂无订单");
@@ -3343,9 +4533,10 @@
 
     async function createOrder() {
         try {
-            requireLogin();
+            requireConsumer();
             const payload = {
                 userId: state.user.id,
+                userCouponId: Number($("checkoutCoupon").value || 0) || null,
                 receiverName: $("receiverName").value.trim(),
                 receiverPhone: $("receiverPhone").value.trim(),
                 shippingAddress: $("shippingAddress").value.trim()
@@ -3361,7 +4552,7 @@
 
     async function addFavorite(productId) {
         try {
-            requireLogin();
+            requireConsumer();
             await request("/favorites", {
                 method: "POST",
                 body: JSON.stringify({userId: state.user.id, productId})
@@ -3373,7 +4564,7 @@
     }
 
     async function loadFavorites() {
-        if (!state.user) {
+        if (!isConsumer()) {
             $("favorites").innerHTML = emptyText("请先登录");
             return;
         }
@@ -3434,7 +4625,7 @@
     }
 
     async function loadUserOrders() {
-        if (!state.user) {
+        if (!isConsumer()) {
             $("userOrders").innerHTML = emptyText("请先登录");
             setOrderBadges(0);
             return;
@@ -3452,7 +4643,10 @@
     }
 
     async function loadOrderCount() {
-        if (!state.user) return;
+        if (!isConsumer()) {
+            setOrderBadges(0);
+            return;
+        }
         try {
             const rows = await request(`/orders?userId=${state.user.id}`);
             setOrderBadges(rows.length);
@@ -3464,14 +4658,27 @@
     function renderOrder(order, adminMode) {
         const status = Number(order.status);
         const statusClass = status === 0 ? "pending" : status === 3 ? "done" : "paid";
-        const items = (order.items || []).map(item => `${html(item.product_name)} x ${html(item.count)}`).join("，") || "无明细";
-        const logistics = order.logistics ? `${html(order.logistics.logistics_no)} / ${logisticsNames[order.logistics.status] || order.logistics.status}` : "暂无物流";
+        const items = (order.items || []).map(item => {
+            const sku = item.sku_text || (item.spec_name ? `${item.spec_name}: ${item.spec_value}` : "");
+            return `${html(item.product_name)}${sku ? `（${html(sku)}）` : ""} x ${html(item.count)}`;
+        }).join("，") || "无明细";
+        const logistics = renderLogisticsText(order.logistics);
         const address = order.shipping_address ? `${html(order.receiver_name || "")} ${html(order.receiver_phone || "")} · ${html(order.shipping_address)}` : "暂无收货信息";
+        const discountText = Number(order.discount_amount || 0) > 0 ? ` · 已优惠 ￥${money(order.discount_amount)}` : "";
+        const afterSales = order.afterSales || [];
+        const afterSaleText = afterSales.length
+            ? `<div class="after-sale-list">${afterSales.map(item => `
+                <div class="muted">售后：${html(afterSaleTypeNames[item.type] || item.type)} · ${html(afterSaleNames[item.status] || item.status)}${item.reply ? ` · ${html(item.reply)}` : ""}</div>
+            `).join("")}</div>`
+            : "";
         const userActions = status === 0
             ? `<button onclick="setOrderStatus(${order.id}, 1, false)">支付</button>`
             : status === 2
                 ? `<button onclick="setOrderStatus(${order.id}, 3, false)">确认收货</button>`
                 : "";
+        const afterSaleAction = !adminMode && status >= 1
+            ? `<button class="secondary" onclick="applyAfterSale(${order.id})">申请售后</button>`
+            : "";
         const rebuyAction = !adminMode && (order.items || []).length
             ? `<button class="ghost" onclick="rebuyOrder(${order.id})">再次购买</button>`
             : "";
@@ -3489,13 +4696,23 @@
                     </div>
                     <span class="status ${statusClass}">${statusNames[status] || status}</span>
                 </div>
-                <div class="price">￥${money(order.total_price)}</div>
+                <div class="price">￥${money(order.total_price)}<span class="muted" style="font-size:13px">${discountText}</span></div>
                 <div class="order-steps">${renderOrderSteps(status)}</div>
                 <div class="muted">商品：${items}</div>
                 <div class="muted">收货：${address}</div>
-                <div class="muted">物流：${logistics}</div>
-                <div class="actions">${adminMode ? adminActions : userActions + rebuyAction}</div>
+                <div class="logistics-line">${logistics}</div>
+                ${afterSaleText}
+                <div class="actions">${adminMode ? adminActions : userActions + afterSaleAction + rebuyAction}</div>
             </div>
+        `;
+    }
+
+    function renderLogisticsText(logistics) {
+        if (!logistics) return `<span>物流：暂无物流</span>`;
+        return `
+            <strong>${html(logistics.courier_company || "平台配送")} · ${html(logistics.delivery_method || "标准配送")}</strong>
+            <span>物流单号：${html(logistics.logistics_no || "-")}</span>
+            <span>送货状态：${html(logisticsNames[logistics.status] || logistics.status || "待更新")}</span>
         `;
     }
 
@@ -3522,6 +4739,81 @@
         }
     }
 
+    async function applyAfterSale(orderId) {
+        try {
+            requireLogin();
+            const type = prompt("售后类型：refund退款、return退货退款、repair维修", "refund");
+            if (!type) return;
+            const reason = prompt("请填写售后原因", "");
+            if (!reason) return;
+            await request("/after-sales", {
+                method: "POST",
+                body: JSON.stringify({userId: state.user.id, orderId, type, reason})
+            });
+            setNotice("售后申请已提交");
+            await loadUserOrders();
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadAdminAfterSales() {
+        try {
+            requireAdmin();
+            const result = await request(`/after-sales?actorId=${state.user.id}&page=1&pageSize=50`);
+            const rows = result.rows || result;
+            $("adminAfterSales").innerHTML = rows.length ? `
+                <table>
+                    <thead><tr><th>ID</th><th>订单</th><th>用户</th><th>类型</th><th>原因</th><th>状态</th><th>回复</th><th>操作</th></tr></thead>
+                    <tbody>
+                    ${rows.map(row => `
+                        <tr>
+                            <td>${html(row.id)}</td>
+                            <td>${html(row.order_no)}</td>
+                            <td>${html(row.nickname || row.username)}</td>
+                            <td>${html(afterSaleTypeNames[row.type] || row.type)}</td>
+                            <td>${html(row.reason)}</td>
+                            <td><span class="badge">${html(afterSaleNames[row.status] || row.status)}</span></td>
+                            <td>${html(row.reply || "")}</td>
+                            <td>
+                                <div class="actions">
+                                    <select id="after-sale-status-${row.id}" style="width:120px">
+                                        ${["pending", "processing", "approved", "rejected", "completed"].map(status => `
+                                            <option value="${status}" ${row.status === status ? "selected" : ""}>${afterSaleNames[status]}</option>
+                                        `).join("")}
+                                    </select>
+                                    <button onclick="updateAfterSaleStatus(${row.id})">保存</button>
+                                </div>
+                            </td>
+                        </tr>
+                    `).join("")}
+                    </tbody>
+                </table>
+            ` : emptyText("暂无售后工单");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function updateAfterSaleStatus(id) {
+        try {
+            requireAdmin();
+            const reply = prompt("处理回复，可留空保持原内容", "");
+            await request(`/after-sales/${id}/status`, {
+                method: "PUT",
+                body: JSON.stringify({
+                    actorId: state.user.id,
+                    status: $(`after-sale-status-${id}`).value,
+                    reply
+                })
+            });
+            setNotice("售后状态已更新");
+            await Promise.all([loadAdminAfterSales(), loadAdminOverview()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
     async function rebuyOrder(orderId) {
         try {
             requireLogin();
@@ -3533,6 +4825,7 @@
                 body: JSON.stringify({
                     userId: state.user.id,
                     productId: item.product_id,
+                    skuId: item.sku_id,
                     count: item.count
                 })
             })));
@@ -3552,19 +4845,40 @@
         }
     }
 
+    async function handleCommentImages(productId, files) {
+        try {
+            const selected = Array.from(files || []).slice(0, 4);
+            const images = [];
+            for (const file of selected) {
+                if (!file.type.startsWith("image/")) throw new Error("评价图片格式不正确");
+                images.push(await resizeImage(file));
+            }
+            state.commentImages[productId] = images;
+            if (state.activeProduct && Number(state.activeProduct.id) === Number(productId)) {
+                renderProductDetail(state.activeProduct);
+                await loadProductComments(productId);
+            }
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
     async function commentProduct(productId) {
         try {
-            requireLogin();
+            requireConsumer();
+            const images = state.commentImages[productId] || [];
             await request("/comments", {
                 method: "POST",
                 body: JSON.stringify({
                     userId: state.user.id,
                     productId,
                     content: $(`comment-${productId}`).value.trim(),
-                    score: Number($(`score-${productId}`).value)
+                    score: Number($(`score-${productId}`).value),
+                    images: JSON.stringify(images)
                 })
             });
             $(`comment-${productId}`).value = "";
+            state.commentImages[productId] = [];
             setNotice("评价发布成功");
             if (state.activeProduct && Number(state.activeProduct.id) === Number(productId)) {
                 const product = await request(`/products/${productId}`);
@@ -3587,6 +4901,11 @@
                         <span class="rating-stars">${stars(row.score)} ${html(row.score)}分</span>
                     </div>
                     <div>${html(row.content)}</div>
+                    ${parseImageList(row.images).length ? `
+                        <div class="comment-images">
+                            ${parseImageList(row.images).map(src => `<img src="${html(src)}" alt="评价图片">`).join("")}
+                        </div>
+                    ` : ""}
                     <div class="muted">${html(row.create_time || "")}</div>
                 </div>
             `).join("") : `<div class="muted">暂无评价</div>`;
@@ -3598,19 +4917,78 @@
     async function loadAdminOverview() {
         try {
             requireAdmin();
-            const [products, orders, comments, users] = await Promise.all([
-                request("/products"),
-                request(`/orders?actorId=${state.user.id}`),
-                request(`/comments?actorId=${state.user.id}`),
-                isSuper() ? request(`/users?actorId=${state.user.id}`) : Promise.resolve([])
-            ]);
-            $("metricProducts").textContent = products.length;
-            $("metricOrders").textContent = orders.length;
-            $("metricComments").textContent = comments.length;
-            $("metricUsers").textContent = isSuper() ? users.length : "-";
+            const data = await request("/dashboard");
+            const metrics = data.metrics || {};
+            $("metricProducts").textContent = intText(metrics.products);
+            $("metricOrders").textContent = intText(metrics.orders);
+            $("metricComments").textContent = intText(metrics.comments);
+            $("metricUsers").textContent = intText(metrics.active_users);
+            renderDashboardCharts(data);
         } catch (error) {
             setNotice(error.message);
         }
+    }
+
+    function renderDashboardCharts(data) {
+        const statusRows = data.orderStatus || [];
+        const categoryRows = data.categorySales || [];
+        const hotRows = data.hotProducts || [];
+        const lowStockRows = data.lowStock || [];
+        const afterSaleRows = data.afterSaleStatus || [];
+        $("dashboardCharts").innerHTML = `
+            <div class="chart-card">
+                <h3>订单状态</h3>
+                ${renderBars(statusRows.map(row => ({
+                    label: statusNames[Number(row.status)] || row.status,
+                    value: Number(row.count || 0)
+                })))}
+            </div>
+            <div class="chart-card">
+                <h3>分类销售</h3>
+                ${renderBars(categoryRows.slice(0, 6).map(row => ({
+                    label: row.category || "综合",
+                    value: Number(row.sales || 0)
+                })))}
+            </div>
+            <div class="chart-card">
+                <h3>热卖商品</h3>
+                ${renderBars(hotRows.slice(0, 6).map(row => ({
+                    label: row.name,
+                    value: Number(row.sales || 0)
+                })))}
+            </div>
+            <div class="chart-card">
+                <h3>售后状态</h3>
+                ${renderBars(afterSaleRows.map(row => ({
+                    label: afterSaleNames[row.status] || row.status,
+                    value: Number(row.count || 0)
+                })))}
+            </div>
+            <div class="chart-card">
+                <h3>库存预警</h3>
+                ${lowStockRows.length ? lowStockRows.map(row => `
+                    <div class="muted">${html(row.name)} · ${html(row.category)} · 库存 ${html(row.stock)}</div>
+                `).join("") : `<div class="muted">暂无低库存商品</div>`}
+            </div>
+            <div class="chart-card">
+                <h3>最近订单</h3>
+                ${(data.recentOrders || []).slice(0, 6).map(row => `
+                    <div class="muted">${html(row.order_no)} · ￥${money(row.total_price)} · ${html(statusNames[Number(row.status)] || row.status)}</div>
+                `).join("") || `<div class="muted">暂无订单</div>`}
+            </div>
+        `;
+    }
+
+    function renderBars(rows) {
+        if (!rows.length) return `<div class="muted">暂无数据</div>`;
+        const max = Math.max(...rows.map(row => row.value), 1);
+        return `<div class="bar-list">${rows.map(row => `
+            <div class="bar-item">
+                <span title="${html(row.label)}">${html(row.label)}</span>
+                <div class="bar-track"><span style="width:${Math.max(6, row.value / max * 100)}%"></span></div>
+                <strong>${intText(row.value)}</strong>
+            </div>
+        `).join("")}</div>`;
     }
 
     async function saveProduct() {
@@ -3625,11 +5003,13 @@
                 price: Number($("productPrice").value),
                 stock: Number($("productStock").value),
                 saleCount: Number($("productSaleCount").value || 0),
-                image: $("productImage").value.trim()
+                image: $("productImage").value.trim(),
+                skus: collectSkus()
             };
             const path = state.editingProductId ? `/products/${state.editingProductId}` : "/products";
             const method = state.editingProductId ? "PUT" : "POST";
             await request(path, {method, body: JSON.stringify(payload)});
+            state.catalogProducts = [];
             setNotice(state.editingProductId ? "商品已更新" : "商品已新增");
             resetProductForm();
             await Promise.all([loadAdminProducts(), loadProducts(), loadAdminOverview()]);
@@ -3649,7 +5029,51 @@
         $("productSaleCount").value = "";
         $("productImage").value = "";
         state.productImageData = "";
+        state.editingSkus = [];
+        renderSkuEditor();
         updateProductPreview("");
+    }
+
+    function renderSkuEditor() {
+        const box = $("skuRows");
+        if (!box) return;
+        box.innerHTML = state.editingSkus.length ? state.editingSkus.map((sku, index) => `
+            <div class="sku-editor-row">
+                <input id="skuSpecName-${index}" value="${html(sku.specName || sku.spec_name || "")}" placeholder="规格名">
+                <input id="skuSpecValue-${index}" value="${html(sku.specValue || sku.spec_value || "")}" placeholder="规格值">
+                <input id="skuPrice-${index}" type="number" min="0" step="0.01" value="${html(sku.price ?? "")}" placeholder="价格">
+                <input id="skuStock-${index}" type="number" min="0" value="${html(sku.stock ?? "")}" placeholder="库存">
+                <input id="skuImage-${index}" value="${html(sku.image || "")}" placeholder="图片地址">
+                <button type="button" class="ghost" onclick="removeSkuRow(${index})">删除</button>
+            </div>
+        `).join("") : `<div class="muted">未设置规格时，商品使用基础价格和库存。</div>`;
+    }
+
+    function addSkuRow() {
+        state.editingSkus = collectSkus();
+        state.editingSkus.push({specName: "", specValue: "", price: $("productPrice").value || 0, stock: $("productStock").value || 0, image: ""});
+        renderSkuEditor();
+    }
+
+    function removeSkuRow(index) {
+        state.editingSkus = collectSkus().filter((_, itemIndex) => itemIndex !== index);
+        renderSkuEditor();
+    }
+
+    function collectSkus() {
+        const rows = [];
+        const count = state.editingSkus.length;
+        for (let index = 0; index < count; index++) {
+            const specName = $(`skuSpecName-${index}`)?.value.trim() || "";
+            const specValue = $(`skuSpecValue-${index}`)?.value.trim() || "";
+            const price = Number($(`skuPrice-${index}`)?.value || 0);
+            const stock = Number($(`skuStock-${index}`)?.value || 0);
+            const image = $(`skuImage-${index}`)?.value.trim() || "";
+            if (specName || specValue) {
+                rows.push({specName, specValue, price, stock, image});
+            }
+        }
+        return rows;
     }
 
     async function loadAdminProducts() {
@@ -3682,8 +5106,8 @@
                             <td><img class="thumb" src="${html(row.image || fallbackImage)}" alt="${html(row.name)}" onerror="this.src='${fallbackImage}'"></td>
                             <td>${html(row.name)}</td>
                             <td><span class="badge">${html(row.category || "综合")}</span></td>
-                            <td>￥${money(row.price)}</td>
-                            <td>${html(row.stock)}</td>
+                            <td>￥${money(productPrice(row))}${Number(row.sku_count || 0) ? "起" : ""}</td>
+                            <td>${html(productStock(row))}${Number(row.sku_count || 0) ? ` · ${html(row.sku_count)}规格` : ""}</td>
                             <td>${intText(row.sales_count)}</td>
                             <td>
                                 <div class="actions">
@@ -3698,8 +5122,8 @@
             ` : emptyText("暂无商品");
     }
 
-    function editProductById(id) {
-        const product = state.products.find(item => Number(item.id) === Number(id));
+    async function editProductById(id) {
+        const product = await request(`/products/${id}`).catch(() => state.products.find(item => Number(item.id) === Number(id)));
         if (!product) return;
         state.editingProductId = product.id;
         $("productName").value = product.name || "";
@@ -3710,6 +5134,14 @@
         $("productStock").value = product.stock || 0;
         $("productSaleCount").value = product.sale_count || 0;
         $("productImage").value = product.image || "";
+        state.editingSkus = (product.skus || []).map(sku => ({
+            specName: sku.spec_name,
+            specValue: sku.spec_value,
+            price: sku.price,
+            stock: sku.stock,
+            image: sku.image || ""
+        }));
+        renderSkuEditor();
         updateProductPreview(product.image || "");
         setNotice(`正在编辑：${product.name}`);
         $("productName").focus();
@@ -3719,13 +5151,92 @@
     async function deleteProduct(id) {
         try {
             requireAdmin();
-            if (!confirm("确定删除这个商品吗？")) return;
+            if (!confirm("确定下架这个商品吗？历史订单会继续保留。")) return;
             await request(`/products/${id}?actorId=${state.user.id}`, {method: "DELETE"});
-            setNotice("商品已删除");
+            state.catalogProducts = [];
+            setNotice("商品已下架");
             await Promise.all([loadAdminProducts(), loadProducts(), loadAdminOverview()]);
         } catch (error) {
             setNotice(error.message);
         }
+    }
+
+    async function loadAdminCoupons() {
+        try {
+            requireAdmin();
+            const rows = await request(`/coupons?actorId=${state.user.id}`);
+            state.coupons = rows;
+            $("adminCoupons").innerHTML = rows.length ? `
+                <table>
+                    <thead><tr><th>ID</th><th>名称</th><th>编码</th><th>优惠</th><th>门槛</th><th>库存</th><th>状态</th><th>有效期</th><th>操作</th></tr></thead>
+                    <tbody>
+                    ${rows.map(row => `
+                        <tr>
+                            <td>${html(row.id)}</td>
+                            <td>${html(row.name)}</td>
+                            <td>${html(row.code)}</td>
+                            <td>￥${money(row.discount_amount)}</td>
+                            <td>￥${money(row.threshold_amount)}</td>
+                            <td>${html(row.stock)}</td>
+                            <td><span class="badge">${Number(row.status) === 1 ? "启用" : "停用"}</span></td>
+                            <td>${html(row.start_time || "-")} 至 ${html(row.end_time || "-")}</td>
+                            <td><button class="secondary" onclick="editCouponById(${row.id})">编辑</button></td>
+                        </tr>
+                    `).join("")}
+                    </tbody>
+                </table>
+            ` : emptyText("暂无优惠券");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function saveCoupon() {
+        try {
+            requireAdmin();
+            const payload = {
+                actorId: state.user.id,
+                name: $("couponName").value.trim(),
+                code: $("couponCode").value.trim(),
+                discountAmount: Number($("couponDiscount").value || 0),
+                thresholdAmount: Number($("couponThreshold").value || 0),
+                stock: Number($("couponStock").value || 0),
+                status: Number($("couponStatus").value),
+                startTime: datetimePayload($("couponStart").value),
+                endTime: datetimePayload($("couponEnd").value)
+            };
+            const path = state.editingCouponId ? `/coupons/${state.editingCouponId}` : "/coupons";
+            const method = state.editingCouponId ? "PUT" : "POST";
+            await request(path, {method, body: JSON.stringify(payload)});
+            setNotice(state.editingCouponId ? "优惠券已更新" : "优惠券已新增");
+            resetCouponForm();
+            await Promise.all([loadAdminCoupons(), loadAdminOverview()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function editCouponById(id) {
+        const row = state.coupons.find(item => Number(item.id) === Number(id));
+        if (!row) return;
+        state.editingCouponId = row.id;
+        $("couponName").value = row.name || "";
+        $("couponCode").value = row.code || "";
+        $("couponDiscount").value = row.discount_amount || 0;
+        $("couponThreshold").value = row.threshold_amount || 0;
+        $("couponStock").value = row.stock || 0;
+        $("couponStatus").value = String(row.status ?? 1);
+        $("couponStart").value = String(row.start_time || "").slice(0, 16);
+        $("couponEnd").value = String(row.end_time || "").slice(0, 16);
+        $("couponName").focus();
+    }
+
+    function resetCouponForm() {
+        state.editingCouponId = null;
+        ["couponName", "couponCode", "couponDiscount", "couponThreshold", "couponStock", "couponStart", "couponEnd"].forEach(id => {
+            if ($(id)) $(id).value = "";
+        });
+        if ($("couponStatus")) $("couponStatus").value = "1";
     }
 
     async function loadAdminOrders() {
@@ -3754,35 +5265,91 @@
 
     async function loadUsers() {
         try {
-            if (!isSuper()) throw new Error("超级管理员才能管理用户权限");
-            const rows = await request(`/users?actorId=${state.user.id}`);
+            requireAdmin();
+            const result = await request(`/users?actorId=${state.user.id}&status=${state.userStatusFilter}&page=${state.userPage}&pageSize=10`);
+            const rows = result.rows || result;
+            state.userPage = result.page || state.userPage;
+            updateUserStatusButtons();
             $("users").innerHTML = rows.length ? `
                 <table>
-                    <thead><tr><th>ID</th><th>用户名</th><th>手机号</th><th>身份</th><th>操作</th></tr></thead>
+                    <thead><tr><th>ID</th><th>用户名</th><th>昵称</th><th>手机号</th><th>身份</th><th>状态</th><th>操作</th></tr></thead>
                     <tbody>
                     ${rows.map(row => `
                         <tr>
                             <td>${html(row.id)}</td>
                             <td>${html(row.username)}</td>
+                            <td>${html(row.nickname || "")}</td>
                             <td>${html(row.phone || "")}</td>
                             <td><span class="badge">${html(roleNames[row.role] || row.role)}</span></td>
-                            <td>${row.role === "super_admin" ? "超级管理员" : `
-                                <div class="actions">
-                                    <select id="role-${row.id}" style="width:150px">
-                                        <option value="user" ${row.role === "user" ? "selected" : ""}>普通用户</option>
-                                        <option value="admin" ${row.role === "admin" ? "selected" : ""}>管理员</option>
-                                    </select>
-                                    <button onclick="updateUserRole(${row.id})">保存</button>
-                                </div>
-                            `}</td>
+                            <td>${Number(row.status) === 1 ? "正常" : "已禁用"}</td>
+                            <td>${renderUserActions(row)}</td>
                         </tr>
                     `).join("")}
                     </tbody>
                 </table>
             ` : emptyText("暂无用户");
+            renderUsersPagination(result.pages || 1);
         } catch (error) {
             setNotice(error.message);
         }
+    }
+
+    function setUserStatusFilter(status) {
+        state.userStatusFilter = status;
+        state.userPage = 1;
+        loadUsers();
+    }
+
+    function updateUserStatusButtons() {
+        ["1", "0", "all"].forEach(status => {
+            const button = $(`userStatus${status}`);
+            if (button) button.classList.toggle("active", state.userStatusFilter === status);
+        });
+    }
+
+    function changeUserPage(delta) {
+        state.userPage = Math.max(1, state.userPage + delta);
+        loadUsers();
+    }
+
+    function renderUsersPagination(totalPages) {
+        $("usersPagination").innerHTML = totalPages > 1 ? `
+            <button class="ghost" onclick="changeUserPage(-1)" ${state.userPage <= 1 ? "disabled" : ""}>上一页</button>
+            <span class="muted">第 ${state.userPage} / ${totalPages} 页</span>
+            <button class="ghost" onclick="changeUserPage(1)" ${state.userPage >= totalPages ? "disabled" : ""}>下一页</button>
+        ` : "";
+    }
+
+    function renderUserActions(row) {
+        if (Number(row.status) === 0) {
+            if (row.role === "super_admin") return "超级管理员";
+            if (isSuper() || row.role === "user") {
+                return `<button class="secondary" onclick="restoreUser(${row.id})">恢复</button>`;
+            }
+            return "无权限";
+        }
+        if (row.role === "super_admin") {
+            return "超级管理员";
+        }
+        if (Number(row.id) === Number(state.user.id)) {
+            return "当前账号";
+        }
+        if (isSuper()) {
+            return `
+                <div class="actions">
+                    <button onclick="updateUserRole(${row.id})">设为管理员</button>
+                    <button class="ghost" onclick="deleteUser(${row.id})">删除</button>
+                </div>
+            `;
+        }
+        if (row.role === "user") {
+            return `
+                <div class="actions">
+                    <button class="ghost" onclick="deleteUser(${row.id})">删除</button>
+                </div>
+            `;
+        }
+        return "无权限";
     }
 
     async function updateUserRole(id) {
@@ -3790,10 +5357,80 @@
             if (!isSuper()) throw new Error("超级管理员才能管理用户权限");
             await request(`/users/${id}/role`, {
                 method: "PUT",
-                body: JSON.stringify({actorId: state.user.id, role: $(`role-${id}`).value})
+                body: JSON.stringify({actorId: state.user.id, role: "admin"})
             });
-            setNotice("用户身份已更新");
+            setNotice("用户已设为管理员");
+            await Promise.all([loadUsers(), loadAdmins(), loadAdminOverview()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function deleteUser(id) {
+        try {
+            requireAdmin();
+            if (!confirm("确定禁用这个账号吗？历史订单会保留，账号将无法继续登录。")) return;
+            await request(`/users/${id}?actorId=${state.user.id}`, {method: "DELETE"});
+            setNotice("账号已禁用");
             await Promise.all([loadUsers(), loadAdminOverview()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function restoreUser(id) {
+        try {
+            requireAdmin();
+            await request(`/users/${id}/restore`, {method: "PUT"});
+            setNotice("账号已恢复");
+            await Promise.all([loadUsers(), loadAdminOverview()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function loadAdmins() {
+        if (!$("admins")) return;
+        try {
+            requireAdmin();
+            const rows = await request("/admins");
+            $("admins").innerHTML = rows.length ? `
+                <table>
+                    <thead><tr><th>ID</th><th>账号</th><th>昵称</th><th>手机号</th><th>身份</th><th>部门</th><th>操作</th></tr></thead>
+                    <tbody>
+                    ${rows.map(row => `
+                        <tr>
+                            <td>${html(row.id)}</td>
+                            <td>${html(row.username)}</td>
+                            <td>${html(row.nickname || "")}</td>
+                            <td>${html(row.phone || "")}</td>
+                            <td><span class="badge">${html(roleNames[row.role] || row.role)}</span></td>
+                            <td>${html(row.department || "")}</td>
+                            <td>${renderAdminActions(row)}</td>
+                        </tr>
+                    `).join("")}
+                    </tbody>
+                </table>
+            ` : emptyText("暂无管理员");
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function renderAdminActions(row) {
+        if (row.role === "super_admin") return "超级管理员";
+        if (Number(row.id) === Number(state.user.id) && state.user.account_type === "admin") return "当前账号";
+        if (!isSuper()) return "无权限";
+        return `<button class="ghost" onclick="deleteAdmin(${row.id})">删除</button>`;
+    }
+
+    async function deleteAdmin(id) {
+        try {
+            if (!isSuper()) throw new Error("超级管理员才能删除管理员");
+            if (!confirm("确定禁用这个管理员账号吗？")) return;
+            await request(`/admins/${id}`, {method: "DELETE"});
+            setNotice("管理员已禁用");
+            await Promise.all([loadAdmins(), loadAdminOverview()]);
         } catch (error) {
             setNotice(error.message);
         }

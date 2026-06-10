@@ -652,6 +652,405 @@
             margin-bottom: 4px;
         }
 
+        [v-cloak] {
+            display: none;
+        }
+
+        .vue-showcase {
+            margin: 14px auto;
+        }
+
+        .vue-showcase-inner {
+            display: grid;
+            grid-template-columns: minmax(0, 1.5fr) minmax(280px, .72fr);
+            gap: 14px;
+            align-items: stretch;
+        }
+
+        .vue-curation-panel,
+        .vue-live-panel {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            background: #fff;
+            box-shadow: var(--shadow);
+        }
+
+        .vue-curation-panel {
+            padding: 16px;
+            overflow: hidden;
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            margin-bottom: 6px;
+            padding: 3px 9px;
+            border-radius: 999px;
+            background: #fff1f2;
+            color: var(--brand);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .vue-mode-tabs {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .vue-mode-tabs button {
+            min-height: 32px;
+            padding: 6px 11px;
+            border-color: #e2e8f0;
+            background: #fff;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .vue-mode-tabs button.active {
+            border-color: #111827;
+            background: #111827;
+            color: #fff;
+        }
+
+        .smart-showcase-hero {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            gap: 12px;
+            align-items: center;
+            margin: -2px -2px 12px;
+            padding: 16px;
+            border-radius: 8px;
+            background:
+                linear-gradient(115deg, rgba(17, 24, 39, .94), rgba(201, 22, 35, .72)),
+                url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80") center/cover;
+            color: #fff;
+        }
+
+        .smart-showcase-hero .eyebrow {
+            background: rgba(255, 255, 255, .14);
+            color: #fff;
+        }
+
+        .smart-showcase-hero .muted {
+            color: rgba(255, 255, 255, .82);
+        }
+
+        .smart-showcase-hero .vue-mode-tabs button {
+            border-color: rgba(255, 255, 255, .24);
+            background: rgba(255, 255, 255, .10);
+            color: #fff;
+        }
+
+        .smart-showcase-hero .vue-mode-tabs button.active {
+            border-color: #fff;
+            background: #fff;
+            color: #111827;
+        }
+
+        .vue-title-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            flex-wrap: wrap;
+        }
+
+        .smart-state {
+            display: inline-flex;
+            align-items: center;
+            min-height: 24px;
+            padding: 3px 8px;
+            border-radius: 999px;
+            background: rgba(255, 255, 255, .16);
+            color: rgba(255, 255, 255, .92);
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .vue-search-row {
+            display: grid;
+            grid-template-columns: minmax(220px, 1fr) auto;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .vue-chip-row {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            margin-top: 10px;
+        }
+
+        .vue-chip-row button {
+            min-height: 30px;
+            padding: 5px 10px;
+            border-color: #e2e8f0;
+            border-radius: 999px;
+            background: #fff;
+            color: #475569;
+            font-size: 13px;
+        }
+
+        .vue-chip-row button.active,
+        .vue-chip-row button:hover {
+            border-color: #fecaca;
+            background: #fff1f2;
+            color: var(--brand);
+        }
+
+        .smart-curation-layout {
+            display: grid;
+            grid-template-columns: minmax(0, 1.06fr) minmax(300px, .82fr);
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        .smart-feature-card,
+        .smart-rank-row {
+            border: 1px solid #edf0f5;
+            border-radius: 8px;
+            background: #fff;
+            color: var(--ink);
+            cursor: pointer;
+            text-align: left;
+        }
+
+        .smart-feature-card {
+            display: grid;
+            grid-template-columns: minmax(180px, .9fr) minmax(0, 1fr);
+            gap: 14px;
+            min-height: 250px;
+            padding: 12px;
+            overflow: hidden;
+            box-shadow: 0 14px 28px rgba(15, 23, 42, .08);
+        }
+
+        .smart-feature-card:hover,
+        .smart-rank-row:hover {
+            border-color: #fecaca;
+            box-shadow: 0 16px 30px rgba(15, 23, 42, .10);
+        }
+
+        .smart-feature-card img {
+            width: 100%;
+            height: 100%;
+            min-height: 220px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #f1f5f9;
+        }
+
+        .smart-feature-info {
+            display: grid;
+            align-content: center;
+            gap: 10px;
+            min-width: 0;
+        }
+
+        .smart-feature-info h3 {
+            font-size: 23px;
+            line-height: 1.25;
+        }
+
+        .smart-feature-desc {
+            display: -webkit-box;
+            overflow: hidden;
+            color: #64748b;
+            font-size: 14px;
+            line-height: 1.7;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .smart-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .smart-metric {
+            min-height: 56px;
+            padding: 9px;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .smart-metric span {
+            display: block;
+            color: #64748b;
+            font-size: 12px;
+        }
+
+        .smart-metric strong {
+            display: block;
+            margin-top: 4px;
+            color: #111827;
+            font-size: 16px;
+        }
+
+        .smart-rank-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .smart-rank-row {
+            display: grid;
+            grid-template-columns: 42px 62px minmax(0, 1fr) auto;
+            gap: 10px;
+            align-items: center;
+            min-height: 78px;
+            padding: 8px;
+        }
+
+        .smart-rank-row img {
+            width: 62px;
+            height: 62px;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #f1f5f9;
+        }
+
+        .smart-rank-row h3 {
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+
+        .vue-feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .vue-mini-card {
+            display: grid;
+            gap: 9px;
+            min-width: 0;
+            min-height: 218px;
+            padding: 10px;
+            border: 1px solid #edf0f5;
+            border-radius: 8px;
+            background: linear-gradient(180deg, #fff, #fafafa);
+            color: var(--ink);
+            text-align: left;
+            box-shadow: 0 10px 18px rgba(15, 23, 42, .04);
+        }
+
+        .vue-mini-card:hover {
+            border-color: #fecaca;
+            box-shadow: 0 16px 28px rgba(15, 23, 42, .10);
+        }
+
+        .vue-mini-card img {
+            width: 100%;
+            aspect-ratio: 1 / .78;
+            border-radius: 6px;
+            object-fit: cover;
+            background: #f1f5f9;
+        }
+
+        .vue-mini-card h3 {
+            display: -webkit-box;
+            min-height: 42px;
+            overflow: hidden;
+            color: #172033;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+        }
+
+        .vue-card-meta {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            min-width: 0;
+        }
+
+        .vue-rank {
+            display: grid;
+            place-items: center;
+            width: 28px;
+            height: 28px;
+            border-radius: 8px;
+            background: #111827;
+            color: #fff;
+            font-size: 13px;
+            font-weight: 900;
+        }
+
+        .vue-empty {
+            display: grid;
+            place-items: center;
+            min-height: 160px;
+            margin-top: 12px;
+            border: 1px dashed #d7dce3;
+            border-radius: 8px;
+            background: #f8fafc;
+            color: #64748b;
+            font-weight: 700;
+        }
+
+        .vue-live-panel {
+            display: grid;
+            align-content: start;
+            gap: 12px;
+            padding: 16px;
+        }
+
+        .vue-metric-list {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .vue-metric {
+            min-height: 72px;
+            padding: 11px;
+            border: 1px solid #edf0f5;
+            border-radius: 8px;
+            background: #f8fafc;
+        }
+
+        .vue-metric span {
+            display: block;
+            margin-bottom: 4px;
+            color: var(--subtle);
+            font-size: 12px;
+        }
+
+        .vue-metric strong {
+            color: #111827;
+            font-size: 22px;
+            line-height: 1.1;
+        }
+
+        .vue-topic-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .vue-topic {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            min-height: 38px;
+            padding: 8px 10px;
+            border: 1px solid #edf0f5;
+            border-radius: 8px;
+            background: #fff;
+            color: #334155;
+            text-align: left;
+        }
+
+        .vue-topic:hover {
+            border-color: #fecaca;
+            color: var(--brand);
+        }
+
         .muted {
             color: var(--subtle);
             font-size: 13px;
@@ -2138,6 +2537,9 @@
             .admin-layout,
             .profile-layout,
             .admin-product-grid,
+            .vue-showcase-inner,
+            .smart-curation-layout,
+            .smart-feature-card,
             .market-hero,
             .channel-row,
             .detail-top,
@@ -2151,6 +2553,10 @@
             .market-kpis,
             .detail-service-grid,
             .review-summary {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .vue-feature-grid {
                 grid-template-columns: repeat(2, minmax(0, 1fr));
             }
         }
@@ -2207,6 +2613,11 @@
             .market-kpis,
             .brand-grid,
             .channel-card-grid,
+            .vue-search-row,
+            .vue-feature-grid,
+            .vue-metric-list,
+            .smart-showcase-hero,
+            .smart-metrics,
             .quantity-row,
             .detail-metrics {
                 grid-template-columns: 1fr;
@@ -2405,6 +2816,93 @@
         <button class="service-item" onclick="showTab('deals')"><strong>补贴秒杀</strong><span class="muted">热门好价集中看</span></button>
         <button class="service-item" onclick="showTab('brands')"><strong>品牌优选</strong><span class="muted">按场景快速选</span></button>
         <button class="service-item" onclick="showTab('service')"><strong>省心售后</strong><span class="muted">订单物流随时查</span></button>
+    </section>
+
+    <section id="vueMallShowcase" class="wrap vue-showcase" v-cloak>
+        <div class="vue-showcase-inner">
+            <div class="vue-curation-panel">
+                <div class="smart-showcase-hero">
+                    <div>
+                        <span class="eyebrow">{{ eyebrow }}</span>
+                        <div class="vue-title-row">
+                            <h2>{{ title }}</h2>
+                            <span class="smart-state">{{ activeSummary }}</span>
+                        </div>
+                        <div class="muted" style="margin-top:6px">{{ subtitle }}</div>
+                    </div>
+                    <div class="vue-mode-tabs">
+                        <button v-for="item in modes" :key="item.value" :class="{active: mode === item.value}" @click="selectMode(item.value)">
+                            {{ item.label }}
+                        </button>
+                    </div>
+                </div>
+                <div class="vue-search-row">
+                    <input v-model.trim="keyword" placeholder="搜索商品、分类、卖点">
+                    <button class="ghost" @click="clearKeyword">全部</button>
+                </div>
+                <div class="vue-chip-row">
+                    <button v-for="topic in hotTopics" :key="topic" :class="{active: keyword === topic}" @click="selectTopic(topic)">
+                        {{ topic }}
+                    </button>
+                </div>
+                <div v-if="loading" class="vue-empty">正在加载精选商品</div>
+                <div v-else-if="!topPicks.length" class="vue-empty">暂无匹配商品</div>
+                <div v-else class="smart-curation-layout">
+                    <article v-if="featuredProduct" class="smart-feature-card" tabindex="0" @click="openProduct(featuredProduct)" @keydown.enter="openProduct(featuredProduct)">
+                        <img :src="featuredProduct.image || fallbackImage" :alt="featuredProduct.name" @error="imageFallback">
+                        <div class="smart-feature-info">
+                            <span class="badge">{{ featuredProduct.category || "综合" }}</span>
+                            <h3>{{ featuredProduct.name }}</h3>
+                            <div class="smart-feature-desc">{{ featuredProduct.subtitle || featuredProduct.description || "精选平台好物" }}</div>
+                            <div class="price" style="font-size:28px">￥{{ money(productPrice(featuredProduct)) }}</div>
+                            <div class="smart-metrics">
+                                <div class="smart-metric"><span>销量</span><strong>{{ intText(featuredProduct.sales_count) }}</strong></div>
+                                <div class="smart-metric"><span>好评</span><strong>{{ percentText(featuredProduct.positive_rate) }}</strong></div>
+                                <div class="smart-metric"><span>库存</span><strong>{{ productStock(featuredProduct) }}</strong></div>
+                            </div>
+                            <div class="actions">
+                                <button type="button">查看详情</button>
+                                <button type="button" class="secondary" @click.stop="quickAddCart(featuredProduct)">加入购物车</button>
+                            </div>
+                        </div>
+                    </article>
+                    <div class="smart-rank-list">
+                        <button v-for="(product, index) in sidePicks" :key="product.id" class="smart-rank-row" @click="openProduct(product)">
+                            <span class="vue-rank">{{ index + 2 }}</span>
+                            <img :src="product.image || fallbackImage" :alt="product.name" @error="imageFallback">
+                            <div>
+                                <h3>{{ product.name }}</h3>
+                                <div class="muted">{{ product.category || "综合" }} · {{ productLabel(product) }}</div>
+                            </div>
+                            <span class="price" style="font-size:16px">￥{{ money(productPrice(product)) }}</span>
+                        </button>
+                        <div v-if="!sidePicks.length" class="vue-empty" style="min-height:120px">暂无更多推荐</div>
+                    </div>
+                </div>
+            </div>
+            <aside class="vue-live-panel">
+                <div>
+                    <span class="eyebrow">{{ sideEyebrow }}</span>
+                    <h2>{{ memberTitle }}</h2>
+                    <div class="muted" style="margin-top:6px">{{ memberSubtitle }}</div>
+                </div>
+                <div class="vue-metric-list">
+                    <div class="vue-metric"><span>在售商品</span><strong>{{ metrics.productCount }}</strong></div>
+                    <div class="vue-metric"><span>当前分类</span><strong style="font-size:18px">{{ metrics.category }}</strong></div>
+                    <div class="vue-metric"><span>购物车</span><strong>{{ metrics.cartCount }}</strong></div>
+                    <div class="vue-metric"><span>订单</span><strong>{{ metrics.orderCount }}</strong></div>
+                </div>
+                <div class="actions">
+                    <button type="button" @click="goPrimary">{{ primaryActionText }}</button>
+                    <button type="button" class="ghost" @click="goOrders">订单进度</button>
+                </div>
+                <div class="vue-topic-list">
+                    <button v-for="topic in hotTopics" :key="topic" class="vue-topic" @click="selectTopic(topic)">
+                        <span>{{ topic }}</span><span>›</span>
+                    </button>
+                </div>
+            </aside>
+        </div>
     </section>
 
     <section class="wrap workspace">
@@ -2986,6 +3484,7 @@
 </div>
 </div>
 
+<script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
 <script>
     const firstPathPart = location.pathname.split("/").filter(Boolean)[0] || "";
     const contextPath = firstPathPart.includes(".") ? "" : firstPathPart;
@@ -3060,7 +3559,8 @@
         products: [],
         visibleProducts: [],
         cartRows: [],
-        coupons: []
+        coupons: [],
+        vueShowcase: null
     };
 
     const $ = id => document.getElementById(id);
@@ -3073,11 +3573,13 @@
     function setCartBadges(count) {
         const text = String(count || 0);
         ["cartCount", "profileCartCount", "headerCartCount", "floatCartBadge"].forEach(id => setText(id, text));
+        refreshVueShowcase();
     }
 
     function setOrderBadges(count) {
         const text = String(count || 0);
         ["orderCount", "profileOrderCount", "headerOrderCount"].forEach(id => setText(id, text));
+        refreshVueShowcase();
     }
 
     function html(value) {
@@ -3236,8 +3738,192 @@
         setAuthMode(state.authMode);
         updateAuthView();
         updateChannelNav();
+        initVueShowcase();
         if (state.user) loadProducts();
         renderRecentViewed();
+    }
+
+    function initVueShowcase() {
+        const mountPoint = $("vueMallShowcase");
+        if (!mountPoint || state.vueShowcase) return;
+        if (!window.Vue) {
+            mountPoint.classList.add("hidden");
+            return;
+        }
+        state.vueShowcase = Vue.createApp({
+            data() {
+                return {
+                    mode: "sales",
+                    keyword: "",
+                    loading: true,
+                    products: [],
+                    account: state.user ? {...state.user} : null,
+                    modes: [
+                        {label: "热销榜", value: "sales"},
+                        {label: "好评优选", value: "rating"},
+                        {label: "价格友好", value: "value"}
+                    ],
+                    metrics: {
+                        productCount: "0",
+                        category: "全部",
+                        cartCount: "0",
+                        orderCount: "0"
+                    },
+                    fallbackImage
+                };
+            },
+            computed: {
+                eyebrow() {
+                    return this.mode === "sales" ? "今日热卖" : this.mode === "rating" ? "口碑精选" : "省心价";
+                },
+                title() {
+                    return this.mode === "sales" ? "大家都在买" : this.mode === "rating" ? "好评值得看" : "省心好价";
+                },
+                subtitle() {
+                    return this.mode === "sales"
+                        ? "从当前商品池中挑出销量更高的单品"
+                        : this.mode === "rating"
+                            ? "按评分和好评率优先推荐"
+                            : "适合日常补货和随手加购";
+                },
+                isManagerAccount() {
+                    return this.account && (this.account.role === "admin" || this.account.role === "super_admin");
+                },
+                sideEyebrow() {
+                    return this.isManagerAccount ? "运营入口" : "会员看板";
+                },
+                memberTitle() {
+                    if (!this.account) return "登录后查看权益";
+                    if (this.isManagerAccount) return "进入运营中心";
+                    const name = this.account.nickname || this.account.username || "会员";
+                    return `${name}，为你精选`;
+                },
+                memberSubtitle() {
+                    if (!this.account) return "登录后同步购物车、订单和收藏状态";
+                    return this.isManagerAccount ? "商品、订单、售后和用户管理集中处理" : "根据当前商品和你的购物状态展示推荐";
+                },
+                primaryActionText() {
+                    if (!this.account) return "去登录";
+                    return this.isManagerAccount ? "运营中心" : "个人主页";
+                },
+                hotTopics() {
+                    const rows = this.products.map(row => row.category || "综合");
+                    return ["全部", ...new Set(rows)].filter(Boolean).slice(0, 7);
+                },
+                filteredProducts() {
+                    const keyword = this.keyword.trim().toLowerCase();
+                    if (!keyword || keyword === "全部") return this.products;
+                    return this.products.filter(product => {
+                        const source = `${product.name || ""} ${product.category || ""} ${product.subtitle || ""} ${product.description || ""}`.toLowerCase();
+                        return source.includes(keyword);
+                    });
+                },
+                topPicks() {
+                    const rows = [...this.filteredProducts].filter(row => productStock(row) > 0);
+                    if (this.mode === "rating") {
+                        rows.sort((a, b) =>
+                            Number(b.positive_rate || 0) - Number(a.positive_rate || 0)
+                            || Number(b.avg_score || 0) - Number(a.avg_score || 0)
+                            || Number(b.sales_count || 0) - Number(a.sales_count || 0)
+                        );
+                    } else if (this.mode === "value") {
+                        rows.sort((a, b) => productPrice(a) - productPrice(b) || Number(b.sales_count || 0) - Number(a.sales_count || 0));
+                    } else {
+                        rows.sort((a, b) => Number(b.sales_count || 0) - Number(a.sales_count || 0) || Number(b.id || 0) - Number(a.id || 0));
+                    }
+                    return rows.slice(0, 8);
+                },
+                featuredProduct() {
+                    return this.topPicks[0] || null;
+                },
+                sidePicks() {
+                    return this.topPicks.slice(1, 6);
+                },
+                activeSummary() {
+                    const count = this.filteredProducts.filter(row => productStock(row) > 0).length;
+                    return this.keyword ? `${this.keyword} · ${count}件` : `${count}件可选`;
+                }
+            },
+            methods: {
+                async load() {
+                    this.loading = true;
+                    try {
+                        const rows = await ensureCatalogProducts();
+                        this.products = rows;
+                        this.sync();
+                    } catch (error) {
+                        setNotice(error.message);
+                    } finally {
+                        this.loading = false;
+                    }
+                },
+                sync() {
+                    const rows = state.catalogProducts.length ? state.catalogProducts : state.products;
+                    if (rows.length) this.products = rows;
+                    this.account = state.user ? {...state.user} : null;
+                    this.metrics = {
+                        productCount: String((state.catalogProducts.length || this.products.length || 0)),
+                        category: state.selectedCategory || "全部",
+                        cartCount: $("cartCount")?.textContent || "0",
+                        orderCount: $("orderCount")?.textContent || "0"
+                    };
+                },
+                selectMode(mode) {
+                    this.mode = mode;
+                },
+                selectTopic(topic) {
+                    this.keyword = topic === "全部" ? "" : topic;
+                },
+                clearKeyword() {
+                    this.keyword = "";
+                },
+                openProduct(product) {
+                    openProductDetail(product.id);
+                },
+                async quickAddCart(product) {
+                    await addCart(product.id, 1);
+                },
+                goPrimary() {
+                    if (!this.account) {
+                        state.authStage = "form";
+                        state.authMode = "login";
+                        updateAuthView();
+                        return;
+                    }
+                    showTab(this.isManagerAccount ? "admin" : "profile");
+                },
+                goOrders() {
+                    if (this.isManagerAccount) {
+                        showTab("admin");
+                        showAdminSection("orders");
+                        return;
+                    }
+                    showTab("orders");
+                },
+                productPrice,
+                money,
+                productStock,
+                intText,
+                percentText,
+                imageFallback(event) {
+                    event.target.src = fallbackImage;
+                },
+                productLabel(product) {
+                    if (this.mode === "rating") return `好评 ${percentText(product.positive_rate)}`;
+                    if (this.mode === "value") return `${productStock(product)} 件有货`;
+                    return `销量 ${intText(product.sales_count)}`;
+                }
+            },
+            mounted() {
+                this.load();
+            }
+        }).mount("#vueMallShowcase");
+    }
+
+    function refreshVueShowcase() {
+        if (state.vueShowcase && typeof state.vueShowcase.sync === "function") {
+            state.vueShowcase.sync();
+        }
     }
 
     function renderCarousel() {
@@ -3424,6 +4110,7 @@
         $("memberName").textContent = displayName;
         $("memberAvatar").textContent = displayName.slice(0, 1);
         renderMemberTags();
+        refreshVueShowcase();
 
         document.querySelectorAll(".admin-only").forEach(el => el.classList.toggle("hidden", !isAdmin()));
         document.querySelectorAll(".super-only").forEach(el => el.classList.toggle("hidden", !isSuper()));
@@ -3736,6 +4423,7 @@
         $("productHint").textContent = `${categoryText}${keyword ? `搜索：${keyword} · ` : ""}共 ${rows.length} 件商品`;
         renderActiveFilters(rows);
         renderProductPagination(totalPages);
+        refreshVueShowcase();
     }
 
     function toggleStockOnly() {

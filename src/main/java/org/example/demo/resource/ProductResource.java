@@ -142,6 +142,7 @@ public class ProductResource extends BaseResource {
 
     @POST
     public Map<String, Object> create(@Context HttpHeaders headers, ProductRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         requireAdmin(headers, request == null ? null : request.actorId);
         validate(request);
         String image = storeImageIfNeeded(request.image);
@@ -162,6 +163,7 @@ public class ProductResource extends BaseResource {
     public Map<String, Object> updateProduct(@Context HttpHeaders headers,
                                              @PathParam("id") int id,
                                              ProductRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         requireAdmin(headers, request == null ? null : request.actorId);
         validate(request);
         String image = storeImageIfNeeded(request.image);

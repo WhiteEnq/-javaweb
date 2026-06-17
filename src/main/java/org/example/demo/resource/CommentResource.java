@@ -57,6 +57,7 @@ public class CommentResource extends BaseResource {
 
     @POST
     public Map<String, Object> create(@Context HttpHeaders headers, CommentRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.userId != null && request.productId != null, "请先登录并选择商品");
         Map<String, Object> user = requireUser(headers, null);
         requireSameUser(user, request.userId);

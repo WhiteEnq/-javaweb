@@ -55,6 +55,7 @@ public class CouponResource extends BaseResource {
     @POST
     @Path("/claim")
     public Map<String, Object> claim(@Context HttpHeaders headers, CouponRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.userId != null && request.couponId != null, "请先登录并选择优惠券");
         Map<String, Object> user = requireUser(headers, null);
         requireSameUser(user, request.userId);
@@ -79,6 +80,7 @@ public class CouponResource extends BaseResource {
 
     @POST
     public Map<String, Object> create(@Context HttpHeaders headers, CouponRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         requireManager(headers, request.actorId, "只有管理员可以管理优惠券");
         validate(request);
         int id = insert("""
@@ -94,6 +96,7 @@ public class CouponResource extends BaseResource {
     public Map<String, Object> updateCoupon(@Context HttpHeaders headers,
                                             @PathParam("id") int id,
                                             CouponRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         requireManager(headers, request.actorId, "只有管理员可以管理优惠券");
         validate(request);
         requireRows(update("""

@@ -23,7 +23,7 @@ import java.util.Map;
 public class AdminResource extends BaseResource {
     @GET
     public Map<String, Object> list(@Context HttpHeaders headers) throws Exception {
-        requireManager(headers, null, "只有管理员可以查看管理员列表");
+        requireSuperAdmin(headers, null);
         return ok(query("""
                 select id, username, nickname, phone, admin_level role, admin_level,
                        department, remark, status, create_time admin_create_time

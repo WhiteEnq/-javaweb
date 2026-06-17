@@ -32,7 +32,7 @@ public class UserResource extends BaseResource {
                                     @QueryParam("pageSize") Integer pageSize) throws Exception {
         List<Object> params = new ArrayList<>();
         StringBuilder where = new StringBuilder(" where 1 = 1");
-        requireManager(headers, null, "只有管理员可以管理用户");
+        requireSuperAdmin(headers, null);
         if (status == null || status.isBlank()) {
             where.append(" and status = 1");
         } else if (!"all".equalsIgnoreCase(status)) {
@@ -65,6 +65,7 @@ public class UserResource extends BaseResource {
     @POST
     @Path("/register")
     public Map<String, Object> register(UserRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.username != null && !request.username.isBlank(), "请填写用户名");
         require(request.password != null && !request.password.isBlank(), "请填写密码");
         String username = request.username.trim();
@@ -83,6 +84,7 @@ public class UserResource extends BaseResource {
     @POST
     @Path("/login")
     public Map<String, Object> login(LoginRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.username != null && !request.username.isBlank(), "请填写用户名");
         require(request.password != null && !request.password.isBlank(), "请填写密码");
         String username = request.username.trim();
@@ -133,6 +135,7 @@ public class UserResource extends BaseResource {
     public Map<String, Object> updateUser(@Context HttpHeaders headers,
                                           @PathParam("id") int id,
                                           UserRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         Map<String, Object> operator = requireUser(headers, null);
         requireSameUser(operator, id);
         Map<String, Object> current = queryOne("""
@@ -169,6 +172,7 @@ public class UserResource extends BaseResource {
     public Map<String, Object> updateRole(@Context HttpHeaders headers,
                                           @PathParam("id") int id,
                                           RoleRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.role != null, "请选择用户身份");
         require("admin".equals(request.role), "当前操作只支持把普通用户设为管理员");
         requireSuperAdmin(headers, null);
@@ -197,7 +201,7 @@ public class UserResource extends BaseResource {
     public Map<String, Object> deleteUser(@Context HttpHeaders headers,
                                           @PathParam("id") int id,
                                           @QueryParam("actorId") Integer actorId) throws Exception {
-        requireManager(headers, null, "只有管理员可以管理用户");
+        requireSuperAdmin(headers, null);
         Map<String, Object> target = queryOne("select id from `user` where id = ? and status = 1", id);
         if (target == null) {
             throw new ApiException(404, "用户不存在");
@@ -211,7 +215,7 @@ public class UserResource extends BaseResource {
     @Path("/{id}/restore")
     public Map<String, Object> restoreUser(@Context HttpHeaders headers,
                                            @PathParam("id") int id) throws Exception {
-        requireManager(headers, null, "只有管理员可以管理用户");
+        requireSuperAdmin(headers, null);
         Map<String, Object> target = queryOne("select id, status from `user` where id = ?", id);
         if (target == null) {
             throw new ApiException(404, "用户不存在");

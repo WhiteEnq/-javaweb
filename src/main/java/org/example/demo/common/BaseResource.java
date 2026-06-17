@@ -64,16 +64,7 @@ public abstract class BaseResource {
         if (user != null) {
             return user;
         }
-        if (fallbackUserId != null) {
-            user = queryOne("""
-                    select id, username, nickname, phone, address, tags, 'user' role, status, 'user' account_type
-                    from `user`
-                    where id = ? and status = 1
-                    """, fallbackUserId);
-            if (user != null) {
-                return user;
-            }
-        }
+        fallbackUserId = null;
         throw new ApiException(401, "请先登录");
     }
 

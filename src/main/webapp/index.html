@@ -6,18 +6,23 @@
     <title>柚子妹妹网购</title>
     <style>
         :root {
-            --brand: #c91623;
-            --brand-dark: #991b1b;
-            --ink: #172033;
-            --subtle: #64748b;
-            --line: #e5e7eb;
-            --soft: #f7f8fa;
+            --brand: #f15b98;
+            --brand-dark: #a92f5e;
+            --brand-soft: #fff4f8;
+            --accent: #ff86b7;
+            --accent-2: #f59e0b;
+            --ink: #4b2a3c;
+            --subtle: #7e6373;
+            --line: #f6d8e4;
+            --soft: #fff4f8;
             --gold: #f59e0b;
             --green: #059669;
             --surface: #ffffff;
-            --surface-2: #f8fafc;
-            --shadow: 0 14px 30px rgba(15, 23, 42, .08);
-            --shadow-strong: 0 22px 48px rgba(15, 23, 42, .14);
+            --surface-2: #fff7fb;
+            --glass: rgba(255, 255, 255, .88);
+            --soft-border: rgba(236, 72, 153, .18);
+            --shadow: 0 18px 50px rgba(167, 52, 101, .16);
+            --shadow-strong: 0 24px 58px rgba(167, 52, 101, .22);
         }
 
         * {
@@ -29,12 +34,90 @@
         }
 
         body {
+            position: relative;
+            min-height: 100vh;
+            overflow-x: hidden;
             margin: 0;
             color: var(--ink);
             background:
-                radial-gradient(circle at 18% 0, rgba(201, 22, 35, .08), transparent 28%),
-                linear-gradient(180deg, #fff 0, #f5f7fb 260px, #f3f4f6 100%);
+                radial-gradient(circle at 12% 8%, rgba(255, 159, 202, .42), transparent 28%),
+                radial-gradient(circle at 88% 18%, rgba(251, 113, 133, .30), transparent 26%),
+                linear-gradient(120deg, rgba(255, 241, 247, .98), rgba(255, 247, 251, .90), rgba(255, 236, 245, .96)),
+                linear-gradient(180deg, #fff 0, #fff5fa 260px, #fdebf3 100%);
+            background-size: 160% 160%, 150% 150%, 220% 220%, 100% 100%;
             font-family: Arial, "Microsoft YaHei", sans-serif;
+            animation: pageGradientShift 16s ease-in-out infinite;
+        }
+
+        body::before,
+        body::after {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            pointer-events: none;
+            content: "";
+        }
+
+        body::before {
+            opacity: .68;
+            background:
+                radial-gradient(circle at 18% 22%, rgba(255, 255, 255, .82) 0 3px, transparent 4px),
+                radial-gradient(circle at 72% 16%, rgba(255, 159, 202, .42) 0 4px, transparent 5px),
+                radial-gradient(circle at 84% 66%, rgba(255, 255, 255, .72) 0 3px, transparent 4px),
+                radial-gradient(circle at 34% 78%, rgba(251, 113, 133, .28) 0 5px, transparent 6px);
+            background-size: 240px 240px, 320px 320px, 280px 280px, 360px 360px;
+            animation: sparkleDrift 24s linear infinite;
+        }
+
+        body::after {
+            inset: -20% -10%;
+            opacity: .18;
+            background:
+                conic-gradient(from 120deg at 20% 30%, transparent, rgba(236, 72, 153, .55), transparent 26%),
+                conic-gradient(from -30deg at 80% 60%, transparent, rgba(251, 113, 133, .46), transparent 24%);
+            filter: blur(36px);
+            animation: auroraFloat 18s ease-in-out infinite;
+        }
+
+        body > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes pageGradientShift {
+            0%, 100% { background-position: 0% 50%, 100% 30%, 0% 50%, 0 0; }
+            50% { background-position: 100% 50%, 0% 70%, 100% 50%, 0 0; }
+        }
+
+        @keyframes sparkleDrift {
+            from { background-position: 0 0, 0 0, 0 0, 0 0; }
+            to { background-position: 240px 260px, -320px 280px, 280px -240px, -360px -300px; }
+        }
+
+        @keyframes auroraFloat {
+            0%, 100% { transform: translate3d(0, 0, 0) rotate(0deg); }
+            50% { transform: translate3d(2%, -2%, 0) rotate(5deg); }
+        }
+
+        @keyframes softSheen {
+            0% { transform: translateX(-120%) skewX(-16deg); opacity: 0; }
+            20%, 70% { opacity: .55; }
+            100% { transform: translateX(160%) skewX(-16deg); opacity: 0; }
+        }
+
+        @keyframes softLift {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-4px); }
+        }
+
+        @keyframes petalFloat {
+            from { background-position: 0 -120px, 120px -80px, 220px -160px, 0 0; }
+            to { background-position: -260px 820px, -80px 780px, 40px 900px, 0 0; }
+        }
+
+        @keyframes pinkBorderFlow {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
         }
 
         button,
@@ -62,7 +145,7 @@
         textarea:focus,
         select:focus {
             border-color: var(--brand);
-            box-shadow: 0 0 0 3px rgba(201, 22, 35, .10);
+            box-shadow: 0 0 0 3px rgba(236, 72, 153, .14);
         }
 
         textarea {
@@ -77,21 +160,41 @@
         }
 
         button {
+            position: relative;
             min-height: 40px;
             padding: 9px 15px;
             border: 1px solid var(--brand);
             border-radius: 6px;
-            background: var(--brand);
+            background: linear-gradient(135deg, var(--brand), var(--accent));
             color: #fff;
             cursor: pointer;
             font-weight: 700;
             white-space: nowrap;
+            box-shadow: 0 10px 18px rgba(236, 72, 153, .16);
+            overflow: hidden;
             transition: transform .16s ease, box-shadow .16s ease, border-color .16s ease, background .16s ease, color .16s ease;
+        }
+
+        button::after {
+            position: absolute;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(110deg, transparent 0 34%, rgba(255, 255, 255, .28) 48%, transparent 62% 100%);
+            opacity: 0;
+            transform: translateX(-70%);
+            transition: opacity .18s ease, transform .36s ease;
+            content: "";
         }
 
         button:hover {
             filter: brightness(.98);
             transform: translateY(-1px);
+            box-shadow: 0 14px 24px rgba(236, 72, 153, .22);
+        }
+
+        button:hover::after {
+            opacity: 1;
+            transform: translateX(70%);
         }
 
         button:active {
@@ -106,12 +209,14 @@
         button.secondary {
             background: #fff;
             color: var(--brand);
+            box-shadow: 0 8px 18px rgba(236, 72, 153, .10);
         }
 
         button.ghost {
-            border-color: #d7dce3;
-            background: #fff;
-            color: #334155;
+            border-color: #f4c9d9;
+            background: rgba(255, 255, 255, .86);
+            color: #5f334d;
+            box-shadow: none;
         }
 
         button.dark {
@@ -148,9 +253,11 @@
         }
 
         .top-strip {
-            background: #111827;
+            background: linear-gradient(90deg, #be185d, #ec4899, #fb7185);
+            background-size: 180% 100%;
             color: rgba(255, 255, 255, .82);
             font-size: 13px;
+            animation: pageGradientShift 14s ease-in-out infinite;
         }
 
         .auth-shell {
@@ -158,7 +265,7 @@
             display: grid;
             grid-template-columns: minmax(0, 1fr) 430px;
             background:
-                linear-gradient(100deg, rgba(17, 24, 39, .86), rgba(153, 27, 27, .62)),
+                linear-gradient(100deg, rgba(131, 24, 67, .82), rgba(236, 72, 153, .62), rgba(251, 113, 133, .50)),
                 url("https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1600&q=80") center/cover;
         }
 
@@ -189,8 +296,8 @@
             gap: 18px;
             min-height: 100vh;
             padding: 34px;
-            background: rgba(255, 255, 255, .96);
-            box-shadow: -20px 0 50px rgba(15, 23, 42, .20);
+            background: rgba(255, 250, 253, .96);
+            box-shadow: -20px 0 50px rgba(190, 24, 93, .18);
         }
 
         .auth-brand {
@@ -273,8 +380,29 @@
             position: sticky;
             top: 0;
             z-index: 20;
-            background: #fff;
-            box-shadow: 0 8px 24px rgba(15, 23, 42, .08);
+            background: rgba(255, 255, 255, .86);
+            box-shadow: 0 8px 24px rgba(190, 24, 93, .10);
+            backdrop-filter: blur(14px);
+        }
+
+        .app-shell {
+            min-height: 100vh;
+        }
+
+        .site-header,
+        .category-rail,
+        .account-box,
+        .checkout-box,
+        .editor-box,
+        .section-box,
+        .product-card,
+        .line-card,
+        .order-card,
+        .metric,
+        .chart-card,
+        .service-card,
+        .coupon-card {
+            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease, background .18s ease;
         }
 
         .header-grid {
@@ -298,10 +426,11 @@
             width: 42px;
             height: 42px;
             border-radius: 8px;
-            background: var(--brand);
+            background: linear-gradient(135deg, var(--brand-dark), var(--brand), var(--accent));
             color: #fff;
             font-size: 20px;
             font-weight: 900;
+            box-shadow: 0 12px 22px rgba(236, 72, 153, .24);
         }
 
         .brand-subtitle {
@@ -318,6 +447,7 @@
             border-radius: 8px;
             overflow: hidden;
             background: #fff;
+            box-shadow: 0 10px 24px rgba(236, 72, 153, .10);
         }
 
         .search-box input {
@@ -1059,6 +1189,7 @@
         .workspace {
             display: grid;
             gap: 14px;
+            scroll-margin-top: 106px;
         }
 
         .tabs {
@@ -1077,6 +1208,7 @@
 
         .view {
             display: none;
+            scroll-margin-top: 106px;
         }
 
         .view.active {
@@ -1175,7 +1307,7 @@
         .product-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
-            gap: 12px;
+            gap: 14px;
         }
 
         .recent-strip {
@@ -1217,7 +1349,8 @@
         .product-card {
             display: grid;
             gap: 10px;
-            padding: 12px;
+            min-height: 100%;
+            padding: 13px;
             border: 1px solid var(--line);
             border-radius: 8px;
             background: #fff;
@@ -1236,6 +1369,15 @@
             overflow: hidden;
             border-radius: 6px;
             background: #e5e7eb;
+        }
+
+        .image-wrap::after {
+            position: absolute;
+            inset: auto 0 0;
+            height: 42%;
+            pointer-events: none;
+            background: linear-gradient(180deg, transparent, rgba(15, 23, 42, .16));
+            content: "";
         }
 
         .image-wrap img {
@@ -1261,6 +1403,7 @@
             position: absolute;
             left: 8px;
             top: 8px;
+            z-index: 1;
             background: rgba(255, 255, 255, .92);
             color: var(--brand-dark);
         }
@@ -1340,7 +1483,7 @@
         .order-card {
             display: grid;
             gap: 10px;
-            padding: 12px;
+            padding: 14px;
             border: 1px solid var(--line);
             border-radius: 8px;
             background: #fff;
@@ -1613,6 +1756,64 @@
 
         .detail-overlay.show {
             display: block;
+        }
+
+        .confirm-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 78;
+            display: none;
+            place-items: center;
+            padding: 18px;
+            background: rgba(15, 23, 42, .58);
+        }
+
+        .confirm-overlay.show {
+            display: grid;
+        }
+
+        .confirm-box {
+            width: min(440px, 100%);
+            display: grid;
+            gap: 16px;
+            padding: 22px;
+            border: 1px solid rgba(241, 91, 152, .26);
+            border-radius: 8px;
+            background: rgba(255, 255, 255, .97);
+            box-shadow: 0 28px 70px rgba(15, 23, 42, .28);
+        }
+
+        .confirm-head {
+            display: grid;
+            grid-template-columns: 44px 1fr;
+            gap: 12px;
+            align-items: start;
+        }
+
+        .confirm-icon {
+            display: grid;
+            place-items: center;
+            width: 44px;
+            height: 44px;
+            border-radius: 8px;
+            background: linear-gradient(135deg, var(--brand), var(--accent));
+            color: #fff;
+            font-size: 22px;
+            font-weight: 900;
+            box-shadow: 0 12px 24px rgba(241, 91, 152, .22);
+        }
+
+        .confirm-message {
+            margin-top: 6px;
+            color: var(--subtle);
+            line-height: 1.7;
+        }
+
+        .confirm-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            flex-wrap: wrap;
         }
 
         .detail-page {
@@ -2341,6 +2542,7 @@
         .cart-expiry {
             display: inline-flex;
             align-items: center;
+            gap: 6px;
             min-height: 26px;
             padding: 4px 9px;
             border-radius: 999px;
@@ -2350,9 +2552,39 @@
             font-weight: 800;
         }
 
+        .cart-expiry::before {
+            width: 7px;
+            height: 7px;
+            border-radius: 999px;
+            background: currentColor;
+            box-shadow: 0 0 0 4px rgba(194, 65, 12, .12);
+            content: "";
+        }
+
         .cart-expiry.safe {
             background: #ecfdf5;
             color: #047857;
+        }
+
+        .cart-expiry.safe::before {
+            box-shadow: 0 0 0 4px rgba(4, 120, 87, .12);
+        }
+
+        .order-expiry {
+            margin-top: 8px;
+        }
+
+        .order-expiry.expired {
+            background: #fef2f2;
+            color: #b91c1c;
+        }
+
+        .order-expiry.expired::before {
+            box-shadow: 0 0 0 4px rgba(185, 28, 28, .12);
+        }
+
+        .order-card .section-head {
+            align-items: flex-start;
         }
 
         .logistics-line {
@@ -2531,6 +2763,327 @@
             display: none !important;
         }
 
+        body:not(.admin-page) .top-strip {
+            background: linear-gradient(90deg, #9d174d, #ec4899, #fb7185, #f9a8d4);
+            background-size: 260% 100%;
+            animation: pageGradientShift 14s ease-in-out infinite;
+        }
+
+        body:not(.admin-page)::before {
+            opacity: .70;
+            background:
+                radial-gradient(ellipse at center, rgba(255, 134, 183, .58) 0 38%, transparent 40%) 0 -120px / 260px 340px,
+                radial-gradient(ellipse at center, rgba(255, 199, 221, .62) 0 36%, transparent 38%) 120px -80px / 320px 420px,
+                radial-gradient(ellipse at center, rgba(241, 91, 152, .30) 0 34%, transparent 36%) 220px -160px / 360px 500px,
+                radial-gradient(circle at 18% 22%, rgba(255, 255, 255, .88) 0 3px, transparent 4px),
+                radial-gradient(circle at 72% 16%, rgba(255, 159, 202, .44) 0 4px, transparent 5px);
+            background-repeat: repeat;
+            animation: petalFloat 28s linear infinite;
+        }
+
+        body:not(.admin-page)::after {
+            opacity: .22;
+            background:
+                conic-gradient(from 110deg at 18% 26%, transparent, rgba(241, 91, 152, .70), transparent 28%),
+                conic-gradient(from -30deg at 82% 64%, transparent, rgba(255, 134, 183, .62), transparent 25%),
+                radial-gradient(circle at 50% 8%, rgba(255, 255, 255, .70), transparent 30%);
+            animation: auroraFloat 16s ease-in-out infinite;
+        }
+
+        body:not(.admin-page) .site-header {
+            border-bottom: 1px solid rgba(236, 72, 153, .16);
+            background: rgba(255, 255, 255, .78);
+            box-shadow: 0 12px 30px rgba(190, 24, 93, .13);
+            backdrop-filter: blur(18px);
+        }
+
+        body:not(.admin-page) .site-header::after {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(236, 72, 153, .72), transparent);
+            content: "";
+        }
+
+        body:not(.admin-page) .category-rail,
+        body:not(.admin-page) .account-box,
+        body:not(.admin-page) .checkout-box,
+        body:not(.admin-page) .editor-box,
+        body:not(.admin-page) .section-box,
+        body:not(.admin-page) .vue-curation-panel,
+        body:not(.admin-page) .vue-live-panel,
+        body:not(.admin-page) .product-card,
+        body:not(.admin-page) .line-card,
+        body:not(.admin-page) .order-card,
+        body:not(.admin-page) .chart-card {
+            border-color: var(--soft-border);
+            background: var(--glass);
+            box-shadow: 0 18px 42px rgba(190, 24, 93, .11);
+            backdrop-filter: blur(10px);
+        }
+
+        body:not(.admin-page) .brand-mark,
+        body:not(.admin-page) .member-avatar,
+        body:not(.admin-page) .float-actions button {
+            background: linear-gradient(135deg, #a92f5e, #f15b98 54%, #ff9fca);
+            box-shadow: 0 12px 28px rgba(241, 91, 152, .24);
+        }
+
+        body:not(.admin-page) .product-card,
+        body:not(.admin-page) .service-card,
+        body:not(.admin-page) .service-item,
+        body:not(.admin-page) .line-card,
+        body:not(.admin-page) .order-card,
+        body:not(.admin-page) .section-box {
+            position: relative;
+            overflow: hidden;
+        }
+
+        body:not(.admin-page) .product-card::before,
+        body:not(.admin-page) .service-card::before,
+        body:not(.admin-page) .service-item::before,
+        body:not(.admin-page) .line-card::before,
+        body:not(.admin-page) .order-card::before,
+        body:not(.admin-page) .section-box::before {
+            position: absolute;
+            inset: 0;
+            z-index: 0;
+            padding: 1px;
+            border-radius: inherit;
+            background: linear-gradient(120deg, rgba(255, 255, 255, .8), rgba(241, 91, 152, .34), rgba(255, 159, 202, .24), rgba(255, 255, 255, .78));
+            background-size: 240% 240%;
+            content: "";
+            animation: pinkBorderFlow 12s ease-in-out infinite;
+            -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            -webkit-mask-composite: xor;
+            mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+            mask-composite: exclude;
+            pointer-events: none;
+        }
+
+        body:not(.admin-page) .product-card > *,
+        body:not(.admin-page) .service-card > *,
+        body:not(.admin-page) .service-item > *,
+        body:not(.admin-page) .line-card > *,
+        body:not(.admin-page) .order-card > *,
+        body:not(.admin-page) .section-box > * {
+            position: relative;
+            z-index: 1;
+        }
+
+        body:not(.admin-page) .hero-stage {
+            background:
+                linear-gradient(100deg, rgba(93, 22, 61, .92), rgba(241, 91, 152, .58), rgba(255, 199, 221, .24)),
+                var(--hero-image, url("https://images.unsplash.com/photo-1607082349566-187342175e2f?auto=format&fit=crop&w=1400&q=80")) center/cover;
+            box-shadow: 0 24px 54px rgba(167, 52, 101, .22);
+        }
+
+        body:not(.admin-page) .hero-stage::after,
+        body:not(.admin-page) .smart-showcase-hero::after,
+        body:not(.admin-page) .market-hero::after {
+            position: absolute;
+            top: -20%;
+            bottom: -20%;
+            left: 0;
+            width: 34%;
+            pointer-events: none;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, .26), transparent);
+            content: "";
+            animation: softSheen 8s ease-in-out infinite;
+        }
+
+        body:not(.admin-page) .smart-showcase-hero,
+        body:not(.admin-page) .market-hero {
+            position: relative;
+            overflow: hidden;
+            background:
+                linear-gradient(115deg, rgba(93, 22, 61, .88), rgba(241, 91, 152, .66), rgba(255, 134, 183, .42)),
+                var(--market-image, url("https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=80")) center/cover;
+            box-shadow: 0 22px 50px rgba(167, 52, 101, .18);
+        }
+
+        body:not(.admin-page) .service-item,
+        body:not(.admin-page) .service-card,
+        body:not(.admin-page) .metric,
+        body:not(.admin-page) .vue-metric,
+        body:not(.admin-page) .smart-metric,
+        body:not(.admin-page) .coupon-card {
+            border-color: rgba(236, 72, 153, .18);
+            background: linear-gradient(180deg, rgba(255, 255, 255, .94), rgba(255, 244, 250, .90));
+            box-shadow: 0 14px 30px rgba(190, 24, 93, .10);
+        }
+
+        body:not(.admin-page) .tabs button.active,
+        body:not(.admin-page) .admin-tabs button.active,
+        body:not(.admin-page) .vue-mode-tabs button.active {
+            border-color: #a92f5e;
+            background: linear-gradient(135deg, #a92f5e, #f15b98, #ff86b7);
+            color: #fff;
+            box-shadow: 0 12px 24px rgba(241, 91, 152, .20);
+        }
+
+        body:not(.admin-page) .product-card:hover,
+        body:not(.admin-page) .service-card:hover,
+        body:not(.admin-page) .service-item:hover,
+        body:not(.admin-page) .line-card:hover,
+        body:not(.admin-page) .order-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 24px 48px rgba(190, 24, 93, .16);
+        }
+
+        body.admin-page {
+            --brand: #2563eb;
+            --brand-dark: #1d4ed8;
+            --brand-soft: #eff6ff;
+            --accent: #38bdf8;
+            --accent-2: #0f766e;
+            --ink: #172033;
+            --subtle: #64748b;
+            --line: #dbe4f0;
+            --soft: #f5f8fc;
+            --surface-2: #f8fbff;
+            --shadow: 0 10px 24px rgba(15, 23, 42, .07);
+            --shadow-strong: 0 18px 34px rgba(15, 23, 42, .10);
+            color: #172033;
+            background:
+                linear-gradient(180deg, #f8fbff 0, #eef4ff 46%, #f7fafc 100%),
+                linear-gradient(90deg, rgba(37, 99, 235, .04), transparent 36%, rgba(14, 165, 233, .04));
+            animation: none;
+        }
+
+        body.admin-page::before,
+        body.admin-page::after {
+            display: none;
+        }
+
+        body.admin-page button {
+            border-color: #2563eb;
+            background: #2563eb;
+            box-shadow: none;
+        }
+
+        body.admin-page button:hover {
+            box-shadow: 0 10px 20px rgba(37, 99, 235, .14);
+        }
+
+        body.admin-page button::after {
+            display: none;
+        }
+
+        body.admin-page button.secondary,
+        body.admin-page button.ghost {
+            border-color: #cbd5e1;
+            background: #fff;
+            color: #334155;
+        }
+
+        body.admin-page button.dark,
+        body.admin-page .admin-tabs button.active,
+        body.admin-page .tabs button.active {
+            border-color: #1d4ed8;
+            background: #1d4ed8;
+            color: #fff;
+        }
+
+        body.admin-page .site-header {
+            border-bottom: 1px solid #dbe4f0;
+            background: rgba(255, 255, 255, .94);
+            box-shadow: 0 8px 22px rgba(15, 23, 42, .06);
+            backdrop-filter: blur(12px);
+        }
+
+        body.admin-page .brand-mark {
+            background: linear-gradient(135deg, #1d4ed8, #2563eb);
+            box-shadow: 0 10px 20px rgba(37, 99, 235, .16);
+        }
+
+        body.admin-page .admin-layout,
+        body.admin-page .section-box,
+        body.admin-page .editor-box,
+        body.admin-page .metric,
+        body.admin-page .chart-card,
+        body.admin-page .order-card {
+            border-color: #dbe4f0;
+            background: #fff;
+            box-shadow: 0 10px 24px rgba(15, 23, 42, .06);
+            backdrop-filter: none;
+        }
+
+        body.admin-page .admin-tabs {
+            align-content: start;
+            border: 1px solid #dbe4f0;
+            border-radius: 8px;
+            background: #f8fbff;
+        }
+
+        body.admin-page .admin-tabs button {
+            justify-content: flex-start;
+            border-color: transparent;
+            background: transparent;
+            color: #475569;
+            box-shadow: none;
+        }
+
+        body.admin-page .admin-tabs button:hover {
+            background: #eef4ff;
+            color: #1d4ed8;
+            transform: none;
+        }
+
+        body.admin-page .bar-track span {
+            background: linear-gradient(90deg, #2563eb, #38bdf8);
+        }
+
+        body.admin-page table th {
+            background: #f1f6ff;
+            color: #334155;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            *,
+            *::before,
+            *::after {
+                scroll-behavior: auto !important;
+                animation-duration: .01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: .01ms !important;
+            }
+        }
+
+        body.admin-page .metric strong,
+        body.admin-page .price {
+            color: #1d4ed8;
+        }
+
+        body.admin-page .section-head h2,
+        body.admin-page .section-head h3 {
+            color: #172033;
+        }
+
+        .admin-page .top-strip,
+        .admin-page .channel-nav,
+        .admin-page .hero-grid,
+        .admin-page .service-row,
+        .admin-page #vueMallShowcase,
+        .admin-page .workspace > .tabs,
+        .admin-page .consumer-only,
+        .admin-page .shop-only,
+        .admin-page #navAdminHeader,
+        .admin-page .cart-float {
+            display: none !important;
+        }
+
+        .admin-page .workspace {
+            margin-top: 18px;
+            scroll-margin-top: 88px;
+        }
+
+        .admin-page .view {
+            scroll-margin-top: 88px;
+        }
+
         @media (max-width: 1100px) {
             .hero-grid,
             .split-view,
@@ -2704,7 +3257,7 @@
             <button onclick="showTab('favorites')">收藏夹</button>
             <button onclick="showTab('orders')">我的订单</button>
             <button onclick="showTab('profile')">个人中心</button>
-            <button class="admin-only hidden" onclick="showTab('admin')">运营中心</button>
+            <button class="admin-only hidden" onclick="openAdminPage()">运营中心</button>
         </div>
     </div>
 </div>
@@ -2723,10 +3276,10 @@
             <button onclick="searchFromHeader()">搜索</button>
         </div>
         <div class="header-actions">
-            <button class="ghost nav-action" onclick="showTab('cart')"><span>购物车</span><span id="headerCartCount" class="action-badge">0</span></button>
-            <button class="ghost nav-action" onclick="showTab('orders')"><span>订单</span><span id="headerOrderCount" class="action-badge">0</span></button>
-            <button class="ghost" onclick="showTab('profile')">个人主页</button>
-            <button id="navAdminHeader" class="dark admin-only hidden" onclick="showTab('admin')">运营中心</button>
+            <button class="ghost nav-action consumer-only" onclick="showTab('cart')"><span>购物车</span><span id="headerCartCount" class="action-badge">0</span></button>
+            <button class="ghost nav-action consumer-only" onclick="showTab('orders')"><span>订单</span><span id="headerOrderCount" class="action-badge">0</span></button>
+            <button class="ghost consumer-only" onclick="showTab('profile')">个人主页</button>
+            <button id="navAdminHeader" class="dark admin-only hidden" onclick="openAdminPage()">运营中心</button>
             <button class="ghost" onclick="logout()">退出</button>
             <div id="headerUser" class="header-user">未登录</div>
         </div>
@@ -2912,7 +3465,7 @@
             <button id="tabFavoritesBtn" class="ghost" onclick="showTab('favorites')">我的收藏</button>
             <button id="tabOrdersBtn" class="ghost" onclick="showTab('orders')">我的订单</button>
             <button id="tabProfileBtn" class="ghost" onclick="showTab('profile')">个人主页</button>
-            <button id="tabAdminBtn" class="ghost admin-only hidden" onclick="showTab('admin')">运营中心</button>
+            <button id="tabAdminBtn" class="ghost admin-only hidden" onclick="openAdminPage()">运营中心</button>
         </nav>
 
         <div id="productsView" class="view active">
@@ -3290,7 +3843,7 @@
                     <button id="adminCommentsBtn" class="ghost" onclick="showAdminSection('comments')">评价管理</button>
                     <button id="adminCouponsBtn" class="ghost" onclick="showAdminSection('coupons')">优惠券</button>
                     <button id="adminAfterSalesBtn" class="ghost" onclick="showAdminSection('afterSales')">售后管理</button>
-                    <button id="adminUsersBtn" class="ghost" onclick="showAdminSection('users')">用户管理</button>
+                    <button id="adminUsersBtn" class="ghost super-only hidden" onclick="showAdminSection('users')">用户权限</button>
                 </nav>
 
                 <div>
@@ -3448,7 +4001,7 @@
                     <div id="adminUsersPanel" class="admin-view">
                         <div class="section-box">
                             <div class="section-head">
-                                <h2>用户管理</h2>
+                                <h2>用户权限</h2>
                                 <button class="ghost" onclick="loadUsers()">刷新</button>
                             </div>
                             <div class="order-filter-bar">
@@ -3482,13 +4035,37 @@
         <div id="productDetail"></div>
     </div>
 </div>
+
+<div id="confirmOverlay" class="confirm-overlay" role="dialog" aria-modal="true" aria-labelledby="confirmTitle">
+    <div class="confirm-box">
+        <div class="confirm-head">
+            <div class="confirm-icon">!</div>
+            <div>
+                <h2 id="confirmTitle">操作确认</h2>
+                <div id="confirmMessage" class="confirm-message">请确认是否继续。</div>
+            </div>
+        </div>
+        <div class="confirm-actions">
+            <button id="confirmCancelBtn" class="ghost" type="button">取消</button>
+            <button id="confirmOkBtn" type="button">确定</button>
+        </div>
+    </div>
+</div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/vue@3/dist/vue.global.prod.js"></script>
 <script>
     const firstPathPart = location.pathname.split("/").filter(Boolean)[0] || "";
     const contextPath = firstPathPart.includes(".") ? "" : firstPathPart;
-    const api = `${location.origin}${contextPath ? `/${contextPath}` : ""}/api`;
+    const storedApiBase = localStorage.getItem("yzmmMallApiBase") || "";
+    const apiCandidates = [...new Set([
+        `${location.origin}${contextPath ? `/${contextPath}` : ""}/api`,
+        `${location.origin}/demo/api`,
+        `${location.origin}/demo-1.0-SNAPSHOT/api`,
+        `${location.origin}/api`,
+        storedApiBase
+    ].filter(Boolean))];
+    let api = apiCandidates[0];
     const fallbackImage = "https://dummyimage.com/800x600/f1f5f9/475569&text=YZMM";
     const categories = ["全部", "手机数码", "电脑办公", "家用电器", "服饰箱包", "美妆个护", "食品饮料", "家居日用", "运动户外"];
     const carouselSlides = [
@@ -3528,8 +4105,40 @@
     const consumerViews = ["cart", "favorites", "orders", "profile", "member", "service"];
     const suggestedProfileTags = ["数码", "办公", "家居", "食品", "运动", "美妆", "通勤", "礼品"];
 
+    function readJsonStorage(key, fallback) {
+        try {
+            const value = localStorage.getItem(key);
+            return value ? JSON.parse(value) : fallback;
+        } catch (error) {
+            localStorage.removeItem(key);
+            return fallback;
+        }
+    }
+
+    function readSessionUser() {
+        try {
+            const value = sessionStorage.getItem("yzmmMallCurrentUser");
+            localStorage.removeItem("yzmmMallCurrentUser");
+            return value ? JSON.parse(value) : null;
+        } catch (error) {
+            sessionStorage.removeItem("yzmmMallCurrentUser");
+            localStorage.removeItem("yzmmMallCurrentUser");
+            return null;
+        }
+    }
+
+    function saveSessionUser(user) {
+        sessionStorage.setItem("yzmmMallCurrentUser", JSON.stringify(user));
+        localStorage.removeItem("yzmmMallCurrentUser");
+    }
+
+    function clearSessionUser() {
+        sessionStorage.removeItem("yzmmMallCurrentUser");
+        localStorage.removeItem("yzmmMallCurrentUser");
+    }
+
     const state = {
-        user: JSON.parse(localStorage.getItem("yzmmMallCurrentUser") || "null"),
+        user: readSessionUser(),
         tab: "products",
         adminTab: "overview",
         authMode: "login",
@@ -3554,11 +4163,18 @@
         productPageSize: 12,
         cartExpiryTimer: null,
         cartExpiryWarned: {},
-        cartExpiryRemoving: {},
+        cartExpiryPrompted: {},
+        cartExpiryPrompting: false,
+        orderExpiryTimer: null,
+        orderExpiryWarned: {},
+        orderExpiryPrompted: {},
+        orderExpiryPrompting: false,
+        confirmResolver: null,
         catalogProducts: [],
         products: [],
         visibleProducts: [],
         cartRows: [],
+        orderRows: [],
         coupons: [],
         vueShowcase: null
     };
@@ -3616,6 +4232,31 @@
         return `${minutes}分${String(seconds).padStart(2, "0")}秒`;
     }
 
+    const CART_EXPIRE_SECONDS = 30 * 60;
+    const ORDER_EXPIRE_SECONDS = 30 * 60;
+    const EXPIRY_WARNING_SECONDS = 5 * 60;
+    const TIMER_TICK_MS = 1000;
+    const EXPIRY_WARNING_MS = EXPIRY_WARNING_SECONDS * TIMER_TICK_MS;
+
+    function isExpirySafe(milliseconds) {
+        return milliseconds > EXPIRY_WARNING_MS;
+    }
+
+    function parseLocalDateTime(value) {
+        if (!value) return NaN;
+        const time = new Date(String(value).trim().replace(" ", "T")).getTime();
+        return Number.isFinite(time) ? time : NaN;
+    }
+
+    function orderExpiresAt(order) {
+        if (order.expiresAt) return Number(order.expiresAt);
+        if (order.expires_in_seconds !== undefined && order.expires_in_seconds !== null) {
+            return Date.now() + Math.max(0, Number(order.expires_in_seconds) || 0) * 1000;
+        }
+        const createdAt = parseLocalDateTime(order.create_time);
+        return Number.isFinite(createdAt) ? createdAt + ORDER_EXPIRE_SECONDS * 1000 : Date.now() + ORDER_EXPIRE_SECONDS * 1000;
+    }
+
     function stars(score) {
         const full = Math.max(1, Math.min(5, Math.round(Number(score) || 5)));
         return "★".repeat(full) + "☆".repeat(5 - full);
@@ -3635,6 +4276,10 @@
         return value ? `${value.replace("T", " ")}:00` : null;
     }
 
+    function isMobileBrowser() {
+        return /Android|iPhone|iPad|iPod|Mobile|Windows Phone/i.test(navigator.userAgent || "");
+    }
+
     function isAdmin() {
         return state.user && (state.user.role === "admin" || state.user.role === "super_admin");
     }
@@ -3645,6 +4290,14 @@
 
     function isSuper() {
         return state.user && state.user.role === "super_admin";
+    }
+
+    function openAdminPage() {
+        if (!isAdmin()) {
+            setNotice("管理员才能进入运营中心");
+            return;
+        }
+        showTab("admin");
     }
 
     function requireLogin() {
@@ -3660,6 +4313,10 @@
         if (!isAdmin()) throw new Error("当前账号不是管理员");
     }
 
+    function requireSuper() {
+        if (!isSuper()) throw new Error("超级管理员才能管理用户权限");
+    }
+
     function setNotice(text) {
         if (!text) return;
         const toast = document.createElement("div");
@@ -3671,8 +4328,38 @@
         setTimeout(() => toast.remove(), isError ? 4600 : 2600);
     }
 
+    function showConfirm({title = "操作确认", message = "请确认是否继续。", okText = "确定", cancelText = "取消"} = {}) {
+        if (state.confirmResolver) {
+            state.confirmResolver(false);
+        }
+        $("confirmTitle").textContent = title;
+        $("confirmMessage").textContent = message;
+        $("confirmOkBtn").textContent = okText;
+        $("confirmCancelBtn").textContent = cancelText;
+        $("confirmOverlay").classList.add("show");
+        document.body.style.overflow = "hidden";
+        setTimeout(() => $("confirmOkBtn").focus(), 0);
+        return new Promise(resolve => {
+            state.confirmResolver = resolve;
+        });
+    }
+
+    function resolveConfirm(result) {
+        if (!state.confirmResolver) return;
+        const resolver = state.confirmResolver;
+        state.confirmResolver = null;
+        $("confirmOverlay").classList.remove("show");
+        if (!$("productDetailOverlay").classList.contains("show")) {
+            document.body.style.overflow = "";
+        }
+        resolver(result);
+    }
+
     async function request(path, options = {}) {
         let response;
+        let raw = "";
+        let body = null;
+        const bases = [...new Set([api, ...apiCandidates])];
         const headers = {
             "Content-Type": "application/json",
             ...(options.headers || {})
@@ -3680,27 +4367,36 @@
         if (state.user?.token) {
             headers.Authorization = `Bearer ${state.user.token}`;
         }
-        try {
-            response = await fetch(`${api}${path}`, {
-                ...options,
-                headers
-            });
-        } catch (error) {
-            throw new Error("无法连接后端服务，请确认 Tomcat 已启动并完成部署");
-        }
-        const raw = await response.text().catch(() => "");
-        let body = null;
-        try {
-            body = raw ? JSON.parse(raw) : null;
-        } catch (error) {
+        for (const base of bases) {
+            try {
+                response = await fetch(`${base}${path}`, {
+                    ...options,
+                    headers
+                });
+            } catch (error) {
+                continue;
+            }
+            raw = await response.text().catch(() => "");
+            try {
+                body = raw ? JSON.parse(raw) : null;
+            } catch (error) {
+                body = null;
+            }
+            if (body && Object.prototype.hasOwnProperty.call(body, "success")) {
+                api = base;
+                localStorage.setItem("yzmmMallApiBase", api);
+                break;
+            }
             body = null;
+            if (response.status !== 404) break;
         }
         if (!body) {
-            throw new Error(`接口返回异常：${response.status} ${response.url}`);
+            const status = response ? `${response.status} ${response.url}` : "无法连接";
+            throw new Error(`接口返回异常：${status}，请确认 Tomcat 部署路径和 /api 接口已启动`);
         }
         if (response.status === 401 && state.user) {
             state.user = null;
-            localStorage.removeItem("yzmmMallCurrentUser");
+            clearSessionUser();
             state.authStage = "entry";
             updateAuthView();
             throw new Error("登录已过期，请重新登录");
@@ -3727,8 +4423,19 @@
         $("productDetailOverlay").addEventListener("click", event => {
             if (event.target.id === "productDetailOverlay") closeProductDetail();
         });
+        $("confirmOverlay").addEventListener("click", event => {
+            if (event.target.id === "confirmOverlay") resolveConfirm(false);
+        });
+        $("confirmCancelBtn").addEventListener("click", () => resolveConfirm(false));
+        $("confirmOkBtn").addEventListener("click", () => resolveConfirm(true));
         document.addEventListener("keydown", event => {
-            if (event.key === "Escape") closeProductDetail();
+            if (event.key === "Escape") {
+                if ($("confirmOverlay").classList.contains("show")) {
+                    resolveConfirm(false);
+                    return;
+                }
+                closeProductDetail();
+            }
         });
         const authHash = location.hash.replace("#", "");
         if (!state.user && (authHash === "login" || authHash === "register")) {
@@ -3739,7 +4446,10 @@
         updateAuthView();
         updateChannelNav();
         initVueShowcase();
-        if (state.user) loadProducts();
+        if (state.user) {
+            if (isAdmin()) showTab("admin", false);
+            else loadProducts();
+        }
         renderRecentViewed();
     }
 
@@ -3800,7 +4510,7 @@
                 },
                 memberSubtitle() {
                     if (!this.account) return "登录后同步购物车、订单和收藏状态";
-                    return this.isManagerAccount ? "商品、订单、售后和用户管理集中处理" : "根据当前商品和你的购物状态展示推荐";
+                    return this.isManagerAccount ? "商品、订单和售后集中处理" : "根据当前商品和你的购物状态展示推荐";
                 },
                 primaryActionText() {
                     if (!this.account) return "去登录";
@@ -3890,12 +4600,15 @@
                         updateAuthView();
                         return;
                     }
-                    showTab(this.isManagerAccount ? "admin" : "profile");
+                    if (this.isManagerAccount) {
+                        openAdminPage();
+                        return;
+                    }
+                    showTab("profile");
                 },
                 goOrders() {
                     if (this.isManagerAccount) {
-                        showTab("admin");
-                        showAdminSection("orders");
+                        openAdminPage();
                         return;
                     }
                     showTab("orders");
@@ -4084,8 +4797,24 @@
     }
 
     function updateAuthView() {
+        document.body.classList.toggle("admin-page", Boolean(state.user && isAdmin()));
+        if (isAdmin()) {
+            document.title = "柚子妹妹运营中心";
+            document.querySelector(".site-header .brand h1").textContent = "柚子妹妹运营中心";
+            document.querySelector(".site-header .brand-subtitle").textContent = "商品、订单、售后运营后台";
+            document.querySelector(".site-header .search-box")?.classList.add("hidden");
+            document.querySelector(".site-header .header-actions")?.classList.add("admin-header-actions");
+        } else {
+            document.title = "柚子妹妹网购";
+            document.querySelector(".site-header .brand h1").textContent = "柚子妹妹网购";
+            document.querySelector(".site-header .brand-subtitle").textContent = "全品类综合网购平台";
+            document.querySelector(".site-header .search-box")?.classList.remove("hidden");
+            document.querySelector(".site-header .header-actions")?.classList.remove("admin-header-actions");
+        }
         $("authShell").classList.toggle("hidden", Boolean(state.user));
         $("appShell").classList.toggle("hidden", !state.user);
+        $("authRegisterModeBtn")?.classList.remove("hidden");
+        document.querySelector("#authEntry .secondary")?.classList.remove("hidden");
         if (!state.user) {
             document.querySelectorAll(".admin-only").forEach(el => el.classList.add("hidden"));
             document.querySelectorAll(".super-only").forEach(el => el.classList.add("hidden"));
@@ -4115,11 +4844,19 @@
         document.querySelectorAll(".admin-only").forEach(el => el.classList.toggle("hidden", !isAdmin()));
         document.querySelectorAll(".super-only").forEach(el => el.classList.toggle("hidden", !isSuper()));
 
+        if (state.adminTab === "users" && !isSuper()) {
+            state.adminTab = "overview";
+        }
+        if (isAdmin()) {
+            state.tab = "admin";
+            showTab("admin", false);
+            return;
+        }
         if (!isAdmin() && state.tab === "admin") {
-            showTab("products");
+                showTab("products", false);
         }
         if (isAdmin() && consumerViews.includes(state.tab)) {
-            showTab("admin");
+            showTab("admin", false);
             return;
         }
         if (isConsumer()) {
@@ -4207,7 +4944,16 @@
         return state.authMode === "register" ? registerUser() : login();
     }
 
-    function showTab(tab) {
+    function scrollToWorkspace() {
+        document.querySelector(".workspace")?.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    function scrollToActiveView(tab) {
+        const element = $(`${tab}View`) || document.querySelector(".workspace");
+        element?.scrollIntoView({behavior: "smooth", block: "start"});
+    }
+
+    function showTab(tab, scroll = true) {
         if (tab === "admin" && !isAdmin()) {
             setNotice("管理员才能进入运营中心");
             return;
@@ -4215,7 +4961,7 @@
         if (consumerViews.includes(tab) && !isConsumer()) {
             setNotice(state.user ? "管理员账号请进入运营中心处理业务" : "请先登录");
             if (isAdmin()) {
-                showTab("admin");
+                openAdminPage();
             }
             return;
         }
@@ -4241,6 +4987,9 @@
         if (tab === "member") loadMemberPage();
         if (tab === "service") loadServicePage();
         if (tab === "admin") showAdminSection(state.adminTab);
+        if (scroll) {
+            setTimeout(() => scrollToActiveView(tab), 0);
+        }
     }
 
     function showAdminSection(name) {
@@ -4248,9 +4997,14 @@
             setNotice("管理员才能进入运营中心");
             return;
         }
+        if (name === "users" && !isSuper()) {
+            setNotice("超级管理员才能管理用户权限");
+            name = "overview";
+        }
         state.adminTab = name;
         adminViews.forEach(view => {
-            $(`admin${view.charAt(0).toUpperCase() + view.slice(1)}Panel`).classList.toggle("active", view === name);
+            const panel = $(`admin${view.charAt(0).toUpperCase() + view.slice(1)}Panel`);
+            if (panel) panel.classList.toggle("active", view === name);
             const button = $(`admin${view.charAt(0).toUpperCase() + view.slice(1)}Btn`);
             if (button) {
                 button.classList.toggle("active", view === name);
@@ -4322,11 +5076,15 @@
                 method: "POST",
                 body: JSON.stringify({username, password})
             });
-            localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
+            saveSessionUser(state.user);
             setNotice("登录成功");
             updateAuthView();
+            if (isAdmin()) {
+                showTab("admin", false);
+                return;
+            }
             await loadProducts();
-            showTab("products");
+            showTab("products", false);
         } catch (error) {
             setNotice(error.message);
         }
@@ -4345,11 +5103,11 @@
                 method: "POST",
                 body: JSON.stringify({username, password, phone, nickname, address})
             });
-            localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
+            saveSessionUser(state.user);
             setNotice("注册成功");
             updateAuthView();
             await loadProducts();
-            showTab("products");
+            showTab("products", false);
         } catch (error) {
             setNotice(error.message);
         }
@@ -4364,10 +5122,12 @@
             // 本地退出优先，后端令牌失效失败不阻塞用户离开。
         } finally {
             state.user = null;
-            localStorage.removeItem("yzmmMallCurrentUser");
+            clearSessionUser();
             setNotice("已退出登录");
             state.authStage = "entry";
             clearCartExpiryWatcher();
+            clearOrderExpiryWatcher();
+            state.orderRows = [];
             clearInterval(state.dealClockTimer);
             updateAuthView();
         }
@@ -4463,7 +5223,7 @@
     }
 
     function saveSearchKeyword(keyword) {
-        const current = JSON.parse(localStorage.getItem("yzmmMallSearchHistory") || "[]");
+        const current = readJsonStorage("yzmmMallSearchHistory", []);
         const next = [keyword, ...current.filter(item => item !== keyword)].slice(0, 8);
         localStorage.setItem("yzmmMallSearchHistory", JSON.stringify(next));
     }
@@ -4700,8 +5460,9 @@
             setText("servicePendingMetric", orders.filter(order => Number(order.status) === 0).length);
             setText("serviceShippingMetric", orders.filter(order => Number(order.status) === 2).length);
             const details = await Promise.all(orders.slice(0, 3).map(order => request(`/orders/${order.id}`).catch(() => order)));
-            $("serviceOrders").innerHTML = details.length
-                ? details.map(order => renderOrder(order, false)).join("")
+            const prepared = rememberOrderRows(details, false);
+            $("serviceOrders").innerHTML = prepared.length
+                ? prepared.map(order => renderOrder(order, false)).join("")
                 : emptyText("暂无订单");
         } catch (error) {
             setNotice(error.message);
@@ -4734,7 +5495,7 @@
     }
 
     function addRecentViewed(product) {
-        const current = JSON.parse(localStorage.getItem("yzmmMallRecentViewed") || "[]");
+        const current = readJsonStorage("yzmmMallRecentViewed", []);
         const next = [
             {
                 id: product.id,
@@ -4750,7 +5511,7 @@
     }
 
     function renderRecentViewed() {
-        const rows = JSON.parse(localStorage.getItem("yzmmMallRecentViewed") || "[]");
+        const rows = readJsonStorage("yzmmMallRecentViewed", []);
         $("recentViewed").classList.toggle("show", rows.length > 0);
         $("recentList").innerHTML = rows.map(item => `
             <article class="recent-card" onclick="openProductDetail(${item.id})">
@@ -4953,7 +5714,7 @@
     function prepareCartRows(rows) {
         return rows.map(row => ({
             ...row,
-            expiresAt: Date.now() + Number(row.expires_in_seconds ?? 1800) * 1000
+            expiresAt: Date.now() + Number(row.expires_in_seconds ?? CART_EXPIRE_SECONDS) * TIMER_TICK_MS
         }));
     }
 
@@ -4965,7 +5726,7 @@
                 <div>
                     <h3>${html(item.product_name)}</h3>
                     <div class="muted">${item.sku_text ? `${html(item.sku_text)} · ` : ""}单价 ￥${money(item.price)} · 库存 ${html(item.stock)}</div>
-                    <div id="cart-expire-${item.id}" class="cart-expiry ${left > 5 * 60 * 1000 ? "safe" : ""}">保留 ${countdownText(left)}</div>
+                    <div id="cart-expire-${item.id}" class="cart-expiry ${isExpirySafe(left) ? "safe" : ""}">保留 ${countdownText(left)}</div>
                     <div class="price">￥${money(item.subtotal)}</div>
                 </div>
                 <div class="actions">
@@ -5018,7 +5779,7 @@
     function startCartExpiryWatcher() {
         clearCartExpiryWatcher();
         if (!state.cartRows.length) return;
-        state.cartExpiryTimer = setInterval(checkCartExpiry, 1000);
+        state.cartExpiryTimer = setInterval(checkCartExpiry, TIMER_TICK_MS);
         checkCartExpiry();
     }
 
@@ -5029,27 +5790,50 @@
 
     function checkCartExpiry() {
         let hasActive = false;
+        let expiredItem = null;
         state.cartRows.forEach(item => {
             const left = item.expiresAt - Date.now();
             const badge = $(`cart-expire-${item.id}`);
             if (badge) {
-                badge.textContent = left <= 0 ? "已超时，正在移除" : `保留 ${countdownText(left)}`;
-                badge.classList.toggle("safe", left > 5 * 60 * 1000);
+                badge.textContent = left <= 0 ? "已超时，等待处理" : `保留 ${countdownText(left)}`;
+                badge.classList.toggle("safe", isExpirySafe(left));
             }
             if (left > 0) {
                 hasActive = true;
-                if (left <= 5 * 60 * 1000 && !state.cartExpiryWarned[item.id]) {
+                if (left <= EXPIRY_WARNING_MS && !state.cartExpiryWarned[item.id]) {
                     state.cartExpiryWarned[item.id] = true;
                     setNotice(`${item.product_name} 即将超时，请尽快结算`);
                 }
                 return;
             }
-            if (!state.cartExpiryRemoving[item.id]) {
-                state.cartExpiryRemoving[item.id] = true;
-                removeCart(item.id);
+            if (!state.cartExpiryPrompted[item.id]) {
+                expiredItem = expiredItem || item;
             }
         });
+        if (expiredItem && !state.cartExpiryPrompting) {
+            promptExpiredCartItem(expiredItem);
+        }
         if (!hasActive) clearCartExpiryWatcher();
+    }
+
+    async function promptExpiredCartItem(item) {
+        state.cartExpiryPrompting = true;
+        state.cartExpiryPrompted[item.id] = true;
+        const shouldDelete = await showConfirm({
+            title: "购物车商品已超时",
+            message: `${item.product_name} 已超过购物车保留时间，是否现在删除？`,
+            okText: "删除商品",
+            cancelText: "暂不删除"
+        });
+        const badge = $(`cart-expire-${item.id}`);
+        if (shouldDelete) {
+            await removeCart(item.id, true);
+        } else if (badge) {
+            badge.textContent = "已超时，请手动处理";
+            badge.classList.remove("safe");
+        }
+        state.cartExpiryPrompting = false;
+        checkCartExpiry();
     }
 
     async function loadCartCount() {
@@ -5077,9 +5861,19 @@
         }
     }
 
-    async function removeCart(id) {
+    async function removeCart(id, silent = false) {
         try {
+            if (!silent) {
+                const confirmed = await showConfirm({
+                    title: "删除购物车商品",
+                    message: "确定要从购物车移除这个商品吗？",
+                    okText: "删除",
+                    cancelText: "取消"
+                });
+                if (!confirmed) return;
+            }
             await request(`/cart/${id}`, {method: "DELETE"});
+            if (!silent) setNotice("商品已从购物车移除");
             await loadCart();
         } catch (error) {
             setNotice(error.message);
@@ -5103,7 +5897,7 @@
             const token = state.user.token;
             const fresh = await request(`/users/${state.user.id}`);
             state.user = {...fresh, token};
-            localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
+            saveSessionUser(state.user);
             $("profileUsername").value = fresh.username || "";
             $("profileNickname").value = fresh.nickname || fresh.username || "";
             $("profilePhone").value = fresh.phone || "";
@@ -5135,7 +5929,7 @@
                 body: JSON.stringify(payload)
             });
             state.user = {...fresh, token};
-            localStorage.setItem("yzmmMallCurrentUser", JSON.stringify(state.user));
+            saveSessionUser(state.user);
             setNotice("个人资料已保存");
             $("profileTags").value = state.user.tags || "";
             renderProfileTagPicker();
@@ -5215,8 +6009,9 @@
     async function loadProfileOrders() {
         if (!isConsumer()) return;
         const rows = await request(`/orders?userId=${state.user.id}`);
+        const prepared = rememberOrderRows(rows.slice(0, 3), false);
         $("profileOrderCount").textContent = rows.length;
-        $("profileOrders").innerHTML = rows.length ? rows.slice(0, 3).map(order => renderOrder(order, false)).join("") : emptyText("暂无订单");
+        $("profileOrders").innerHTML = prepared.length ? prepared.map(order => renderOrder(order, false)).join("") : emptyText("暂无订单");
     }
 
     async function createOrder() {
@@ -5229,10 +6024,19 @@
                 receiverPhone: $("receiverPhone").value.trim(),
                 shippingAddress: $("shippingAddress").value.trim()
             };
-            await request("/orders", {method: "POST", body: JSON.stringify(payload)});
+            const order = await request("/orders", {method: "POST", body: JSON.stringify(payload)});
             setNotice("下单成功");
             await Promise.all([loadCart(), loadUserOrders(), loadProducts()]);
             showTab("orders");
+            const payNow = await showConfirm({
+                title: "订单已提交",
+                message: "是否现在前往支付宝完成支付？",
+                okText: "去支付",
+                cancelText: "稍后支付"
+            });
+            if (payNow && order?.id) {
+                await startAlipayPayment(order.id);
+            }
         } catch (error) {
             setNotice(error.message);
         }
@@ -5316,11 +6120,13 @@
         if (!isConsumer()) {
             $("userOrders").innerHTML = emptyText("请先登录");
             setOrderBadges(0);
+            state.orderRows = [];
+            clearOrderExpiryWatcher();
             return;
         }
         try {
             const rows = await request(`/orders?userId=${state.user.id}`);
-            const details = await Promise.all(rows.map(order => request(`/orders/${order.id}`).catch(() => order)));
+            const details = rememberOrderRows(await Promise.all(rows.map(order => request(`/orders/${order.id}`).catch(() => order))), true);
             const visible = filterOrdersByStatus(details, state.orderFilter);
             updateOrderFilterButtons("orderFilter", state.orderFilter);
             $("userOrders").innerHTML = visible.length ? visible.map(order => renderOrder(order, false)).join("") : emptyText("当前状态暂无订单");
@@ -5337,15 +6143,44 @@
         }
         try {
             const rows = await request(`/orders?userId=${state.user.id}`);
+            rememberOrderRows(rows, false);
             setOrderBadges(rows.length);
         } catch (error) {
             setNotice(error.message);
         }
     }
 
+    function prepareOrderRows(rows) {
+        return rows.map(order => ({
+            ...order,
+            expiresAt: Number(order.status) === 0 ? orderExpiresAt(order) : null
+        }));
+    }
+
+    function rememberOrderRows(rows, replace = false) {
+        const prepared = prepareOrderRows(rows);
+        if (replace) {
+            state.orderRows = prepared.filter(order => Number(order.status) === 0);
+        } else {
+            const byId = new Map(state.orderRows.map(order => [Number(order.id), order]));
+            prepared.forEach(order => {
+                const id = Number(order.id);
+                if (Number(order.status) === 0) {
+                    byId.set(id, order);
+                } else {
+                    byId.delete(id);
+                }
+            });
+            state.orderRows = Array.from(byId.values());
+        }
+        startOrderExpiryWatcher();
+        return prepared;
+    }
+
     function renderOrder(order, adminMode) {
         const status = Number(order.status);
         const statusClass = status === 0 ? "pending" : status === 3 ? "done" : "paid";
+        const left = status === 0 ? orderExpiresAt(order) - Date.now() : 0;
         const items = (order.items || []).map(item => {
             const sku = item.sku_text || (item.spec_name ? `${item.spec_name}: ${item.spec_value}` : "");
             return `${html(item.product_name)}${sku ? `（${html(sku)}）` : ""} x ${html(item.count)}`;
@@ -5359,15 +6194,20 @@
                 <div class="muted">售后：${html(afterSaleTypeNames[item.type] || item.type)} · ${html(afterSaleNames[item.status] || item.status)}${item.reply ? ` · ${html(item.reply)}` : ""}</div>
             `).join("")}</div>`
             : "";
+        const orderExpiry = !adminMode && status === 0
+            ? `<div data-order-expire-id="${html(order.id)}" class="cart-expiry order-expiry ${isExpirySafe(left) ? "safe" : ""} ${left <= 0 ? "expired" : ""}">${left <= 0 ? "支付已超时，等待处理" : `支付剩余 ${countdownText(left)}`}</div>`
+            : "";
         const userActions = status === 0
-            ? `<button onclick="setOrderStatus(${order.id}, 1, false)">支付</button>`
+            ? left > 0
+                ? `<button onclick="startAlipayPayment(${order.id})">支付</button>`
+                : `<button class="ghost" onclick="rebuyOrder(${order.id})">重新购买</button>`
             : status === 2
                 ? `<button onclick="setOrderStatus(${order.id}, 3, false)">确认收货</button>`
                 : "";
         const afterSaleAction = !adminMode && status >= 1
             ? `<button class="secondary" onclick="applyAfterSale(${order.id})">申请售后</button>`
             : "";
-        const rebuyAction = !adminMode && (order.items || []).length
+        const rebuyAction = !adminMode && status !== 0 && (order.items || []).length
             ? `<button class="ghost" onclick="rebuyOrder(${order.id})">再次购买</button>`
             : "";
         const adminActions = `
@@ -5386,6 +6226,7 @@
                 </div>
                 <div class="price">￥${money(order.total_price)}<span class="muted" style="font-size:13px">${discountText}</span></div>
                 <div class="order-steps">${renderOrderSteps(status)}</div>
+                ${orderExpiry}
                 <div class="muted">商品：${items}</div>
                 <div class="muted">收货：${address}</div>
                 <div class="logistics-line">${logistics}</div>
@@ -5408,6 +6249,123 @@
         return statusNames.map((name, index) => `
             <span class="step ${index <= status ? "done" : ""}">${html(name)}</span>
         `).join("");
+    }
+
+    function startOrderExpiryWatcher() {
+        clearOrderExpiryWatcher();
+        if (!state.orderRows.length) return;
+        state.orderExpiryTimer = setInterval(checkOrderExpiry, TIMER_TICK_MS);
+        checkOrderExpiry();
+    }
+
+    function clearOrderExpiryWatcher() {
+        if (state.orderExpiryTimer) clearInterval(state.orderExpiryTimer);
+        state.orderExpiryTimer = null;
+    }
+
+    function orderExpiryBadges(orderId) {
+        return document.querySelectorAll(`[data-order-expire-id="${Number(orderId)}"]`);
+    }
+
+    function updateOrderExpiryBadges(orderId, left, text = null) {
+        orderExpiryBadges(orderId).forEach(badge => {
+            badge.textContent = text || (left <= 0 ? "支付已超时，等待处理" : `支付剩余 ${countdownText(left)}`);
+            badge.classList.toggle("safe", isExpirySafe(left));
+            badge.classList.toggle("expired", left <= 0);
+        });
+    }
+
+    function checkOrderExpiry() {
+        let hasActive = false;
+        let expiredOrder = null;
+        state.orderRows = state.orderRows.filter(order => Number(order.status) === 0);
+        state.orderRows.forEach(order => {
+            const left = Number(order.expiresAt || 0) - Date.now();
+            updateOrderExpiryBadges(order.id, left);
+            if (left > 0) {
+                hasActive = true;
+                if (left <= EXPIRY_WARNING_MS && !state.orderExpiryWarned[order.id]) {
+                    state.orderExpiryWarned[order.id] = true;
+                    setNotice(`订单 ${order.order_no} 即将超时，请尽快支付`);
+                }
+                return;
+            }
+            if (!state.orderExpiryPrompted[order.id]) {
+                expiredOrder = expiredOrder || order;
+            }
+        });
+        if (expiredOrder && !state.orderExpiryPrompting) {
+            promptExpiredOrder(expiredOrder);
+        }
+        if (!hasActive && !expiredOrder && !state.orderExpiryPrompting) {
+            clearOrderExpiryWatcher();
+        }
+    }
+
+    async function promptExpiredOrder(order) {
+        state.orderExpiryPrompting = true;
+        state.orderExpiryPrompted[order.id] = true;
+        const shouldRebuy = await showConfirm({
+            title: "订单支付已超时",
+            message: `订单 ${order.order_no} 已超过支付保留时间，是否把商品重新加入购物车？`,
+            okText: "重新购买",
+            cancelText: "稍后处理"
+        });
+        if (shouldRebuy) {
+            await rebuyOrder(order.id);
+        } else {
+            updateOrderExpiryBadges(order.id, 0, "支付已超时，请重新购买");
+        }
+        state.orderExpiryPrompting = false;
+        checkOrderExpiry();
+    }
+
+    async function startAlipayPayment(orderId) {
+        let payWindow = null;
+        try {
+            requireConsumer();
+            const clientType = isMobileBrowser() ? "wap" : "page";
+            if (clientType === "page") {
+                payWindow = window.open("", "_blank");
+                if (payWindow) {
+                    payWindow.document.open();
+                    payWindow.document.write("<!doctype html><html><head><meta charset=\"UTF-8\"><title>支付宝支付</title></head><body>正在打开支付宝支付...</body></html>");
+                    payWindow.document.close();
+                }
+            }
+            const result = await request("/payments/alipay/start", {
+                method: "POST",
+                body: JSON.stringify({orderId, clientType})
+            });
+            if (clientType === "wap") {
+                submitAlipayFormInCurrentPage(result.formHtml);
+                return;
+            }
+            if (payWindow && !payWindow.closed) {
+                payWindow.document.open();
+                payWindow.document.write(result.formHtml);
+                payWindow.document.close();
+                setNotice("已打开支付宝支付页，请按页面提示完成支付");
+            } else {
+                submitAlipayFormInCurrentPage(result.formHtml);
+            }
+        } catch (error) {
+            if (payWindow && !payWindow.closed) {
+                payWindow.close();
+            }
+            setNotice(error.message);
+        }
+    }
+
+    function submitAlipayFormInCurrentPage(formHtml) {
+        const wrapper = document.createElement("div");
+        wrapper.style.display = "none";
+        wrapper.innerHTML = formHtml;
+        document.body.appendChild(wrapper);
+        const form = wrapper.querySelector("form");
+        if (form) {
+            form.submit();
+        }
     }
 
     async function setOrderStatus(id, status, adminMode) {
@@ -5953,7 +6911,7 @@
 
     async function loadUsers() {
         try {
-            requireAdmin();
+            requireSuper();
             const result = await request(`/users?actorId=${state.user.id}&status=${state.userStatusFilter}&page=${state.userPage}&pageSize=10`);
             const rows = result.rows || result;
             state.userPage = result.page || state.userPage;
@@ -6042,7 +7000,7 @@
 
     async function updateUserRole(id) {
         try {
-            if (!isSuper()) throw new Error("超级管理员才能管理用户权限");
+            requireSuper();
             await request(`/users/${id}/role`, {
                 method: "PUT",
                 body: JSON.stringify({actorId: state.user.id, role: "admin"})
@@ -6056,7 +7014,7 @@
 
     async function deleteUser(id) {
         try {
-            requireAdmin();
+            requireSuper();
             if (!confirm("确定禁用这个账号吗？历史订单会保留，账号将无法继续登录。")) return;
             await request(`/users/${id}?actorId=${state.user.id}`, {method: "DELETE"});
             setNotice("账号已禁用");
@@ -6068,7 +7026,7 @@
 
     async function restoreUser(id) {
         try {
-            requireAdmin();
+            requireSuper();
             await request(`/users/${id}/restore`, {method: "PUT"});
             setNotice("账号已恢复");
             await Promise.all([loadUsers(), loadAdminOverview()]);
@@ -6080,7 +7038,7 @@
     async function loadAdmins() {
         if (!$("admins")) return;
         try {
-            requireAdmin();
+            requireSuper();
             const rows = await request("/admins");
             $("admins").innerHTML = rows.length ? `
                 <table>

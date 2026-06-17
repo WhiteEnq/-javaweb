@@ -209,5 +209,7 @@ erDiagram
 - `user.password` 支持 PBKDF2 哈希；旧明文种子密码会在首次登录成功后自动升级。
 - `login_attempt` 用于记录失败次数和锁定时间，减少暴力尝试。
 - `cart.update_time` 用于购物车保留倒计时，后端会清理超时项，前端会提前提醒。
+- `order_info.create_time` 用于待支付订单倒计时，前端和支付入口都会按 30 分钟保留期处理，超时后提示重新购买。
 - `order_info.total_price` 保存优惠后的应付金额，`discount_amount` 保存优惠金额。
+- 支付配置放在 `pay.properties` / `pay.local.properties` 里，包含 APPID、应用私钥、支付宝公钥、回调地址和公网访问地址。
 - `schema.sql` 可直接执行，其他成员拉取项目后运行即可得到完整本地数据库。

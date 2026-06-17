@@ -55,6 +55,7 @@ public class AfterSaleResource extends BaseResource {
 
     @POST
     public Map<String, Object> create(@Context HttpHeaders headers, AfterSaleRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.userId != null && request.orderId != null, "请先登录并选择订单");
         Map<String, Object> user = requireUser(headers, null);
         requireSameUser(user, request.userId);
@@ -78,6 +79,7 @@ public class AfterSaleResource extends BaseResource {
     public Map<String, Object> updateStatus(@Context HttpHeaders headers,
                                             @PathParam("id") int id,
                                             AfterSaleRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         requireManager(headers, request.actorId, "只有管理员可以处理售后工单");
         require(request.status != null && !request.status.isBlank(), "请选择售后状态");
         requireRows(update("""

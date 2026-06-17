@@ -32,6 +32,8 @@ import java.util.concurrent.ThreadLocalRandom;
 public class OrderResource extends BaseResource {
     private static final String[] COURIER_COMPANIES = {"顺丰速运", "京东快递", "中通快递", "圆通速递", "韵达快递", "申通快递"};
     private static final String[] DELIVERY_METHODS = {"标准配送", "次日达", "普通配送", "同城配送", "预约配送"};
+    private static final String ORDER_EXPIRE_SECONDS_SQL =
+            "greatest(0, timestampdiff(second, now(), date_add(order_info.create_time, interval 30 minute))) expires_in_seconds";
 
     @GET
     public Map<String, Object> list(@Context HttpHeaders headers,
@@ -56,7 +58,7 @@ public class OrderResource extends BaseResource {
             where.append(" and status = ?");
             params.add(status);
         }
-        String rowsSql = "select * from order_info" + where + " order by id desc";
+        String rowsSql = "select order_info.*, " + ORDER_EXPIRE_SECONDS_SQL + " from order_info" + where + " order by id desc";
         if (page != null || pageSize != null) {
             return ok(pagedQuery("select count(*) total from order_info" + where, rowsSql, page, pageSize, params.toArray()));
         }
@@ -67,7 +69,7 @@ public class OrderResource extends BaseResource {
     @Path("/{id}")
     public Map<String, Object> detail(@Context HttpHeaders headers,
                                       @PathParam("id") int id) throws Exception {
-        Map<String, Object> order = queryOne("select * from order_info where id = ?", id);
+        Map<String, Object> order = queryOne("select order_info.*, " + ORDER_EXPIRE_SECONDS_SQL + " from order_info where id = ?", id);
         if (order == null) {
             throw new ApiException(404, "订单不存在");
         }
@@ -88,6 +90,7 @@ public class OrderResource extends BaseResource {
 
     @POST
     public Map<String, Object> create(@Context HttpHeaders headers, OrderRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.userId != null, "请先登录");
         Map<String, Object> user = requireUser(headers, null);
         requireSameUser(user, request.userId);
@@ -188,6 +191,7 @@ public class OrderResource extends BaseResource {
     public Map<String, Object> updateStatus(@Context HttpHeaders headers,
                                             @PathParam("id") int id,
                                             StatusRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.status != null && request.status >= 0 && request.status <= 3, "订单状态不正确");
         Map<String, Object> order = queryOne("select id, user_id, status from order_info where id = ?", id);
         if (order == null) {

@@ -286,6 +286,15 @@ admin：管理员，账号在 admin 表，可以进入运营中心管理商品�
 super_admin：超级管理员，账号在 admin 表，可以把普通用户转为管理员，也可以禁用普通用户和管理员
 ```
 
+页面说明：
+
+```text
+1. 登录页不分用户页和管理员页，只有一个统一登录入口。
+2. 登录成功后，前端根据账号类型自动切换到用户端或管理端。
+3. 超级管理员比普通管理员多一个“用户权限”页面。
+4. 用户端使用粉色渐变和动态效果，管理员端保持蓝色简洁风格。
+```
+
 安全说明：
 
 ```text
@@ -298,7 +307,38 @@ super_admin：超级管理员，账号在 admin 表，可以把普通用户转�
 7. user 表只保存消费者账号，admin 表独立保存管理员账号，auth_token 通过 account_type 区分登录身份。
 ```
 
-## 七、常见问题
+## 七、支付配置说明
+
+如果要演示支付宝支付，需要先准备本地支付配置文件。
+
+### 1. 复制本地配置模板
+
+```powershell
+Copy-Item src\main\resources\pay.local.properties.example src\main\resources\pay.local.properties
+```
+
+### 2. 填写必要配置
+
+打开 `src/main/resources/pay.local.properties`，填写这些内容：
+
+```text
+alipay.app-id=你的支付宝沙箱应用ID
+alipay.private-key=你的应用私钥
+alipay.alipay-public-key=支付宝公钥
+alipay.public-base-url=你的公网访问地址/demo
+alipay.notify-url=支付异步通知地址
+alipay.return-url=支付完成后的跳转地址
+```
+
+如果使用 `cloudflared` 或 `trycloudflare`，`alipay.public-base-url` 一般写成：
+
+```text
+https://xxxx.trycloudflare.com/demo
+```
+
+页面里显示的是“支付”，但课堂演示实际连接的是支付宝沙箱环境。
+
+## 八、常见问题
 
 ### 1. 登录提示“接口返回异常”
 
@@ -385,7 +425,7 @@ Unknown database
 
 只看旧模型不会自动出现连线。
 
-## 八、项目目录说明
+## 九、项目目录说明
 
 ```text
 src/main/java/org/example/demo/common
@@ -407,7 +447,7 @@ src/main/webapp/index.html
 前端页面和交互逻辑
 ```
 
-## 九、快速运行检查清单
+## 十、快速运行检查清单
 
 ```text
 JDK 17 已配置

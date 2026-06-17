@@ -1,0 +1,22 @@
+# Copy this file to pay.local.properties and fill values from Alipay sandbox.
+# Do not commit pay.local.properties.
+#
+# Environment variable alternatives:
+# YZMM_ALIPAY_ENABLED
+# YZMM_ALIPAY_GATEWAY
+# YZMM_ALIPAY_APP_ID
+# YZMM_ALIPAY_PRIVATE_KEY
+# YZMM_ALIPAY_PUBLIC_KEY
+# YZMM_PUBLIC_BASE_URL
+
+alipay.enabled=true
+alipay.gateway=https://openapi-sandbox.dl.alipaydev.com/gateway.do
+alipay.app-id=your_sandbox_app_id
+
+# Paste one-line RSA2 keys. Headers, footers, and line breaks are optional.
+alipay.private-key=your_application_private_key
+alipay.alipay-public-key=your_alipay_public_key
+
+# Replace this with your Cloudflare domain and Tomcat context path.
+alipay.public-base-url=https://pay.your-domain.com/demo
+alipay.subject-prefix=YZMM Mall Order

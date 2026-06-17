@@ -27,7 +27,6 @@ public class CartResource extends BaseResource {
                                     @QueryParam("userId") int userId) throws Exception {
         Map<String, Object> user = requireUser(headers, null);
         requireSameUser(user, userId);
-        clearExpired(userId);
         String sql = """
                 select c.id, c.user_id, c.product_id, c.sku_id, c.count,
                        p.name product_name, p.category, p.image product_image,
@@ -49,6 +48,7 @@ public class CartResource extends BaseResource {
 
     @POST
     public Map<String, Object> add(@Context HttpHeaders headers, CartRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.userId != null && request.productId != null, "请先登录并选择商品");
         Map<String, Object> user = requireUser(headers, null);
         requireSameUser(user, request.userId);
@@ -85,6 +85,7 @@ public class CartResource extends BaseResource {
     public Map<String, Object> updateCount(@Context HttpHeaders headers,
                                            @PathParam("id") int id,
                                            CartRequest request) throws Exception {
+        require(request != null, "请求内容不能为空");
         require(request.count != null && request.count > 0, "数量必须大于 0");
         Map<String, Object> row = queryOne("""
                 select c.user_id, coalesce(ps.stock, p.stock) stock

@@ -5,7 +5,9 @@ import com.alipay.api.AlipayClient;
 import com.alipay.api.DefaultAlipayClient;
 import com.alipay.api.internal.util.AlipaySignature;
 import com.alipay.api.request.AlipayTradePagePayRequest;
+import com.alipay.api.request.AlipayTradeQueryRequest;
 import com.alipay.api.request.AlipayTradeWapPayRequest;
+import com.alipay.api.response.AlipayTradeQueryResponse;
 import org.example.demo.common.ApiException;
 import org.example.demo.common.BaseResource;
 import org.example.demo.common.PayConfig;
@@ -20,6 +22,7 @@ import javax.ws.rs.core.HttpHeaders;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedMap;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.net.URI;
@@ -58,13 +61,6 @@ public class AlipayPaymentResource extends BaseResource {
             throw new ApiException(404, "订单不存在");
         }
         requireSameUser(user, ((Number) order.get("user_id")).intValue());
-        require(((Number) order.get("status")).intValue() == 0, "只有待支付订单可以发起支付");
-        require(queryOne("""
-                select id
-                from order_info
-                where id = ?
-                  and create_time >= date_sub(now(), interval 30 minute)
-                """, request.orderId) != null, "订单支付已超时，请重新购买");
 
         PayConfig.AlipaySettings settings = PayConfig.alipay();
         if (!settings.ready()) {
@@ -74,6 +70,23 @@ public class AlipayPaymentResource extends BaseResource {
 
         String orderNo = String.valueOf(order.get("order_no"));
         BigDecimal totalAmount = ((BigDecimal) order.get("total_price")).setScale(2, RoundingMode.HALF_UP);
+        int status = ((Number) order.get("status")).intValue();
+        if (status > 0) {
+            return ok(paymentStatusResult(request.orderId, orderNo, status, "local", "订单已支付"));
+        }
+
+        PaymentSync sync = syncPaidOrderFromAlipay(settings, orderNo, totalAmount);
+        if (sync.paid()) {
+            return ok(paymentStatusResult(request.orderId, orderNo, sync.status(), sync.source(), "支付宝已确认支付，订单状态已更新"));
+        }
+
+        require(queryOne("""
+                select id
+                from order_info
+                where id = ?
+                  and create_time >= date_sub(now(), interval 30 minute)
+                """, request.orderId) != null, "订单支付已超时，请重新购买");
+
         boolean wap = request.isWap();
         String productCode = wap ? "QUICK_WAP_WAY" : "FAST_INSTANT_TRADE_PAY";
         String formHtml = buildPaymentForm(settings, wap,
@@ -87,6 +100,8 @@ public class AlipayPaymentResource extends BaseResource {
         result.put("paymentUrl", "");
         result.put("notifyUrl", settings.notifyUrl());
         result.put("returnUrl", settings.returnUrl());
+        result.put("paid", false);
+        result.put("status", status);
         return ok(result);
     }
 
@@ -120,6 +135,43 @@ public class AlipayPaymentResource extends BaseResource {
     @Consumes(MediaType.APPLICATION_JSON)
     public Map<String, Object> createLegacyPagePay(@Context HttpHeaders headers, PayRequest request) throws Exception {
         return createPagePay(headers, request);
+    }
+
+    @POST
+    @Path("/sync")
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Map<String, Object> syncPaymentStatus(@Context HttpHeaders headers, PayRequest request) throws Exception {
+        require(request != null && request.orderId != null, "缺少订单ID");
+        Map<String, Object> user = requireUser(headers, null);
+        require("user".equals(user.get("role")), "管理员账号不能同步用户支付");
+
+        Map<String, Object> order = queryOne("""
+                select id, order_no, user_id, total_price, status
+                from order_info
+                where id = ?
+                """, request.orderId);
+        if (order == null) {
+            throw new ApiException(404, "订单不存在");
+        }
+        requireSameUser(user, ((Number) order.get("user_id")).intValue());
+
+        String orderNo = String.valueOf(order.get("order_no"));
+        int status = ((Number) order.get("status")).intValue();
+        if (status > 0) {
+            return ok(paymentStatusResult(request.orderId, orderNo, status, "local", "订单已支付"));
+        }
+
+        PayConfig.AlipaySettings settings = PayConfig.alipay();
+        if (!settings.ready()) {
+            throw new ApiException(400, "支付宝支付还未配置，缺少：" + String.join("、", settings.missingFields()));
+        }
+
+        BigDecimal totalAmount = ((BigDecimal) order.get("total_price")).setScale(2, RoundingMode.HALF_UP);
+        PaymentSync sync = syncPaidOrderFromAlipay(settings, orderNo, totalAmount);
+        int currentStatus = sync.paid() ? sync.status() : 0;
+        return ok(paymentStatusResult(request.orderId, orderNo, currentStatus, sync.source(),
+                sync.paid() ? "支付宝已确认支付，订单状态已更新" : sync.message()));
     }
 
     @POST
@@ -168,21 +220,18 @@ public class AlipayPaymentResource extends BaseResource {
 
     @GET
     @Path("/return")
-    public Response returnToOrders() {
+    public Response returnToOrders(@Context UriInfo uriInfo) {
+        try {
+            syncReturnPayment(uriInfo);
+        } catch (Exception ignored) {
+            // 同步回跳不能影响用户回到订单页，最终状态仍可通过异步通知或查单接口修正。
+        }
         return Response.seeOther(URI.create(PayConfig.alipay().returnPageUrl())).build();
     }
 
     private String buildPaymentForm(PayConfig.AlipaySettings settings, boolean wap, String bizContent)
             throws AlipayApiException {
-        AlipayClient alipayClient = new DefaultAlipayClient(
-                settings.gateway(),
-                settings.appId(),
-                settings.privateKey(),
-                FORMAT,
-                CHARSET,
-                settings.alipayPublicKey(),
-                SIGN_TYPE
-        );
+        AlipayClient alipayClient = alipayClient(settings);
         if (wap) {
             AlipayTradeWapPayRequest payRequest = new AlipayTradeWapPayRequest();
             payRequest.setNotifyUrl(settings.notifyUrl());
@@ -196,6 +245,103 @@ public class AlipayPaymentResource extends BaseResource {
         payRequest.setReturnUrl(settings.returnUrl());
         payRequest.setBizContent(bizContent);
         return alipayClient.pageExecute(payRequest).getBody();
+    }
+
+    private AlipayClient alipayClient(PayConfig.AlipaySettings settings) {
+        return new DefaultAlipayClient(
+                settings.gateway(),
+                settings.appId(),
+                settings.privateKey(),
+                FORMAT,
+                CHARSET,
+                settings.alipayPublicKey(),
+                SIGN_TYPE
+        );
+    }
+
+    private PaymentSync syncPaidOrderFromAlipay(PayConfig.AlipaySettings settings, String orderNo,
+                                                BigDecimal expectedAmount) throws Exception {
+        AlipayTradeQueryRequest queryRequest = new AlipayTradeQueryRequest();
+        queryRequest.setBizContent("{\"out_trade_no\":\"" + json(orderNo) + "\"}");
+        AlipayTradeQueryResponse response;
+        try {
+            response = alipayClient(settings).execute(queryRequest);
+        } catch (AlipayApiException e) {
+            return new PaymentSync(false, 0, "alipay-query", "支付宝查单暂不可用");
+        }
+        if (response == null || !response.isSuccess()) {
+            String message = response == null ? "支付宝查单无响应" : firstNonBlank(response.getSubMsg(), response.getMsg(), "支付宝暂未确认支付");
+            return new PaymentSync(false, 0, "alipay-query", message);
+        }
+        String tradeStatus = response.getTradeStatus();
+        BigDecimal paidAmount = parseAmount(response.getTotalAmount());
+        if (!isPaidTradeStatus(tradeStatus)) {
+            return new PaymentSync(false, 0, "alipay-query", "支付宝交易状态：" + firstNonBlank(tradeStatus, "未支付"));
+        }
+        if (paidAmount == null || paidAmount.compareTo(expectedAmount.setScale(2, RoundingMode.HALF_UP)) != 0) {
+            return new PaymentSync(false, 0, "alipay-query", "支付宝金额与订单金额不一致");
+        }
+        update("update order_info set status = 1 where order_no = ? and status = 0", orderNo);
+        return new PaymentSync(true, 1, "alipay-query", "支付宝已确认支付");
+    }
+
+    private void syncReturnPayment(UriInfo uriInfo) throws Exception {
+        if (uriInfo == null) {
+            return;
+        }
+        Map<String, String> params = firstValues(uriInfo.getQueryParameters());
+        String orderNo = params.get("out_trade_no");
+        if (orderNo == null || orderNo.isBlank()) {
+            return;
+        }
+        PayConfig.AlipaySettings settings = PayConfig.alipay();
+        if (!settings.ready() || !AlipaySignature.rsaCheckV1(params, settings.alipayPublicKey(), CHARSET, SIGN_TYPE)) {
+            return;
+        }
+        Map<String, Object> order = queryOne("""
+                select total_price
+                from order_info
+                where order_no = ?
+                """, orderNo);
+        if (order == null) {
+            return;
+        }
+        BigDecimal expectedAmount = ((BigDecimal) order.get("total_price")).setScale(2, RoundingMode.HALF_UP);
+        PaymentSync sync = syncPaidOrderFromAlipay(settings, orderNo, expectedAmount);
+        if (sync.paid()) {
+            return;
+        }
+        BigDecimal returnAmount = parseAmount(params.get("total_amount"));
+        if (returnAmount != null && returnAmount.compareTo(expectedAmount) == 0 && params.get("trade_no") != null) {
+            update("update order_info set status = 1 where order_no = ? and status = 0", orderNo);
+        }
+    }
+
+    private Map<String, Object> paymentStatusResult(Integer orderId, String orderNo, int status,
+                                                    String source, String message) {
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("orderId", orderId);
+        result.put("orderNo", orderNo);
+        result.put("status", status);
+        result.put("paid", status > 0);
+        result.put("source", source);
+        result.put("message", message);
+        result.put("formHtml", "");
+        result.put("paymentUrl", "");
+        return result;
+    }
+
+    private boolean isPaidTradeStatus(String tradeStatus) {
+        return "TRADE_SUCCESS".equals(tradeStatus) || "TRADE_FINISHED".equals(tradeStatus);
+    }
+
+    private String firstNonBlank(String... values) {
+        for (String value : values) {
+            if (value != null && !value.isBlank()) {
+                return value;
+            }
+        }
+        return "";
     }
 
     private String bizContent(String orderNo, BigDecimal totalAmount, String subjectPrefix, String productCode,
@@ -320,5 +466,8 @@ public class AlipayPaymentResource extends BaseResource {
         public boolean isWap() {
             return "wap".equalsIgnoreCase(clientType) || "mobile".equalsIgnoreCase(clientType);
         }
+    }
+
+    private record PaymentSync(boolean paid, int status, String source, String message) {
     }
 }

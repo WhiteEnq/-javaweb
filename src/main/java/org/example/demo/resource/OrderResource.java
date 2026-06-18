@@ -1,6 +1,7 @@
 package org.example.demo.resource;
 
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
@@ -32,8 +33,10 @@ import java.util.concurrent.ThreadLocalRandom;
 public class OrderResource extends BaseResource {
     private static final String[] COURIER_COMPANIES = {"顺丰速运", "京东快递", "中通快递", "圆通速递", "韵达快递", "申通快递"};
     private static final String[] DELIVERY_METHODS = {"标准配送", "次日达", "普通配送", "同城配送", "预约配送"};
+    private static final int ORDER_EXPIRE_MINUTES = 30;
     private static final String ORDER_EXPIRE_SECONDS_SQL =
-            "greatest(0, timestampdiff(second, now(), date_add(order_info.create_time, interval 30 minute))) expires_in_seconds";
+            "greatest(0, timestampdiff(second, now(), date_add(order_info.create_time, interval "
+                    + ORDER_EXPIRE_MINUTES + " minute))) expires_in_seconds";
 
     @GET
     public Map<String, Object> list(@Context HttpHeaders headers,
@@ -233,6 +236,56 @@ public class OrderResource extends BaseResource {
         return detail(headers, id);
     }
 
+    @POST
+    @Path("/expired/cleanup")
+    public Map<String, Object> cleanupExpired(@Context HttpHeaders headers, ExpiredOrderRequest request) throws Exception {
+        require(request != null && request.userId != null, "请先登录");
+        Map<String, Object> user = requireUser(headers, null);
+        requireSameUser(user, request.userId);
+        try (Connection connection = Db.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                List<Integer> orderIds = loadExpiredOrderIds(connection, request.userId);
+                for (Integer orderId : orderIds) {
+                    deletePendingOrder(connection, orderId);
+                }
+                connection.commit();
+                return ok(Map.of("deleted", orderIds.size(), "orderIds", orderIds));
+            } catch (Exception e) {
+                connection.rollback();
+                throw e;
+            }
+        }
+    }
+
+    @DELETE
+    @Path("/{id}/expired")
+    public Map<String, Object> deleteExpired(@Context HttpHeaders headers,
+                                             @PathParam("id") int id,
+                                             @QueryParam("userId") Integer userId) throws Exception {
+        require(userId != null, "请先登录");
+        Map<String, Object> user = requireUser(headers, null);
+        requireSameUser(user, userId);
+        try (Connection connection = Db.getConnection()) {
+            connection.setAutoCommit(false);
+            try {
+                OrderSnapshot order = loadOrderForUpdate(connection, id);
+                if (order == null) {
+                    throw new ApiException(404, "订单不存在");
+                }
+                require(order.userId == userId, "只能操作自己的订单");
+                require(order.status == 0, "只有待支付订单可以删除");
+                require(order.expired, "订单仍在支付保留时间内，暂不能删除");
+                deletePendingOrder(connection, id);
+                connection.commit();
+                return ok(Map.of("deleted", 1, "orderIds", List.of(id)));
+            } catch (Exception e) {
+                connection.rollback();
+                throw e;
+            }
+        }
+    }
+
     private void requireAdmin(HttpHeaders headers, Integer actorId) throws Exception {
         requireManager(headers, null, "只有管理员可以管理订单");
     }
@@ -251,6 +304,103 @@ public class OrderResource extends BaseResource {
 
     private String randomOne(String[] values) {
         return values[ThreadLocalRandom.current().nextInt(values.length)];
+    }
+
+    private List<Integer> loadExpiredOrderIds(Connection connection, int userId) throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement("""
+                select id
+                from order_info
+                where user_id = ?
+                  and status = 0
+                  and create_time < date_sub(now(), interval %d minute)
+                order by id
+                for update
+                """.formatted(ORDER_EXPIRE_MINUTES))) {
+            statement.setInt(1, userId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                List<Integer> ids = new ArrayList<>();
+                while (resultSet.next()) {
+                    ids.add(resultSet.getInt("id"));
+                }
+                return ids;
+            }
+        }
+    }
+
+    private OrderSnapshot loadOrderForUpdate(Connection connection, int orderId) throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement("""
+                select id, user_id, status,
+                       case when create_time < date_sub(now(), interval %d minute) then 1 else 0 end expired
+                from order_info
+                where id = ?
+                for update
+                """.formatted(ORDER_EXPIRE_MINUTES))) {
+            statement.setInt(1, orderId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                if (!resultSet.next()) {
+                    return null;
+                }
+                return new OrderSnapshot(
+                        resultSet.getInt("id"),
+                        resultSet.getInt("user_id"),
+                        resultSet.getInt("status"),
+                        resultSet.getInt("expired") == 1
+                );
+            }
+        }
+    }
+
+    private void deletePendingOrder(Connection connection, int orderId) throws Exception {
+        restoreOrderStock(connection, orderId);
+        try (PreparedStatement statement = connection.prepareStatement("""
+                update user_coupon
+                set status = 0, used_order_id = null, used_time = null
+                where used_order_id = ?
+                """)) {
+            statement.setInt(1, orderId);
+            statement.executeUpdate();
+        }
+        try (PreparedStatement statement = connection.prepareStatement("delete from order_info where id = ? and status = 0")) {
+            statement.setInt(1, orderId);
+            statement.executeUpdate();
+        }
+    }
+
+    private void restoreOrderStock(Connection connection, int orderId) throws Exception {
+        try (PreparedStatement statement = connection.prepareStatement("""
+                select product_id, sku_id, count
+                from order_item
+                where order_id = ?
+                """)) {
+            statement.setInt(1, orderId);
+            try (ResultSet resultSet = statement.executeQuery()) {
+                while (resultSet.next()) {
+                    Object skuId = resultSet.getObject("sku_id");
+                    int count = resultSet.getInt("count");
+                    if (skuId == null) {
+                        try (PreparedStatement restore = connection.prepareStatement("""
+                                update product
+                                set stock = stock + ?
+                                where id = ?
+                                """)) {
+                            restore.setInt(1, count);
+                            restore.setInt(2, resultSet.getInt("product_id"));
+                            restore.executeUpdate();
+                        }
+                    } else {
+                        try (PreparedStatement restore = connection.prepareStatement("""
+                                update product_sku
+                                set stock = stock + ?
+                                where id = ?
+                                """)) {
+                            restore.setInt(1, count);
+                            restore.setInt(2, ((Number) skuId).intValue());
+                            restore.executeUpdate();
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private int deductStock(Connection connection, CartLine line) throws Exception {
@@ -365,6 +515,9 @@ public class OrderResource extends BaseResource {
     private record CouponUse(int userCouponId, int couponId, BigDecimal discountAmount) {
     }
 
+    private record OrderSnapshot(int id, int userId, int status, boolean expired) {
+    }
+
     public static class OrderRequest {
         public Integer userId;
         public Integer userCouponId;
@@ -378,5 +531,9 @@ public class OrderResource extends BaseResource {
         public Integer status;
         public Integer userId;
         public Integer actorId;
+    }
+
+    public static class ExpiredOrderRequest {
+        public Integer userId;
     }
 }

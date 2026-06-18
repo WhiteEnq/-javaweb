@@ -1306,8 +1306,9 @@
 
         .product-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 296px));
             gap: 14px;
+            justify-content: center;
         }
 
         .recent-strip {
@@ -2302,7 +2303,7 @@
         }
 
         .product-grid.loading {
-            grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 296px));
         }
 
         .skeleton-card {
@@ -3402,7 +3403,7 @@
                 <div v-else-if="!topPicks.length" class="vue-empty">暂无匹配商品</div>
                 <div v-else class="smart-curation-layout">
                     <article v-if="featuredProduct" class="smart-feature-card" tabindex="0" @click="openProduct(featuredProduct)" @keydown.enter="openProduct(featuredProduct)">
-                        <img :src="featuredProduct.image || fallbackImage" :alt="featuredProduct.name" @error="imageFallback">
+                        <img :src="productDisplayImage(featuredProduct)" :alt="featuredProduct.name" @error="imageFallback">
                         <div class="smart-feature-info">
                             <span class="badge">{{ featuredProduct.category || "综合" }}</span>
                             <h3>{{ featuredProduct.name }}</h3>
@@ -3422,7 +3423,7 @@
                     <div class="smart-rank-list">
                         <button v-for="(product, index) in sidePicks" :key="product.id" class="smart-rank-row" @click="openProduct(product)">
                             <span class="vue-rank">{{ index + 2 }}</span>
-                            <img :src="product.image || fallbackImage" :alt="product.name" @error="imageFallback">
+                            <img :src="productDisplayImage(product)" :alt="product.name" @error="imageFallback">
                             <div>
                                 <h3>{{ product.name }}</h3>
                                 <div class="muted">{{ product.category || "综合" }} · {{ productLabel(product) }}</div>
@@ -3751,7 +3752,10 @@
             <div class="section-box">
                 <div class="section-head">
                     <h2>我的订单</h2>
-                    <button class="ghost" onclick="loadUserOrders()">刷新</button>
+                    <div class="actions">
+                        <button class="secondary" onclick="cleanupExpiredOrders()">一键处理过期订单</button>
+                        <button class="ghost" onclick="loadUserOrders()">刷新</button>
+                    </div>
                 </div>
                 <div class="order-filter-bar">
                     <button id="orderFilterAll" class="active" onclick="setOrderFilter('all')">全部</button>
@@ -4046,6 +4050,7 @@
             </div>
         </div>
         <div class="confirm-actions">
+            <button id="confirmExtraBtn" class="secondary hidden" type="button">更多操作</button>
             <button id="confirmCancelBtn" class="ghost" type="button">取消</button>
             <button id="confirmOkBtn" type="button">确定</button>
         </div>
@@ -4067,6 +4072,13 @@
     ].filter(Boolean))];
     let api = apiCandidates[0];
     const fallbackImage = "https://dummyimage.com/800x600/f1f5f9/475569&text=YZMM";
+    const productImageOverrides = [
+        ["空气炸锅", "https://i5.walmartimages.com/seo/10-6QT-Dual-Basket-Air-Fryer-Oven-Digital-Control-Clear-View-Window-Versatile-Air-Fryer-for-Roasting-Baking-Reheating-Healthy-Meals_5433db24-03c6-40c7-bafd-660d0e938b02.0ea13af9bc84969e88c45754e5e789f3.jpeg?odnBg=FFFFFF&odnHeight=900&odnWidth=900"],
+        ["机器人", "https://images.unsplash.com/photo-1603618090561-412154b4bd1b?auto=format&fit=crop&w=900&q=80"],
+        ["坚果", "https://images.unsplash.com/photo-1626697556426-8a55a8af4999?auto=format&fit=crop&w=900&q=80"],
+        ["牛奶燕麦", "https://images.unsplash.com/photo-1568086256437-e745ec321426?auto=format&fit=crop&w=900&q=80"],
+        ["折叠", "https://images.unsplash.com/photo-1554941829-fcef7b298d5d?auto=format&fit=crop&w=900&q=80"]
+    ];
     const categories = ["全部", "手机数码", "电脑办公", "家用电器", "服饰箱包", "美妆个护", "食品饮料", "家居日用", "运动户外"];
     const carouselSlides = [
         {
@@ -4160,7 +4172,7 @@
         userStatusFilter: "1",
         userPage: 1,
         productPage: 1,
-        productPageSize: 12,
+        productRowsPerPage: 3,
         cartExpiryTimer: null,
         cartExpiryWarned: {},
         cartExpiryPrompted: {},
@@ -4180,6 +4192,14 @@
     };
 
     const $ = id => document.getElementById(id);
+
+    function debounce(fn, delay = 160) {
+        let timer = null;
+        return (...args) => {
+            clearTimeout(timer);
+            timer = setTimeout(() => fn(...args), delay);
+        };
+    }
 
     function setText(id, value) {
         const element = $(id);
@@ -4214,6 +4234,12 @@
 
     function productStock(product) {
         return Number(product?.sku_stock ?? product?.stock ?? 0);
+    }
+
+    function productDisplayImage(product) {
+        const name = String(product?.name || product?.product_name || "").trim();
+        const override = productImageOverrides.find(([keyword]) => name.includes(keyword));
+        return override?.[1] || product?.image || product?.product_image || fallbackImage;
     }
 
     function intText(value) {
@@ -4328,7 +4354,13 @@
         setTimeout(() => toast.remove(), isError ? 4600 : 2600);
     }
 
-    function showConfirm({title = "操作确认", message = "请确认是否继续。", okText = "确定", cancelText = "取消"} = {}) {
+    function showConfirm({
+        title = "操作确认",
+        message = "请确认是否继续。",
+        okText = "确定",
+        cancelText = "取消",
+        extraText = ""
+    } = {}) {
         if (state.confirmResolver) {
             state.confirmResolver(false);
         }
@@ -4336,6 +4368,8 @@
         $("confirmMessage").textContent = message;
         $("confirmOkBtn").textContent = okText;
         $("confirmCancelBtn").textContent = cancelText;
+        $("confirmExtraBtn").textContent = extraText || "";
+        $("confirmExtraBtn").classList.toggle("hidden", !extraText);
         $("confirmOverlay").classList.add("show");
         document.body.style.overflow = "hidden";
         setTimeout(() => $("confirmOkBtn").focus(), 0);
@@ -4428,6 +4462,12 @@
         });
         $("confirmCancelBtn").addEventListener("click", () => resolveConfirm(false));
         $("confirmOkBtn").addEventListener("click", () => resolveConfirm(true));
+        $("confirmExtraBtn").addEventListener("click", () => resolveConfirm("extra"));
+        window.addEventListener("resize", debounce(() => {
+            if (state.tab === "products" && state.products.length) {
+                renderProductList();
+            }
+        }, 160));
         document.addEventListener("keydown", event => {
             if (event.key === "Escape") {
                 if ($("confirmOverlay").classList.contains("show")) {
@@ -4614,6 +4654,7 @@
                     showTab("orders");
                 },
                 productPrice,
+                productDisplayImage,
                 money,
                 productStock,
                 intText,
@@ -5172,10 +5213,11 @@
             return Number(b.id || 0) - Number(a.id || 0);
         });
         state.visibleProducts = rows;
-        const totalPages = Math.max(1, Math.ceil(rows.length / state.productPageSize));
+        const pageSize = currentProductPageSize();
+        const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
         state.productPage = Math.min(Math.max(1, state.productPage), totalPages);
-        const start = (state.productPage - 1) * state.productPageSize;
-        const pageRows = rows.slice(start, start + state.productPageSize);
+        const start = (state.productPage - 1) * pageSize;
+        const pageRows = rows.slice(start, start + pageSize);
         $("products").classList.remove("loading");
         $("products").innerHTML = pageRows.length ? pageRows.map(renderProductCard).join("") : emptyText("没有符合条件的商品");
         const keyword = $("keyword").value.trim();
@@ -5184,6 +5226,17 @@
         renderActiveFilters(rows);
         renderProductPagination(totalPages);
         refreshVueShowcase();
+    }
+
+    function currentProductPageSize() {
+        const grid = $("products");
+        const styleColumns = grid ? getComputedStyle(grid).gridTemplateColumns : "";
+        const columns = styleColumns && styleColumns !== "none"
+            ? styleColumns.split(" ").filter(Boolean).length
+            : 0;
+        const width = grid?.clientWidth || $("productsView")?.clientWidth || 0;
+        const fallbackColumns = width ? Math.max(1, Math.floor((width + 14) / 244)) : 4;
+        return Math.max(1, columns || fallbackColumns) * state.productRowsPerPage;
     }
 
     function toggleStockOnly() {
@@ -5231,6 +5284,7 @@
     function renderProductCard(product) {
         const displayStock = productStock(product);
         const displayPrice = productPrice(product);
+        const displayImage = productDisplayImage(product);
         const soldOut = displayStock <= 0;
         const hot = Number(product.sales_count || 0) >= 1500;
         const lowStock = !soldOut && displayStock <= 20;
@@ -5238,7 +5292,7 @@
         return `
             <article class="product-card ${soldOut ? "sold-out" : ""}" onclick="openProductDetail(${product.id})">
                 <div class="image-wrap">
-                    <img src="${html(product.image || fallbackImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
+                    <img src="${html(displayImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
                     <div class="card-badges">
                         <span class="badge">${html(product.category || "综合")}</span>
                         ${hot ? `<span class="sale-badge">热卖</span>` : ""}
@@ -5299,9 +5353,10 @@
     function renderChannelProductCard(product, label, note = "", progress = 0) {
         const soldOut = productStock(product) <= 0;
         const progressWidth = Math.max(0, Math.min(100, Number(progress || 0)));
+        const displayImage = productDisplayImage(product);
         return `
             <article class="channel-card ${soldOut ? "sold-out" : ""}" onclick="openProductDetail(${product.id})">
-                <img src="${html(product.image || fallbackImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
+                <img src="${html(displayImage)}" alt="${html(product.name)}" onerror="this.src='${fallbackImage}'">
                 <div class="channel-card-body">
                     <div class="card-badges" style="position:static">
                         <span class="badge">${html(product.category || "综合")}</span>
@@ -5501,7 +5556,7 @@
                 id: product.id,
                 name: product.name,
                 price: productPrice(product),
-                image: product.image,
+                image: productDisplayImage(product),
                 category: product.category
             },
             ...current.filter(item => Number(item.id) !== Number(product.id))
@@ -5515,7 +5570,7 @@
         $("recentViewed").classList.toggle("show", rows.length > 0);
         $("recentList").innerHTML = rows.map(item => `
             <article class="recent-card" onclick="openProductDetail(${item.id})">
-                <img src="${html(item.image || fallbackImage)}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
+                <img src="${html(productDisplayImage(item))}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
                 <strong>${html(item.name)}</strong>
                 <span class="price" style="font-size:16px">￥${money(item.price)}</span>
             </article>
@@ -5543,7 +5598,7 @@
         const selectedSku = skus.find(sku => Number(sku.id) === Number(state.selectedSkuId));
         const detailPrice = Number(selectedSku?.price ?? product.price ?? 0);
         const detailStock = Number(selectedSku?.stock ?? product.stock ?? 0);
-        const detailImage = selectedSku?.image || product.image || fallbackImage;
+        const detailImage = selectedSku?.image || productDisplayImage(product);
         const soldOut = detailStock <= 0;
         const avgScore = Number(product.avg_score || 5).toFixed(1);
         const previewImages = state.commentImages[product.id] || [];
@@ -5722,7 +5777,7 @@
         const left = item.expiresAt - Date.now();
         return `
             <div class="line-card">
-                <img src="${html(item.image || fallbackImage)}" alt="${html(item.product_name)}" onerror="this.src='${fallbackImage}'">
+                <img src="${html(productDisplayImage(item))}" alt="${html(item.product_name)}" onerror="this.src='${fallbackImage}'">
                 <div>
                     <h3>${html(item.product_name)}</h3>
                     <div class="muted">${item.sku_text ? `${html(item.sku_text)} · ` : ""}单价 ￥${money(item.price)} · 库存 ${html(item.stock)}</div>
@@ -5997,7 +6052,7 @@
         $("profileFavorites").innerHTML = rows.length ? rows.slice(0, 4).map(item => `
             <article class="product-card" onclick="openProductDetail(${item.product_id})">
                 <div class="image-wrap">
-                    <img src="${html(item.image || fallbackImage)}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
+                    <img src="${html(productDisplayImage(item))}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
                     <span class="badge">${html(item.category || "收藏")}</span>
                 </div>
                 <h3>${html(item.name)}</h3>
@@ -6065,7 +6120,7 @@
             $("favorites").innerHTML = rows.length ? rows.map(item => `
                 <article class="product-card" onclick="openProductDetail(${item.product_id})">
                     <div class="image-wrap">
-                        <img src="${html(item.image || fallbackImage)}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
+                        <img src="${html(productDisplayImage(item))}" alt="${html(item.name)}" onerror="this.src='${fallbackImage}'">
                         <span class="badge">${html(item.category || "收藏")}</span>
                     </div>
                     <h3>${html(item.name)}</h3>
@@ -6126,6 +6181,7 @@
         }
         try {
             const rows = await request(`/orders?userId=${state.user.id}`);
+            await syncPendingPayments(rows);
             const details = rememberOrderRows(await Promise.all(rows.map(order => request(`/orders/${order.id}`).catch(() => order))), true);
             const visible = filterOrdersByStatus(details, state.orderFilter);
             updateOrderFilterButtons("orderFilter", state.orderFilter);
@@ -6133,6 +6189,29 @@
             setOrderBadges(rows.length);
         } catch (error) {
             setNotice(error.message);
+        }
+    }
+
+    async function syncPendingPayments(rows) {
+        const pendingRows = (rows || []).filter(order => Number(order.status) === 0);
+        if (!pendingRows.length) return;
+        let synced = 0;
+        for (const order of pendingRows) {
+            try {
+                const result = await request("/payments/alipay/sync", {
+                    method: "POST",
+                    body: JSON.stringify({orderId: order.id})
+                });
+                if (result?.paid) {
+                    synced += 1;
+                    order.status = result.status || 1;
+                }
+            } catch (error) {
+                // 支付宝查单失败不影响订单列表展示，点击支付时还会再查一次。
+            }
+        }
+        if (synced > 0) {
+            setNotice(`已同步 ${synced} 个支付宝支付成功的订单`);
         }
     }
 
@@ -6200,7 +6279,10 @@
         const userActions = status === 0
             ? left > 0
                 ? `<button onclick="startAlipayPayment(${order.id})">支付</button>`
-                : `<button class="ghost" onclick="rebuyOrder(${order.id})">重新购买</button>`
+                : `
+                    <button class="ghost" onclick="rebuyOrder(${order.id})">重新购买</button>
+                    <button class="secondary" onclick="deleteExpiredOrder(${order.id})">删除过期订单</button>
+                `
             : status === 2
                 ? `<button onclick="setOrderStatus(${order.id}, 3, false)">确认收货</button>`
                 : "";
@@ -6307,17 +6389,85 @@
         state.orderExpiryPrompted[order.id] = true;
         const shouldRebuy = await showConfirm({
             title: "订单支付已超时",
-            message: `订单 ${order.order_no} 已超过支付保留时间，是否把商品重新加入购物车？`,
+            message: `订单 ${order.order_no} 已超过支付保留时间。重新购买会把商品加入购物车；也可以稍后在订单页删除过期订单并释放库存。`,
             okText: "重新购买",
-            cancelText: "稍后处理"
+            cancelText: "稍后处理",
+            extraText: "一键处理过期订单"
         });
         if (shouldRebuy) {
             await rebuyOrder(order.id);
+        } else if (shouldRebuy === "extra") {
+            await cleanupExpiredOrders({skipConfirm: true});
         } else {
             updateOrderExpiryBadges(order.id, 0, "支付已超时，请重新购买");
         }
         state.orderExpiryPrompting = false;
         checkOrderExpiry();
+    }
+
+    async function cleanupExpiredOrders(options = {}) {
+        try {
+            requireConsumer();
+            const latestRows = prepareOrderRows(await request(`/orders?userId=${state.user.id}`));
+            const expiredCount = latestRows.filter(order => {
+                return Number(order.status) === 0 && Number(order.expiresAt || 0) <= Date.now();
+            }).length;
+            if (expiredCount === 0) {
+                setNotice("暂无过期待支付订单");
+                await loadUserOrders();
+                return;
+            }
+            if (!options.skipConfirm) {
+                const confirmed = await showConfirm({
+                    title: "处理过期订单",
+                    message: `将删除 ${expiredCount} 个已超时待支付订单，并释放占用的库存和优惠券。`,
+                    okText: "确认处理",
+                    cancelText: "取消"
+                });
+                if (!confirmed) return;
+            }
+            const result = await request("/orders/expired/cleanup", {
+                method: "POST",
+                body: JSON.stringify({userId: state.user.id})
+            });
+            removeTrackedOrders(result?.orderIds || []);
+            setNotice(`已处理 ${Number(result?.deleted || 0)} 个过期订单`);
+            await Promise.all([loadUserOrders(), loadOrderCount(), loadProfileOrders(), loadProducts(), loadProfileCoupons()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    async function deleteExpiredOrder(orderId) {
+        try {
+            requireConsumer();
+            const confirmed = await showConfirm({
+                title: "删除过期订单",
+                message: "删除后会释放该订单占用的库存和优惠券，订单记录也会移除。",
+                okText: "删除",
+                cancelText: "取消"
+            });
+            if (!confirmed) return;
+            const result = await request(`/orders/${orderId}/expired?userId=${state.user.id}`, {method: "DELETE"});
+            removeTrackedOrders(result?.orderIds || [orderId]);
+            setNotice("过期订单已删除");
+            await Promise.all([loadUserOrders(), loadOrderCount(), loadProfileOrders(), loadProducts(), loadProfileCoupons()]);
+        } catch (error) {
+            setNotice(error.message);
+        }
+    }
+
+    function removeTrackedOrders(orderIds) {
+        const deleted = new Set((orderIds || []).map(id => Number(id)));
+        if (!deleted.size) return;
+        state.orderRows = state.orderRows.filter(order => !deleted.has(Number(order.id)));
+        deleted.forEach(id => {
+            delete state.orderExpiryWarned[id];
+            delete state.orderExpiryPrompted[id];
+        });
+        if (!state.orderRows.length) {
+            clearOrderExpiryWatcher();
+        }
     }
 
     async function startAlipayPayment(orderId) {
@@ -6337,6 +6487,22 @@
                 method: "POST",
                 body: JSON.stringify({orderId, clientType})
             });
+            if (result?.paid) {
+                if (payWindow && !payWindow.closed) {
+                    payWindow.close();
+                }
+                setNotice(result.message || "订单已支付，状态已同步");
+                await loadUserOrders();
+                return;
+            }
+            if (!result?.formHtml) {
+                if (payWindow && !payWindow.closed) {
+                    payWindow.close();
+                }
+                setNotice(result?.message || "支付宝暂未返回支付页面，请稍后再试");
+                await loadUserOrders();
+                return;
+            }
             if (clientType === "wap") {
                 submitAlipayFormInCurrentPage(result.formHtml);
                 return;
@@ -6749,7 +6915,7 @@
                     ${rows.map(row => `
                         <tr>
                             <td>${html(row.id)}</td>
-                            <td><img class="thumb" src="${html(row.image || fallbackImage)}" alt="${html(row.name)}" onerror="this.src='${fallbackImage}'"></td>
+                            <td><img class="thumb" src="${html(productDisplayImage(row))}" alt="${html(row.name)}" onerror="this.src='${fallbackImage}'"></td>
                             <td>${html(row.name)}</td>
                             <td><span class="badge">${html(row.category || "综合")}</span></td>
                             <td>￥${money(productPrice(row))}${Number(row.sku_count || 0) ? "起" : ""}</td>

@@ -460,3 +460,9 @@ Tomcat 使用 9.x
 Application context 为 /demo
 能访问 /demo/api/products 并返回 JSON
 ```
+## 十一. 未上传内容
+```text
+由于沙箱支付涉及内网穿透和支付宝密钥等隐私信息未上传至此
+沙箱支付可在支付宝官方参考手册进行修改
+本项目实际演示时通过cloudflared实现本地暴露在公网短暂实现,若只用于展示配置服务器较为繁琐
+```
